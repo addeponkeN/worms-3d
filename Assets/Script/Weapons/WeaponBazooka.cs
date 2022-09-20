@@ -6,16 +6,23 @@ namespace Weapons
     {
         public override WeaponTypes WeaponType { get; } = WeaponTypes.Bazooka;
 
+        private BaseProjectile _projectile;
+        
         public override void Init()
         {
             base.Init();
             Power = 3000f;
         }
+        
+        public override BaseProjectile GetProjectile()
+        {
+            return _projectile;
+        }
 
         public override void Fired()
         {
             base.Fired();
-            FireProjectile(ProjectileTypes.Missile);
+           _projectile = FireProjectile(ProjectileTypes.Missile);
         }
     }
 }

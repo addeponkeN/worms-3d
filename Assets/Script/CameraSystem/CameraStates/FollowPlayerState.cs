@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace CameraSystem.CameraStates
 {
     public class FollowPlayerState : FollowState

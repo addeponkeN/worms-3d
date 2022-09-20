@@ -1,14 +1,18 @@
+using System;
 using UnityEngine;
 using VoxelEngine;
 
 namespace Projectiles
 {
-    public class ProjectileGrenade : BaseProjectile
+    public class ProjectileGrenade : BaseProjectile, IExploder
     {
         public override ProjectileTypes Type { get; } = ProjectileTypes.Grenade;
 
         private const float FuseTime = 4f;
-        private const int ExplodeRadius = 4;
+        
+        public event Action<ExplodeData> ExplodeEvent;
+        public float ExplodeRadius = 4;
+        public int Damage = 4;
         
         private float _fuseTimer;
 
@@ -27,10 +31,11 @@ namespace Projectiles
             }
         }
 
-        void Explode()
+        private void Explode()
         {
-            World.Get.SetVoxelCube(transform.position, ExplodeRadius, 0);
+            ExplodeEvent?.Invoke(new ExplodeData(transform.position, ExplodeRadius, Damage));
             Kill();
         }
+
     }
 }

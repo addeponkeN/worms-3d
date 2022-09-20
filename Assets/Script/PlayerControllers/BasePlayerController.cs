@@ -6,8 +6,9 @@ namespace PlayerControllers
     {
         public bool IsAlive { get; set; } = true;
         public PlayerControllerManager Manager { get; set; }
+        public Player Player => Manager.Player;
 
-        protected Transform Transform => Manager.CurrentPlayerObj.transform;
+        protected Transform Transform => Manager.PlayerGo.transform;
 
         public virtual void Init()
         {
@@ -18,6 +19,10 @@ namespace PlayerControllers
         }
 
         public virtual void FixedUpdate()
+        {
+        }
+
+        public virtual void OnEnabled(bool enabled)
         {
         }
 

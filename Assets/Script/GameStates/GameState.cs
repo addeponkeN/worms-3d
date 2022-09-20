@@ -7,6 +7,7 @@ namespace GameStates
         
         public virtual void Init(GameStateManager manager)
         {
+            IsAlive = true;
             Manager = manager;
         }
 

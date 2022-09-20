@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace VoxelEngine
 {
-    public class ChunkMeshGenerator
+    public static class ChunkMeshGenerator
     {
         private static Dictionary<Vector3Int, FaceData> _faces;
 
@@ -36,14 +36,7 @@ namespace VoxelEngine
             }
         }
 
-        private TextureLoader _textureLoader;
-
-        public ChunkMeshGenerator(TextureLoader tx)
-        {
-            _textureLoader = tx;
-        }
-
-        public Mesh CreateMesh(Voxel[,,] data)
+        public static Mesh CreateMesh(Voxel[,,] data, TextureLoader textureLoader)
         {
             var vertices = new List<Vector3>();
             var indices = new List<int>();
@@ -68,7 +61,7 @@ namespace VoxelEngine
                         {
                             var face = Faces[faceDirection];
                             var voxel = data[x, y, z].Type;
-                            var texture = _textureLoader.Textures[voxel];
+                            var texture = textureLoader.Textures[voxel];
 
                             for(var j = 0; j < face.Verts.Length; j++)
                             {
@@ -95,7 +88,7 @@ namespace VoxelEngine
                         {
                             var newFace = Faces[faceDirection];
                             var voxel = data[x, y, z];
-                            var texture = _textureLoader.Textures[voxel.Type];
+                            var texture = textureLoader.Textures[voxel.Type];
 
                             for(var j = 0; j < newFace.Verts.Length; j++)
                             {

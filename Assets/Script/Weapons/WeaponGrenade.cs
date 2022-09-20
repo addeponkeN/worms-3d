@@ -9,6 +9,13 @@ namespace Weapons
     {
         public override WeaponTypes WeaponType { get; } = WeaponTypes.Grenade;
 
+        private BaseProjectile _projectile;
+        
+        public override BaseProjectile GetProjectile()
+        {
+            return _projectile;
+        }
+        
         public override void Init()
         {
             base.Init();
@@ -18,7 +25,8 @@ namespace Weapons
         public override void Fired()
         {
             base.Fired();
-            FireProjectile(ProjectileTypes.Grenade);
+            _projectile = FireProjectile(ProjectileTypes.Grenade);
         }
+
     }
 }

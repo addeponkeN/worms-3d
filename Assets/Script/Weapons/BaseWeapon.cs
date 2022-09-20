@@ -1,4 +1,5 @@
 using CameraSystem.CameraStates;
+using GameStates;
 using PlayerControllers;
 using Projectiles;
 using UnityEngine;
@@ -16,13 +17,14 @@ namespace Weapons
     public abstract class BaseWeapon
     {
         private const float MaxCharge = 1.5f;
-        
+
         public abstract WeaponTypes WeaponType { get; }
-        
+
         public PlayerControllerManager Manager;
         public GameObject WeaponObject;
         public bool IsFired;
         public bool IsAimDown;
+        public bool IsProjectile = true;
 
         protected bool IsFireDown;
         protected float Power = 5000f;
@@ -37,7 +39,7 @@ namespace Weapons
         {
             WeaponObject = Object.Instantiate(PrefabManager.Get.GetPrefab(WeaponType));
 
-            _weaponOrigin = Manager.WeaponOrigin.transform;
+            _weaponOrigin = Manager.Player.WeaponOrigin.transform;
             _rotationOffset = WeaponObject.transform.eulerAngles;
         }
 
@@ -46,8 +48,8 @@ namespace Weapons
             var tf = WeaponObject.transform;
             tf.position = _weaponOrigin.transform.position;
 
-            var eulerAngles = Manager.CurrentPlayerObj.transform.eulerAngles;
-            var camEuler = GameManager.Get.CamManager.Camera.transform.eulerAngles;
+            var eulerAngles = Manager.PlayerGo.transform.eulerAngles;
+            var camEuler = GameManager.Get.CamManager.Cam.transform.eulerAngles;
             tf.eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y - 90, _rotationOffset.z - camEuler.x);
 
             _prevAimDown = IsAimDown;
@@ -83,25 +85,35 @@ namespace Weapons
             }
         }
 
-        protected void FireProjectile(ProjectileTypes type)
+        protected BaseProjectile FireProjectile(ProjectileTypes type)
         {
-            var aimer = GameManager.Get.CamManager.Camera;
-            var dir = aimer.transform.forward + Vector3.up * 0.01f;
-            dir.Normalize();
-            
-            var projectile = Object.Instantiate(PrefabManager.Get.GetPrefab(type));
-            projectile.transform.position = WeaponObject.transform.position + dir * 0.75f;
-            var pScript = projectile.GetComponent<BaseProjectile>();
-            pScript.Init(new ProjectileData(GetFinalPower, dir));
-            
-            GameManager.Get.CamManager.SetMainState(new FollowProjectileState(pScript));
+            var aimer = GameManager.Get.CamManager.Cam;
+            var projDirection = aimer.transform.forward + Vector3.up * 0.01f;
+            projDirection.Normalize();
+
+            var projectileGo = Object.Instantiate(PrefabManager.Get.GetPrefab(type));
+            projectileGo.transform.position = WeaponObject.transform.position + projDirection * 0.75f;
+            var projectile = projectileGo.GetComponent<BaseProjectile>();
+            projectile.Init(new ProjectileData(GetFinalPower, projDirection));
+            return projectile;
         }
-        
+
+        public virtual BaseProjectile GetProjectile()
+        {
+            return null;
+        }
+
         public virtual void FireStart()
         {
             IsFireDown = true;
         }
-        
+
+        public virtual void OnEnabled(bool enabled)
+        {
+            if(!enabled)
+                GameManager.Get.CamManager.AimCam.Priority = 9;
+        }
+
         public virtual void Fired()
         {
             IsFired = true;
@@ -115,6 +127,5 @@ namespace Weapons
             var camManager = GameManager.Get.CamManager;
             camManager.AimCam.Priority = 9;
         }
-        
     }
 }

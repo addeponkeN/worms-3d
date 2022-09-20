@@ -5,6 +5,7 @@ namespace PlayerControllers
 {
     public class PlayerLookController : BasePlayerController
     {
+        private const float PlayerRotationSpeed = 6f;
         public bool IsAiming;
 
         private InputAction _aimAction;
@@ -12,18 +13,20 @@ namespace PlayerControllers
         public override void Init()
         {
             base.Init();
-            _aimAction = Manager.Input.FindAction("Aim");
+            _aimAction = Manager.Input.actions["Aim"];
         }
 
         public override void Update()
         {
             base.Update();
 
-            if(Input.GetMouseButton(1))
+            // if(Input.GetMouseButton(1))
+            if(_aimAction.inProgress)
             {
-                var cam = GameManager.Get.CamManager.Camera.transform;
+                var cam = GameManager.Get.CamManager.Cam.transform;
                 var rotation = Quaternion.Euler(0, cam.eulerAngles.y, 0);
-                Transform.rotation = Quaternion.Lerp(Transform.rotation, rotation, 4f * Time.deltaTime);
+                Transform.rotation =
+                    Quaternion.Lerp(Transform.rotation, rotation, PlayerRotationSpeed * Time.deltaTime);
             }
         }
 

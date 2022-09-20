@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace GameStates
 {
@@ -15,23 +16,72 @@ namespace GameStates
 
         public void PushState(GameState state)
         {
-            States.Push(state);
-            state.Init(this);
+            if(CurrentState == null && States.Count <= 0)
+            {
+                SetState(state);
+            }
+            else
+            {
+                States.Push(state);
+            }
+
+            Debug.Log($"STATE PUSH: {state.GetType().Name}");
         }
 
-        public void ExitCurrentState()
+        public void ClearStack()
         {
-            States.Pop();
+            States.Clear();
+            SetDefaultState();
+        }
+
+        public void ForceSetState(GameState state)
+        {
+            SetState(state);
+        }
+        
+        void SetState(GameState state)
+        {
+            //  if current state is (not null & is alive), exit it
+            if(CurrentState is {IsAlive: true})
+            {
+                CurrentState.Exit();
+            }
+            
+            CurrentState = state;
+            CurrentState.Init(this);
+            Debug.Log($"STATE: {state.GetType().Name}");
+        }
+
+        void SetDefaultState()
+        {
+            SetState(new GameStateMain());
+        }
+
+        public void NextState()
+        {
+            if(States.Count > 0)
+            {
+                SetState(States.Pop());
+            }
+            else
+            {
+                SetDefaultState();
+            }
         }
 
         public void Update()
         {
+            if(CurrentState == null)
+            {
+                NextState();
+            }
+
             if(CurrentState != null)
             {
                 CurrentState.Update();
                 if(!CurrentState.IsAlive)
                 {
-                    ExitCurrentState();
+                    NextState();
                 }
             }
         }
@@ -40,8 +90,9 @@ namespace GameStates
         {
             if(CurrentState != null)
             {
-                CurrentState.Update();
+                CurrentState.FixedUpdate();
             }
         }
+        
     }
 }

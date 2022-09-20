@@ -27,7 +27,7 @@ public class PrefabManager : MonoBehaviour
             var path = AssetDatabase.GUIDToAssetPath(prefabGuids[i]);
             var go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
             _prefabs.Add(go.name, go);
-            Debug.Log($"loaded prefab: {go.name}");
         }
     }
+    
 }

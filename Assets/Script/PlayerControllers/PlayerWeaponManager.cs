@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Weapons;
 
@@ -6,33 +7,37 @@ namespace PlayerControllers
     public class PlayerWeaponManager : BasePlayerController
     {
         public BaseWeapon CurrentWeapon;
+        public event Action<BaseWeapon> WeaponFiredEvent;
 
-        private bool isWeaponActive;
+        private bool _isWeaponActive;
 
         public override void Init()
         {
             base.Init();
-            SetWeapon(new WeaponGrenade());
+            EquipWeapon(new WeaponGrenade());
         }
 
-        public void SetWeapon(BaseWeapon wep)
+        public void UnequipWeapon()
+        {
+            EquipWeapon(new WeaponHand());
+        }
+
+        public void EquipWeapon(BaseWeapon wep)
         {
             if(CurrentWeapon != null)
             {
                 CurrentWeapon.Kill();
             }
 
-            if(wep == null)
-            {
-                Debug.Log($"WEAPON: no weapon");
-                CurrentWeapon = null;
-                return;
-            }
-
             CurrentWeapon = wep;
             CurrentWeapon.Manager = Manager;
             CurrentWeapon.Init();
-            Debug.Log($"WEAPON: {wep.WeaponType.ToString()}");
+        }
+
+        public override void OnEnabled(bool enabled)
+        {
+            base.OnEnabled(enabled);
+            CurrentWeapon?.OnEnabled(enabled);
         }
 
         public override void Update()
@@ -44,21 +49,22 @@ namespace PlayerControllers
                 CurrentWeapon.Update();
                 if(CurrentWeapon.IsFired)
                 {
-                    SetWeapon(null);
+                    WeaponFiredEvent?.Invoke(CurrentWeapon);
+                    UnequipWeapon();
                 }
             }
 
             if(Input.GetKeyDown(KeyCode.Alpha0))
             {
-                SetWeapon(new WeaponHand());
+                UnequipWeapon();
             }
             else if(Input.GetKeyDown(KeyCode.Alpha1))
             {
-                SetWeapon(new WeaponGrenade());
+                EquipWeapon(new WeaponGrenade());
             }
             else if(Input.GetKeyDown(KeyCode.Alpha2))
             {
-                SetWeapon(new WeaponBazooka());
+                EquipWeapon(new WeaponBazooka());
             }
         }
     }

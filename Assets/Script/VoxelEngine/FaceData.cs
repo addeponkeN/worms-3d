@@ -4,7 +4,7 @@ namespace VoxelEngine
 {
     public class FaceData
     {
-        //  size of cube
+        //  size of voxel
         public static float s = 1f;
         
         public static readonly Vector3Int[] Directions = new Vector3Int[]

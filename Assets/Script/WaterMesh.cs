@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using VoxelEngine;
@@ -31,7 +30,6 @@ public class WaterMesh : MonoBehaviour
     {
         var worldBounds = World.Get.WorldBounds;
         transform.position = new Vector3(worldBounds.x * .5f, 1.01f, worldBounds.z * .5f);
-        Debug.Log($"water pos: {transform.position}");
     }
 
     private void Update()

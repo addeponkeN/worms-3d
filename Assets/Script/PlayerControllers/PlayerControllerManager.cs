@@ -1,23 +1,31 @@
 using System;
+using GameStates;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace PlayerControllers
 {
-    public class PlayerControllerManager : MonoBehaviour
+    public class PlayerControllerManager : MonoBehaviour, ILoader
     {
-        public StatContainer Stats => CurrentPlayer.Stats;
-
-        public GameObject CurrentPlayerObj;
-        public Player CurrentPlayer;
-        
-        [NonSerialized] public GameObject Model;
-        [NonSerialized] public GameObject WeaponOrigin;
-        [NonSerialized] public CharacterController CharController;
+        [NonSerialized] public GameObject PlayerGo;
+        [NonSerialized] public Player Player;
         [NonSerialized] public bool Started = false;
-        [NonSerialized] public bool ControllersEnabled = true;
 
-        public InputCore Input;
+        public PlayerInput Input => GameManager.Get.PlayerInput;
         public ControllerSet ControlSet;
+
+        private bool _controllersEnabled = false;
+        public bool ControllersEnabled
+        {
+            get => _controllersEnabled;
+            set
+            {
+                _controllersEnabled = value;
+                Input.enabled = _controllersEnabled;
+                for(int i = 0; i < ControlSet.Controllers.Count; i++)
+                    ControlSet.Controllers[i].OnEnabled(_controllersEnabled);
+            }
+        }
 
         public T GetController<T>() where T : BasePlayerController => ControlSet.GetController<T>();
 
@@ -25,9 +33,9 @@ namespace PlayerControllers
         {
             ControlSet = new ControllerSet();
             ControlSet.Manager = this;
-            Input = new InputCore();
-            Input.Enable();
-            SetActivePlayer(GameObject.Find("MainPlayer"));
+
+            PlayerGo = gameObject;
+            Player = gameObject.GetComponent<Player>();
         }
 
         private void Start()
@@ -35,7 +43,6 @@ namespace PlayerControllers
             AddController(new PlayerMovementController());
             AddController(new PlayerLookController());
             AddController(new PlayerJumpController());
-            AddController(new PlayerGravityController());
             AddController(new PlayerWeaponManager());
 
             ControlSet.Init();
@@ -43,12 +50,9 @@ namespace PlayerControllers
             Started = true;
         }
 
-        public void SetActivePlayer(GameObject player)
+        public void Load()
         {
-            CurrentPlayerObj = player;
-            Model = CurrentPlayerObj.GetComponentInChildren<Animator>().gameObject;
-            WeaponOrigin = GameObject.Find("WeaponOrigin");
-            CharController = CurrentPlayerObj.GetComponent<CharacterController>();
+            
         }
 
         public void AddController(BasePlayerController controller)
@@ -73,5 +77,6 @@ namespace PlayerControllers
         {
             ControlSet.LateUpdate();
         }
+
     }
 }

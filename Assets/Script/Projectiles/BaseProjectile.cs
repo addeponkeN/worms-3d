@@ -1,4 +1,5 @@
 using System;
+using GameStates;
 using UnityEngine;
 using VoxelEngine;
 
@@ -24,13 +25,16 @@ namespace Projectiles
     }
 
     [RequireComponent(typeof(Rigidbody))]
-    public abstract class BaseProjectile : MonoBehaviour
+    public abstract class BaseProjectile : MonoBehaviour, IFollowable
     {
         public abstract ProjectileTypes Type { get; }
 
-        public virtual bool IsAlive { get; set; } = true;
+        //  IFollowable
+        public bool EndFollow { get; set; }
+        //  -----------
+        
+        public bool IsAlive { get; set; } = true;
 
-        protected float Force;
         protected Rigidbody Body;
         protected ProjectileData Data;
 
@@ -38,7 +42,7 @@ namespace Projectiles
         {
             Body = GetComponent<Rigidbody>();
         }
-
+        
         protected virtual void FixedUpdate()
         {
             if(transform.position.y < World.Get.WaterLevel)
@@ -46,19 +50,19 @@ namespace Projectiles
                 Kill();
             }
         }
-
+        
         public virtual void Init(ProjectileData data)
         {
             Data = data;
-            Force = data.Force;
-
             Body.AddForce(Data.Direction * Data.Force);
         }
 
         public virtual void Kill()
         {
             IsAlive = false;
+            EndFollow = true;
             Destroy(Body.gameObject);
         }
+
     }
 }

@@ -1,20 +1,23 @@
 using System.Collections.Generic;
 using CameraSystem.CameraStates;
 using Cinemachine;
+using GameStates;
 using UnityEngine;
 using VoxelEngine;
 
 namespace CameraSystem
 {
-    public class CameraManager : MonoBehaviour
+    public class CameraManager : MonoBehaviour, ILoader
     {
-        public Camera Camera;
+        public bool LoadingComplete { get; set; }
+
+        public Camera Cam;
         public CinemachineVirtualCamera MoveCam;
         public CinemachineVirtualCamera AimCam;
         public ICameraState MainState;
 
         public Transform DefaultPosition;
-        
+
         private List<ICameraState> _states;
         private Queue<ICameraState> _queue;
 
@@ -22,19 +25,25 @@ namespace CameraSystem
         {
             _states = new List<ICameraState>();
             _queue = new Queue<ICameraState>();
+
+            Cam = Camera.main;
+            MoveCam = GameObject.Find("CM Movement").GetComponent<CinemachineVirtualCamera>();
+            AimCam = GameObject.Find("CM Aiming").GetComponent<CinemachineVirtualCamera>();
         }
 
         private void Start()
         {
             AddDefaultState();
-            
-            World.Get.OnGeneratedEvent += GetOnOnGeneratedEvent;
-            
+            World.Get.OnGeneratedEvent += OnWorldGeneratedEvent;
         }
 
-        private void GetOnOnGeneratedEvent()
+        public void Load()
         {
-            
+            LoadingComplete = true;
+        }
+
+        private void OnWorldGeneratedEvent()
+        {
         }
 
         public void SetMainState(ICameraState state)
@@ -43,9 +52,9 @@ namespace CameraSystem
             {
                 MainState.OnExit();
             }
-            
+
             MainState = state;
-            MainState.Camera = Camera;
+            MainState.Camera = Cam;
             MainState.IsAlive = true;
             MainState.Manager = this;
             MainState.Init();
@@ -53,7 +62,7 @@ namespace CameraSystem
 
         public void AddDefaultState()
         {
-            SetMainState(new FollowPlayerState(GameManager.Get.ControllerManager.CurrentPlayer));
+            // SetMainState(new FollowPlayerState(GameManager.Get.ControllerManager.CurrentPlayer));
         }
 
         public void QueueMainState(ICameraState state)
@@ -61,7 +70,6 @@ namespace CameraSystem
             _queue.Enqueue(state);
         }
 
-        // ReSharper disable Unity.PerformanceAnalysis
         public void KillMainState()
         {
             if(_queue.Count > 0)
@@ -76,11 +84,14 @@ namespace CameraSystem
 
         private void Update()
         {
-            MainState.Update();
-
-            if(!MainState.IsAlive)
+            if(MainState != null)
             {
-                KillMainState();
+                MainState.Update();
+
+                if(!MainState.IsAlive)
+                {
+                    KillMainState();
+                }
             }
         }
 

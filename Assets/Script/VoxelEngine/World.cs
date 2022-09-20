@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GameStates;
 using UnityEngine;
 using Util;
 using VoxelEngine.Generation;
@@ -7,36 +8,39 @@ using Random = UnityEngine.Random;
 
 namespace VoxelEngine
 {
-    public class World : MonoBehaviour
+    public class World : MonoBehaviour, ILoader
     {
-        public static readonly Vector3Int ChunkSize = new(10, 32, 10);
         private const float WaterLevelStart = 1.025f;
-
-        public Vector3Int WorldBounds => ChunkSize * worldSize;
-
+        
+        public static readonly Vector3Int ChunkSize = new(10, 32, 10);
         public static World Get { get; private set; }
+        
+        public bool LoadingComplete { get; set; }
+
+        public Vector3Int WorldBounds => ChunkSize * _worldSize;
 
         public GameObject Chunks;
         public GameObject Environment;
-
         public GameObject Prefab_Chunk;
+        
+        [NonSerialized] public TextureLoader TextureLoader;
 
-        [SerializeField] private TextureLoader _textureLoader;
-        private int worldSize = 16;
-        private int heightOffset = 60;
-        private int heightIntensity = 5;
+        public event Action OnGeneratedEvent;
+        public float WaterLevel = WaterLevelStart;
+        
+        private int _worldSize = 16;
+        private int _heightOffset = 60;
+        private int _heightIntensity = 5;
 
         private Dictionary<Vector2Int, Chunk> _chunks;
         private List<Chunk> _chunkList;
-
-        public ChunkMeshGenerator MeshGenerator;
         private DistinctList<Chunk> _chunksToUpdate;
-
         private List<IGenerator> _generators;
 
-        public event Action OnGeneratedEvent;
-
-        public float WaterLevel = WaterLevelStart;
+        public List<Chunk> GetChunkList()
+        {
+            return _chunkList;
+        }
 
         private void Awake()
         {
@@ -47,27 +51,37 @@ namespace VoxelEngine
             _chunksToUpdate = new DistinctList<Chunk>();
             _chunkList = new List<Chunk>();
             _chunks = new Dictionary<Vector2Int, Chunk>();
-            MeshGenerator = new ChunkMeshGenerator(_textureLoader);
+
+            TextureLoader = gameObject.GetComponent<TextureLoader>();
 
             GridHelper.Init(ChunkSize);
         }
 
         private void Start()
         {
+        }
+        
+        public void Load()
+        {
             Generate();
+            UpdateChunkMeshes();
         }
 
         private void Update()
+        {
+            UpdateChunkMeshes();
+        }
+
+        public void UpdateChunkMeshes()
         {
             if(_chunksToUpdate.Count > 0)
             {
                 for(int i = 0; i < _chunksToUpdate.Count; i++)
                     _chunksToUpdate[i].UpdateMesh();
                 _chunksToUpdate.Clear();
-                
+
                 // _chunksToUpdate[_chunksToUpdate.Count - 1].UpdateMesh();
                 // _chunksToUpdate.RemoveAt(_chunksToUpdate.Count - 1);
-                
             }
         }
 
@@ -75,8 +89,8 @@ namespace VoxelEngine
         {
             Vector2Int globalOffset = new Vector2Int(Random.Range(0, 1000), Random.Range(0, 1000));
 
-            for(int wx = 0; wx < worldSize; wx++)
-            for(int wz = 0; wz < worldSize; wz++)
+            for(int wx = 0; wx < _worldSize; wx++)
+            for(int wz = 0; wz < _worldSize; wz++)
             {
                 var chunk = new Chunk(ChunkSize);
                 int offX = wx * ChunkSize.x + globalOffset.x;
@@ -85,8 +99,7 @@ namespace VoxelEngine
                 for(int x = 0; x < ChunkSize.x; x++)
                 for(int z = 0; z < ChunkSize.z; z++)
                 {
-                    float scale = 0.2f;
-                    float intens = 5f;
+                    const float scale = 0.2f;
 
                     float perX = (offX + x) / (float)WorldBounds.x;
                     float perZ = (offZ + z) / (float)WorldBounds.z;
@@ -169,7 +182,7 @@ namespace VoxelEngine
             var position = new Vector3(x, y, z);
             if(!InWorldBounds(x, y, z))
             {
-                Debug.Log($"out of bounds: {position}");
+                // Debug.Log($"out of bounds: {position}");
                 return;
             }
 
@@ -203,51 +216,7 @@ namespace VoxelEngine
                 SetVoxel(x, y, z, voxelType);
             }
         }
+
     }
 
-    public struct Voxel
-    {
-        public byte Type;
-
-        public Voxel(byte type)
-        {
-            Type = type;
-        }
-    }
-
-    public class Chunk
-    {
-        private static ChunkMeshGenerator MeshGenerator => World.Get.MeshGenerator;
-
-        public GameObject GameObject;
-        public Vector2Int PositionIndex;
-        public Voxel[,,] Voxels;
-
-        private MeshCollider _meshCollider;
-        private MeshFilter _meshFilter;
-
-        public Chunk(Vector3Int size)
-        {
-            Voxels = new Voxel[size.x, size.y, size.z];
-        }
-
-        public void Init(GameObject ob)
-        {
-            GameObject = ob;
-            _meshFilter = GameObject.GetComponent<MeshFilter>();
-            _meshCollider = GameObject.GetComponent<MeshCollider>();
-        }
-
-        public void SetVoxel(int x, int y, int z, int type)
-        {
-            Voxels[x, y, z] = new Voxel((byte)type);
-        }
-
-        public void UpdateMesh()
-        {
-            var mesh = MeshGenerator.CreateMesh(Voxels);
-            _meshFilter.mesh = mesh;
-            _meshCollider.sharedMesh = mesh;
-        }
-    }
 }
