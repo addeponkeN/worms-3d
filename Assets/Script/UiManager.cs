@@ -1,4 +1,3 @@
-using System;
 using GameStates;
 using UnityEngine;
 
@@ -13,7 +12,7 @@ public class UiManager : MonoBehaviour, ILoader
         MainCanvas = GameObject.Find("MainCanvas").GetComponent<Canvas>();
     }
 
-    void Start()
+    private void Start()
     {
         
     }
@@ -23,9 +22,12 @@ public class UiManager : MonoBehaviour, ILoader
         
     }
     
-    void Update()
+    private void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            // TogglePause();
+        }
     }
 
 }

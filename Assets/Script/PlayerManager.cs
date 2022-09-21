@@ -36,7 +36,7 @@ public class PlayerManager : MonoBehaviour, ILoader
             {
                 new TeamData()
                 {
-                    PlayerCount = 1
+                    PlayerCount = 10
                 },
                 // new TeamData()
                 // {

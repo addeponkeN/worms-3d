@@ -28,6 +28,22 @@ public class PrefabManager : MonoBehaviour
             var go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
             _prefabs.Add(go.name, go);
         }
+        
+    }
+
+    public GameObject[] GetPrefabs(string prefabFolder)
+    {
+        var prefabGuids = AssetDatabase.FindAssets("t:prefab", new[] {$"Assets/Prefabs/{prefabFolder}"});
+
+        var prefabs = new GameObject[prefabGuids.Length];
+        
+        for(int i = 0; i < prefabGuids.Length; i++)
+        {
+            var path = AssetDatabase.GUIDToAssetPath(prefabGuids[i]);
+            prefabs[i] = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+        }
+
+        return prefabs;
     }
     
 }

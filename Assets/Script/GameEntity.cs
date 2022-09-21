@@ -60,7 +60,7 @@ public class SimpleBody : BaseEntityComponent
 
     public void Push(Vector3 direction, float force)
     {
-        _pushDir = direction.normalized * force;
+        _pushDir = direction * force;
         _force = force;
         _fallForce = force;
     }

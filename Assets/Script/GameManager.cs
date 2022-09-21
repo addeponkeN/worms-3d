@@ -10,6 +10,20 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Get { get; private set; }
 
+    private bool _isGamePaused;
+    public bool IsGamePaused
+    {
+        get => _isGamePaused;
+        set
+        {
+            _isGamePaused = value;
+            if(_isGamePaused)
+                Time.timeScale = 0f;
+            else
+                Time.timeScale = 1f;
+        }
+    }
+
     [NonSerialized] public CameraManager CamManager;
     [NonSerialized] public PlayerManager PlayerManager;
     [NonSerialized] public UiManager Ui;
