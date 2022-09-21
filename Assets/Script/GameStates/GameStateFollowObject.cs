@@ -6,7 +6,7 @@ namespace GameStates
     public interface IFollowable
     {
         public bool EndFollow { get; set; }
-        public Transform transform { get; }
+        public Transform Transform { get; }
     }
 
     public class GameStateFollowObject : GameState

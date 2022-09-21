@@ -8,7 +8,7 @@ namespace CameraSystem.CameraStates
         private IFollowable _followable;
         private float _timer;
 
-        public FollowFollowable(IFollowable followable, float waitTimeAfterEndFollow = 2f) : base(followable.transform)
+        public FollowFollowable(IFollowable followable, float waitTimeAfterEndFollow = 2f) : base(followable.Transform)
         {
             _followable = followable;
             _timer = waitTimeAfterEndFollow;

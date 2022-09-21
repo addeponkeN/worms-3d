@@ -48,9 +48,14 @@ public class GameManager : MonoBehaviour
         _stateManager.PushState(new GameStateLoading());
 
         Systems = new();
-        // AddGameSystem(new AirDropSystem());
+        AddGameSystem(new AirDropSystem());
     }
 
+    private void Start()
+    {
+        Cursor.visible = false;
+    }
+    
     void AddGameSystem(GameSystem system)
     {
         system.GameStateManager = _stateManager;
@@ -62,10 +67,6 @@ public class GameManager : MonoBehaviour
         CamManager = gameObject.AddComponent<CameraManager>();
         PlayerManager = gameObject.AddComponent<PlayerManager>();
         Ui = gameObject.AddComponent<UiManager>();
-    }
-
-    private void Start()
-    {
     }
 
     private void Update()

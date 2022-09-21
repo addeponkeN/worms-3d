@@ -1,5 +1,6 @@
 using CameraSystem.CameraStates;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace GameStates
 {
@@ -7,6 +8,8 @@ namespace GameStates
     {
         private float _timer;
         private AirDrop _drop;
+
+        private InputAction skipAction;
 
         public override void Init(GameStateManager manager)
         {
@@ -16,13 +19,24 @@ namespace GameStates
 
             var prefab = PrefabManager.Get.GetPrefab("airdrop");
             _drop = Object.Instantiate(prefab).GetComponent<AirDrop>();
-            
+
             GameManager.Get.CamManager.SetMainState(new FollowFollowable(_drop));
+
+            skipAction = GameManager.Get.PlayerInput.actions["Jump"];
         }
 
         public override void Update()
         {
             base.Update();
+
+
+            //                              this new input system rarely works
+            // if(!_drop.ReleasedParachute && skipAction.triggered)
+
+            if(!_drop.ReleasedParachute && Input.GetKeyDown(KeyCode.Space))
+            {
+                _drop.ReleaseParachute();
+            }
 
             if(_drop.EndFollow)
             {

@@ -1,3 +1,4 @@
+using System;
 using GameStates;
 using UnityEngine;
 using Util;
@@ -6,21 +7,23 @@ using VoxelEngine;
 public class AirDrop : MonoBehaviour, IFollowable
 {
     private static readonly int Idle = Animator.StringToHash("Idle");
-    private const float Gravity = 5f;
+    private const float FallSpeed = 6f;
 
     public bool EndFollow { get; set; }
+    public Transform Transform => _collider.transform;
+    [NonSerialized] public bool ReleasedParachute = false;
 
     private float _waitTimer = 1.5f;
 
-    [SerializeField] private GameObject _crate;
-    [SerializeField] private GameObject _parachute;
     private Animator _animator;
-
+    [SerializeField] private GameObject _parachute;
+    [SerializeField] private GameObject _collider;
+    
     private bool _landed;
 
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
+        _animator = GetComponentInChildren<Animator>();
     }
 
     private void Start()
@@ -35,40 +38,36 @@ public class AirDrop : MonoBehaviour, IFollowable
         transform.position = position;
     }
 
-    private void Land()
+    public void ReleaseParachute()
     {
-        _landed = true;
-        
-        //  cleanup
+        ReleasedParachute = true;
         Destroy(_parachute);
         Destroy(GetComponent<BoxCollider>());
         Destroy(GetComponent<Rigidbody>());
-        
-        _crate.GetComponent<BoxCollider>().enabled = true;
-        var body = _crate.AddComponent<Rigidbody>();
-        body.useGravity = true;
-        body.mass = 8f;
 
+        var boxCollider = _collider.GetComponent<BoxCollider>();
+        boxCollider.enabled = true;
+        var body = _collider.GetComponent<Rigidbody>();
+        body.useGravity = true;
+        body.mass = 1f;
+        
         _animator.SetTrigger(Idle);
     }
 
     private void Crash()
     {
-        _landed = true;
+        ReleasedParachute = true;
         Destroy(gameObject);
     }
 
     private void Update()
     {
-        if(!_landed)
+        if(!ReleasedParachute)
         {
-            transform.Translate(0f, -Gravity * Time.deltaTime, 0f);
-            if(transform.position.y < World.Get.WaterLevel)
-            {
-                Crash();
-            }
+            transform.Translate(0f, -FallSpeed * Time.deltaTime, 0f);
         }
-        else
+
+        if(ReleasedParachute)
         {
             _waitTimer -= Time.deltaTime;
             if(_waitTimer <= 0)
@@ -76,13 +75,19 @@ public class AirDrop : MonoBehaviour, IFollowable
                 EndFollow = true;
             }
         }
+
+        if(transform.position.y < World.Get.WaterLevel)
+        {
+            Crash();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("World"))
         {
-            Land();
+            _landed = true;
+            ReleaseParachute();
         }
     }
 }

@@ -10,6 +10,8 @@ public class UiManager : MonoBehaviour, ILoader
     {
         AimCanvas = GameObject.Find("AimCanvas").GetComponent<Canvas>();
         MainCanvas = GameObject.Find("MainCanvas").GetComponent<Canvas>();
+        
+        AimCanvas.gameObject.SetActive(false);
     }
 
     private void Start()

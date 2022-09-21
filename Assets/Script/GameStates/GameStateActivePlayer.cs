@@ -51,6 +51,8 @@ namespace GameStates
         {
             base.Update();
 
+            GameManager.Get.Ui.AimCanvas.gameObject.SetActive(_wepManager.CurrentWeapon.IsAimDown);
+
             _playTimer -= Time.deltaTime;
             if(_playTimer <= 0)
             {
@@ -65,6 +67,7 @@ namespace GameStates
         {
             base.Exit();
             _player.ControlManager.ControllersEnabled = false;
+            GameManager.Get.Ui.AimCanvas.gameObject.SetActive(false);
         }
     }
 }

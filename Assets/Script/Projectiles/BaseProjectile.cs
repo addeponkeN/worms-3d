@@ -31,6 +31,7 @@ namespace Projectiles
 
         //  IFollowable
         public bool EndFollow { get; set; }
+        public Transform Transform => transform;
         //  -----------
         
         public bool IsAlive { get; set; } = true;
