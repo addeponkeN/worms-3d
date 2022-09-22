@@ -111,6 +111,9 @@ namespace VoxelEngine
 
                     for(int y = height; y >= 0; y--)
                     {
+                        if(y < 1)
+                            continue;
+                        
                         int voxelType = 0;
 
                         if(y == height)

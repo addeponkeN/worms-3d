@@ -47,6 +47,7 @@
      <Compile Include="Assets\Script\Util\BoundsChecker.cs" />
      <Compile Include="Assets\Script\GameStates\GameStateManager.cs" />
      <Compile Include="Assets\Script\VoxelEngine\Generation\IGenerator.cs" />
+     <Compile Include="Assets\Script\Ui\SettingsPanel.cs" />
      <Compile Include="Assets\Script\VoxelEngine\Chunk.cs" />
      <Compile Include="Assets\Script\VoxelEngine\FaceData.cs" />
      <Compile Include="Assets\Script\PlayerControllers\PlayerMovementController.cs" />
@@ -82,8 +83,10 @@
      <Compile Include="Assets\Script\VoxelEngine\ChunkMeshGenerator.cs" />
      <Compile Include="Assets\Script\GameStates\GameStateFollowObject.cs" />
      <Compile Include="Assets\Script\WaterMesh.cs" />
+     <Compile Include="Assets\Script\GameSettings.cs" />
      <Compile Include="Assets\Script\Util\DistinctList.cs" />
      <Compile Include="Assets\Script\PrefabManager.cs" />
+     <Compile Include="Assets\Script\Ui\PausePanel.cs" />
      <Compile Include="Assets\Script\AirDrop.cs" />
      <Compile Include="Assets\Script\Exploder.cs" />
      <Compile Include="Assets\Script\PlayerControllers\PlayerControllerManager.cs" />
@@ -100,13 +103,10 @@
      <Compile Include="Assets\Script\Util\Indexer.cs" />
      <Compile Include="Assets\Script\GameStates\GameStateActivePlayer.cs" />
      <Compile Include="Assets\Script\VoxelEngine\World.cs" />
-     <Compile Include="Assets\Script\GameSystems\GameSystem.cs" />
-     <Compile Include="Assets\Script\Weapons\BaseWeapon.cs" />
-     <Compile Include="Assets\Script\Ui\PausePanel.cs" />
-     <Compile Include="Assets\MainCanvas.cs" />
      <Compile Include="Assets\JuicyButton.cs" />
-     <Compile Include="Assets\Script\Ui\SettingsPanel.cs" />
-     <Compile Include="Assets\Script\GameSettings.cs" />
+     <Compile Include="Assets\Script\GameSystems\GameSystem.cs" />
+     <Compile Include="Assets\MainCanvas.cs" />
+     <Compile Include="Assets\Script\Weapons\BaseWeapon.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
@@ -127,6 +127,7 @@
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
      <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
+     <None Include="Assets\AssetStore\VertexColorFarmAnimals\Shaders\VertexColorUnlit.shader" />
      <None Include="Assets\TextMesh Pro\Sprites\EmojiOne.json" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
      <Reference Include="UnityEngine">
