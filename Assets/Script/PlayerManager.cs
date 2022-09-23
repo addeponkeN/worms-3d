@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using GameStates;
+using PlayerControllers;
 using UnityEngine;
 using Util;
 using VoxelEngine;
@@ -11,9 +13,12 @@ public class PlayerManager : MonoBehaviour, ILoader
     public List<Team> Teams;
     public Player ActivePlayer;
     public int CurrentTeamIndex => _index = (_index + 1) % Teams.Count;
+    public event Action WeaponChangedEvent;
 
+    public PlayerControllerManager ControllerManager;
+    
     private int _index;
-
+    
     public Team GetNextActiveTeam()
     {
         return Teams[CurrentTeamIndex];
@@ -22,12 +27,9 @@ public class PlayerManager : MonoBehaviour, ILoader
     private void Awake()
     {
         Teams = new List<Team>();
+        ControllerManager = gameObject.AddComponent<PlayerControllerManager>();
     }
 
-    private void Start()
-    {
-    }
-    
     public void Load()
     {
         var testData = new GameData()
@@ -36,12 +38,12 @@ public class PlayerManager : MonoBehaviour, ILoader
             {
                 new TeamData()
                 {
-                    PlayerCount = 10
+                    PlayerCount = 5
                 },
-                // new TeamData()
-                // {
-                    // PlayerCount = 1
-                // }
+                new TeamData()
+                {
+                    PlayerCount = 5
+                }
             }
         };
 
@@ -50,11 +52,16 @@ public class PlayerManager : MonoBehaviour, ILoader
         ActivePlayer = Teams[0].Players[0];
     }
 
-    public Player SetNextActivePlayer()
+    public Player GetNextActivePlayer()
     {
         var team = GetNextActiveTeam();
-        ActivePlayer = team.GetNextPlayer();
-        return ActivePlayer;
+        return team.GetNextPlayer();
+    }
+
+    public void SetActivePlayer(Player player)
+    {
+        ActivePlayer = player;
+        ControllerManager.SetPlayer(player);
     }
 
     private void CreateTeams(GameData gameData)
@@ -108,7 +115,7 @@ public class PlayerManager : MonoBehaviour, ILoader
 
     }
 
-    bool IsSpawnPointValid(ref Vector3 pos)
+    private bool IsSpawnPointValid(ref Vector3 pos)
     {
         var worldLayer = LayerMask.NameToLayer("World");
         const float distanceToCheck = 500f;

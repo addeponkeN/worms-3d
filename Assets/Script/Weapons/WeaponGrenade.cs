@@ -1,7 +1,4 @@
-using CameraSystem.CameraStates;
 using Projectiles;
-using UnityEngine;
-using Util;
 
 namespace Weapons
 {
@@ -19,6 +16,7 @@ namespace Weapons
         public override void Init()
         {
             base.Init();
+            IsProjectile = true;
             Power = 5000f;
         }
 
@@ -26,6 +24,7 @@ namespace Weapons
         {
             base.Fired();
             _projectile = FireProjectile(ProjectileTypes.Grenade);
+            Kill();
         }
 
     }

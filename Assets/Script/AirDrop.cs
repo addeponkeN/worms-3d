@@ -4,6 +4,12 @@ using UnityEngine;
 using Util;
 using VoxelEngine;
 
+public enum CrateItemTypes
+{
+    Health,
+    
+}
+
 public class AirDrop : MonoBehaviour, IFollowable
 {
     private static readonly int Idle = Animator.StringToHash("Idle");
@@ -18,6 +24,7 @@ public class AirDrop : MonoBehaviour, IFollowable
     private Animator _animator;
     [SerializeField] private GameObject _parachute;
     [SerializeField] private GameObject _collider;
+    [SerializeField] private GameObject _playerCollider;
     
     private bool _landed;
 
@@ -45,8 +52,8 @@ public class AirDrop : MonoBehaviour, IFollowable
         Destroy(GetComponent<BoxCollider>());
         Destroy(GetComponent<Rigidbody>());
 
-        var boxCollider = _collider.GetComponent<BoxCollider>();
-        boxCollider.enabled = true;
+        // var boxCollider = _collider.GetComponent<BoxCollider>();
+        // boxCollider.enabled = true;
         var body = _collider.GetComponent<Rigidbody>();
         body.useGravity = true;
         body.mass = 1f;
@@ -57,6 +64,23 @@ public class AirDrop : MonoBehaviour, IFollowable
     private void Crash()
     {
         ReleasedParachute = true;
+        Destroy(gameObject);
+    }
+
+    public void LootItem(Player player)
+    {
+        //  temp
+
+        var rewardType = CrateItemTypes.Health;
+        
+        switch(rewardType)
+        {
+            case CrateItemTypes.Health:
+                player.Life.Heal(50);
+                break;
+        }
+        
+        Debug.Log("gave player loot. time to die");
         Destroy(gameObject);
     }
 

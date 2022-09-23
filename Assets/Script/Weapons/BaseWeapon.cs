@@ -12,23 +12,26 @@ namespace Weapons
         Hand,
         Grenade,
         Bazooka,
+        Pistol,
     }
 
     public abstract class BaseWeapon
     {
-        private const float MaxCharge = 1.5f;
+        protected float ChargeTime = 1.5f;
 
         public abstract WeaponTypes WeaponType { get; }
 
         public PlayerControllerManager Manager;
-        public GameObject WeaponObject;
+        public GameObject WeaponGo;
         public bool IsFired;
         public bool IsAimDown;
-        public bool IsProjectile = true;
+        public bool IsProjectile;
+        public bool IsAlive = true;
+        public bool CanBeSwapped = true;
 
         protected bool IsFireDown;
         protected float Power = 5000f;
-        protected float GetFinalPower => Power * (_chargeTimer / MaxCharge);
+        protected float GetFinalPower => Power * (_chargeTimer / ChargeTime);
 
         private Vector3 _rotationOffset;
         private Transform _weaponOrigin;
@@ -37,15 +40,15 @@ namespace Weapons
 
         public virtual void Init()
         {
-            WeaponObject = Object.Instantiate(PrefabManager.Get.GetPrefab(WeaponType));
+            WeaponGo = Object.Instantiate(PrefabManager.Get.GetPrefab(WeaponType));
 
             _weaponOrigin = Manager.Player.WeaponOrigin.transform;
-            _rotationOffset = WeaponObject.transform.eulerAngles;
+            _rotationOffset = WeaponGo.transform.eulerAngles;
         }
 
         public virtual void Update()
         {
-            var tf = WeaponObject.transform;
+            var tf = WeaponGo.transform;
             tf.position = _weaponOrigin.transform.position;
 
             var eulerAngles = Manager.PlayerGo.transform.eulerAngles;
@@ -74,7 +77,7 @@ namespace Weapons
                 if(IsFireDown)
                 {
                     _chargeTimer += Time.deltaTime;
-                    if(Input.GetMouseButtonUp(0) || _chargeTimer >= MaxCharge)
+                    if(Input.GetMouseButtonUp(0) || _chargeTimer >= ChargeTime)
                         Fired();
                 }
                 else
@@ -92,7 +95,7 @@ namespace Weapons
             projDirection.Normalize();
 
             var projectileGo = Object.Instantiate(PrefabManager.Get.GetPrefab(type));
-            projectileGo.transform.position = WeaponObject.transform.position + projDirection * 0.75f;
+            projectileGo.transform.position = WeaponGo.transform.position + projDirection * 0.75f;
             var projectile = projectileGo.GetComponent<BaseProjectile>();
             projectile.Init(new ProjectileData(GetFinalPower, projDirection));
             return projectile;
@@ -106,6 +109,7 @@ namespace Weapons
         public virtual void FireStart()
         {
             IsFireDown = true;
+            _chargeTimer = 0f;
         }
 
         public virtual void OnEnabled(bool enabled)
@@ -118,12 +122,17 @@ namespace Weapons
         {
             IsFired = true;
             IsFireDown = false;
-            Kill();
         }
 
+        protected void ResetFire()
+        {
+            IsFired = false;
+        }
+        
         public virtual void Kill()
         {
-            Object.Destroy(WeaponObject);
+            IsAlive = false;
+            Object.Destroy(WeaponGo);
             var camManager = GameManager.Get.CamManager;
             camManager.AimCam.Priority = 9;
         }

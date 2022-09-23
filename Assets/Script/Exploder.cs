@@ -62,7 +62,7 @@ public class Exploder : MonoBehaviour
         for(int i = 0; i < hits; i++)
         {
             var target = _buffer[i].transform.gameObject;
-            var ent = target.GetComponentInParent<GameEntity>();
+            var ent = target.GetComponentInParent<GameActor>();
 
             var distance = Vector3.Distance(target.transform.position, data.Position);
             var multiplier = Mathf.Clamp(1.15f - distance / data.Radius, 0.1f, 1f);

@@ -41,7 +41,7 @@ namespace Projectiles
         void Explode()
         {
             _exploded = true;
-            ExplodeEvent?.Invoke(new ExplodeData(transform.position, ExplodeRadius, 35));
+            ExplodeEvent?.Invoke(new ExplodeData(transform.position, ExplodeRadius, Damage));
             Kill();
         }
     }

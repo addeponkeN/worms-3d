@@ -14,7 +14,9 @@ namespace GameStates
         private IFollowable _followAble;
         private float _timer;
 
-        public GameStateFollowObject(IFollowable followAble, float waitTimeAfterFollowEnded = 2f)
+        private bool _ended;
+
+        public GameStateFollowObject(IFollowable followAble, float waitTimeAfterFollowEnded = 0f)
         {
             _followAble = followAble;
             _timer = waitTimeAfterFollowEnded;
@@ -26,14 +28,34 @@ namespace GameStates
             GameManager.Get.CamManager.SetMainState(new FollowFollowable(_followAble));
         }
 
+        private void SpectateCorpse()
+        {
+            var corpseGo = new GameObject();
+            var corpse = corpseGo.AddComponent<Corpse>();
+            corpseGo.transform.position = _followAble.Transform.position;
+            GameManager.Get.CamManager.SetMainState(new FollowFollowable(corpse));
+        }
+
         public override void Update()
         {
             base.Update();
-            if(_followAble == null || _followAble.EndFollow)
+
+            if(!_followAble.EndFollow)
+                return;
+            
+            if(_timer > 0)
             {
+                if(!_ended)
+                {
+                    _ended = true;
+                    SpectateCorpse();
+                }
+
                 _timer -= Time.deltaTime;
-                if(_timer <= 0)
-                    Exit();
+            }
+            else
+            {
+                Exit();
             }
         }
 

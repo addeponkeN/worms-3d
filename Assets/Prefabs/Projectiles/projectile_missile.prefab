@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExplodeRadius: 6
-  Damage: 35
+  Damage: 999
 --- !u!114 &-7234649945466578060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,14 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 141593b4340946cfb838e92f0cbc09a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetExploder:
-    rid: -2
   _exploder: {fileID: -9126945574819455020}
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
 --- !u!33 &67998377334574035
 MeshFilter:
   m_ObjectHideFlags: 0

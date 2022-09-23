@@ -4,10 +4,13 @@ using Weapons;
 
 namespace PlayerControllers
 {
-    public class PlayerWeaponManager : BasePlayerController
+    public class PlayerWeaponController : BasePlayerController
     {
         public BaseWeapon CurrentWeapon;
+
         public event Action<BaseWeapon> WeaponFiredEvent;
+        public event Action<BaseWeapon> WeaponChangedEvent;
+        public event Action<BaseWeapon> WeaponDoneEvent;
 
         private bool _isWeaponActive;
 
@@ -32,6 +35,7 @@ namespace PlayerControllers
             CurrentWeapon = wep;
             CurrentWeapon.Manager = Manager;
             CurrentWeapon.Init();
+            WeaponChangedEvent?.Invoke(CurrentWeapon);
         }
 
         public override void OnEnabled(bool enabled)
@@ -47,24 +51,45 @@ namespace PlayerControllers
             if(CurrentWeapon != null)
             {
                 CurrentWeapon.Update();
+                if(!CurrentWeapon.IsAlive)
+                {
+                    WeaponDoneEvent?.Invoke(CurrentWeapon);
+                    UnequipWeapon();
+                }
+
                 if(CurrentWeapon.IsFired)
                 {
                     WeaponFiredEvent?.Invoke(CurrentWeapon);
-                    UnequipWeapon();
+                }
+
+                if(CurrentWeapon.CanBeSwapped)
+                {
+                    SelectWeaponInput();
                 }
             }
+            else
+            {
+                SelectWeaponInput();
+            }
+        }
 
-            if(Input.GetKeyDown(KeyCode.Alpha0))
+        void SelectWeaponInput()
+        {
+            if(Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Alpha0))
             {
                 UnequipWeapon();
             }
-            else if(Input.GetKeyDown(KeyCode.Alpha1))
+            else if(Input.GetKeyDown(KeyCode.Alpha2))
             {
                 EquipWeapon(new WeaponGrenade());
             }
-            else if(Input.GetKeyDown(KeyCode.Alpha2))
+            else if(Input.GetKeyDown(KeyCode.Alpha3))
             {
                 EquipWeapon(new WeaponBazooka());
+            }
+            else if(Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                EquipWeapon(new WeaponPistol());
             }
         }
     }

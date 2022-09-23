@@ -26,7 +26,7 @@ namespace PlayerControllers
                     ControlSet.Controllers[i].OnEnabled(_controllersEnabled);
             }
         }
-
+        
         public T GetController<T>() where T : BasePlayerController => ControlSet.GetController<T>();
 
         private void Awake()
@@ -36,17 +36,23 @@ namespace PlayerControllers
 
             PlayerGo = gameObject;
             Player = gameObject.GetComponent<Player>();
+            
+            AddController(new PlayerMovementController());
+            AddController(new PlayerLookController());
+            AddController(new PlayerJumpController());
+            AddController(new PlayerWeaponController());
+        }
+
+        public void SetPlayer(Player player)
+        {
+            PlayerGo = player.gameObject;
+            Player = player;
+            
+            ControlSet.Init();
         }
 
         private void Start()
         {
-            AddController(new PlayerMovementController());
-            AddController(new PlayerLookController());
-            AddController(new PlayerJumpController());
-            AddController(new PlayerWeaponManager());
-
-            ControlSet.Init();
-
             Started = true;
         }
 
@@ -63,13 +69,13 @@ namespace PlayerControllers
 
         private void Update()
         {
-            if(ControllersEnabled)
+            if(ControllersEnabled && Player.Life.IsAlive)
                 ControlSet.Update();
         }
 
         private void FixedUpdate()
         {
-            if(ControllersEnabled)
+            if(ControllersEnabled && Player.Life.IsAlive)
                 ControlSet.FixedUpdate();
         }
 

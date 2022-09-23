@@ -62,6 +62,11 @@ namespace Projectiles
         {
             IsAlive = false;
             EndFollow = true;
+            Invoke(nameof(DestroySelf), 0.05f);
+        }
+
+        void DestroySelf()
+        {
             Destroy(Body.gameObject);
         }
 

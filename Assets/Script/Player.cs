@@ -1,5 +1,4 @@
 using System;
-using PlayerControllers;
 using UnityEngine;
 
 public class EntityLife
@@ -9,10 +8,10 @@ public class EntityLife
     public int MaxLife { get; set; }
 
     /// <summary>
-    /// Life and Damage amount
+    /// EntityLife(life), int(damage)
     /// </summary>
-    public Action<EntityLife, int> LifeUpdatedEvent;
-    public Action DeathEvent;
+    public event Action<EntityLife, int> LifeUpdatedEvent;
+    public event Action DeathEvent;
 
     public EntityLife(int life)
     {
@@ -27,11 +26,10 @@ public class EntityLife
             return;
         }
 
-        Debug.Log($"took dmg: {dmg}");
-
         Life -= dmg;
+        Debug.Log($"took dmg: {dmg}  ({Life}hp)");
         LifeUpdatedEvent?.Invoke(this, -dmg);
-        if(Life <= 0)
+        if(!IsAlive)
         {
             DeathEvent?.Invoke();
         }
@@ -45,16 +43,23 @@ public class EntityLife
         }
 
         Life = Mathf.Clamp(Life + val, 0, MaxLife);
+        Debug.Log($"heal: +{val}  ({Life}hp)");
         LifeUpdatedEvent?.Invoke(this, val);
+    }
+
+    public void Kill()
+    {
+        Life = 0;
+        DeathEvent?.Invoke();
     }
     
 }
 
-public class Player : GameEntity
+public class Player : GameActor
 {
     private const int PLAYER_START_LIFE = 100;
 
-    public PlayerControllerManager ControlManager;
+    // public PlayerControllerManager ControlManager;
     public bool IsControllersEnabled;
 
     public Transform CameraPosition;
@@ -68,7 +73,7 @@ public class Player : GameEntity
     {
         base.Awake();
         CharController = GetComponent<CharacterController>();
-        ControlManager = GetComponent<PlayerControllerManager>();
+        // ControlManager = GetComponent<PlayerControllerManager>();
     }
 
     public void Init(Team team)
@@ -80,6 +85,6 @@ public class Player : GameEntity
     protected override void Update()
     {
         base.Update();
-        IsControllersEnabled = ControlManager.ControllersEnabled;
+        // IsControllersEnabled = ControlManager.ControllersEnabled;
     }
 }

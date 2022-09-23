@@ -1,22 +1,43 @@
 using CameraSystem.CameraStates;
 using PlayerControllers;
 using UnityEngine;
+using Util;
 using Weapons;
 
 namespace GameStates
 {
+    public class Corpse : MonoBehaviour, IFollowable
+    {
+        public bool EndFollow { get; set; } = true;
+        public Transform Transform => transform;
+
+        private Timer _life = 3f;
+
+        private void Update()
+        {
+            if(_life.Update())
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
+
     public class GameStateActivePlayer : GameState
     {
         private Player _player;
-        private PlayerWeaponManager _wepManager;
+        private PlayerWeaponController _wepManager;
 
         private float _playTimer;
         private bool _timeOut;
 
+        private bool _died;
+
+        public float PlayTimer => _playTimer;
+
         public GameStateActivePlayer(Player player)
         {
             _player = player;
-            _wepManager = player.ControlManager.GetController<PlayerWeaponManager>();
+            _wepManager = GameManager.Get.PlayerManager.ControllerManager.GetController<PlayerWeaponController>();
         }
 
         public override void Init(GameStateManager manager)
@@ -25,8 +46,19 @@ namespace GameStates
 
             _playTimer = 30f;
             _wepManager.WeaponFiredEvent += WepManagerOnWeaponFiredEvent;
-            _player.ControlManager.ControllersEnabled = true;
+            _wepManager.WeaponDoneEvent += WepManagerOnWeaponDoneEvent;
+            GameManager.Get.PlayerManager.ControllerManager.ControllersEnabled = true;
             GameManager.Get.CamManager.SetMainState(new FollowPlayerState(_player));
+        }
+
+        private void WepManagerOnWeaponDoneEvent(BaseWeapon wep)
+        {
+            if(!wep.IsProjectile)
+            {
+                Manager.PushState(new GameStateSpectatePlayer(_player));
+                Exit();
+                Debug.Log("weapon killed");
+            }
         }
 
         private void WepManagerOnWeaponFiredEvent(BaseWeapon wep)
@@ -35,15 +67,33 @@ namespace GameStates
             {
                 var projectile = wep.GetProjectile();
                 Manager.PushState(new GameStateSpectatePlayer(_player));
-                Manager.PushState(new GameStateFollowObject(projectile));
+                Manager.PushState(new GameStateFollowProjectile(projectile, 2f));
+                Exit();
+            }
+            if(!wep.IsAlive)
+            {
+                Manager.PushState(new GameStateSpectatePlayer(_player));
                 Exit();
             }
         }
 
         private void OnTimeOut()
         {
-            Debug.Log("TIME OUT");
             Manager.PushState(new GameStateSpectatePlayer(_player));
+            Exit();
+        }
+
+        private void OnDied()
+        {
+            if(_died)
+                return;
+
+            _died = true;
+
+            var corpseGo = new GameObject("corpse");
+            var corpse = corpseGo.AddComponent<Corpse>();
+            corpseGo.transform.position = _player.transform.position;
+            Manager.PushState(new GameStateFollowObject(corpse));
             Exit();
         }
 
@@ -52,6 +102,11 @@ namespace GameStates
             base.Update();
 
             GameManager.Get.Ui.AimCanvas.gameObject.SetActive(_wepManager.CurrentWeapon.IsAimDown);
+
+            if(!_player.Life.IsAlive)
+            {
+                OnDied();
+            }
 
             _playTimer -= Time.deltaTime;
             if(_playTimer <= 0)
@@ -66,7 +121,8 @@ namespace GameStates
         public override void Exit()
         {
             base.Exit();
-            _player.ControlManager.ControllersEnabled = false;
+            _wepManager.WeaponFiredEvent -= WepManagerOnWeaponFiredEvent;
+            GameManager.Get.PlayerManager.ControllerManager.ControllersEnabled = false;
             GameManager.Get.Ui.AimCanvas.gameObject.SetActive(false);
         }
     }

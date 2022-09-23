@@ -3,17 +3,13 @@ using UnityEngine;
 namespace GameStates
 {
     /// <summary>
+    /// default state
     /// the brain of all states
     /// the state decider
     /// </summary>
     public class GameStateMain : GameState
     {
         private float _thinkTimer = 0.1f;
-
-        public override void Init(GameStateManager manager)
-        {
-            base.Init(manager);
-        }
 
         private void Think()
         {
@@ -23,7 +19,10 @@ namespace GameStates
                 systems[i].OnNextPlayerTurn();
             }
 
-            var player = GameManager.Get.PlayerManager.SetNextActivePlayer();
+            var playerManager = GameManager.Get.PlayerManager;
+            var player = playerManager.GetNextActivePlayer();
+            playerManager.SetActivePlayer(player);
+            
             Manager.PushState(new GameStateActivePlayer(player));
             Exit();
         }
@@ -37,12 +36,5 @@ namespace GameStates
                 Think();
             }
         }
-
-        public override void Exit()
-        {
-            base.Exit();
-            
-        }
-        
     }
 }

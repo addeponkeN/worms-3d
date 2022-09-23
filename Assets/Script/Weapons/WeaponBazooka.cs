@@ -11,6 +11,7 @@ namespace Weapons
         public override void Init()
         {
             base.Init();
+            IsProjectile = true;
             Power = 3000f;
         }
         
@@ -23,6 +24,7 @@ namespace Weapons
         {
             base.Fired();
            _projectile = FireProjectile(ProjectileTypes.Missile);
+           Kill();
         }
     }
 }

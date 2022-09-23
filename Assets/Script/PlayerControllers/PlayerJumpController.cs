@@ -1,5 +1,4 @@
 using System;
-using EntityComponents;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,9 +16,9 @@ namespace PlayerControllers
         public override void Init()
         {
             _jumpAction = Manager.Input.actions["Jump"];
-            _body = Player.gameObject
-                .GetComponent<ComponentManager>()
-                .GetGameComponent<SimpleBody>();
+            _body = Player.gameObject.GetComponent<SimpleBody>();
+            // .GetComponent<ComponentManager>()
+            // .GetGameComponent<SimpleBody>();
         }
 
         public override void Update()

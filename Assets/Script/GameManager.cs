@@ -27,13 +27,10 @@ public class GameManager : MonoBehaviour
     [NonSerialized] public CameraManager CamManager;
     [NonSerialized] public PlayerManager PlayerManager;
     [NonSerialized] public UiManager Ui;
+    [NonSerialized] public PlayerInput PlayerInput;
     
-    [NonSerialized]
-    public PlayerInput PlayerInput;
-    
+    public GameStateManager StateManager;
     public List<GameSystem> Systems;
-
-    private GameStateManager _stateManager;
 
     private void Awake()
     {
@@ -44,11 +41,16 @@ public class GameManager : MonoBehaviour
         
         PlayerInput = GetComponent<PlayerInput>();
         
-        _stateManager = new GameStateManager();
-        _stateManager.PushState(new GameStateLoading());
+        StateManager = new GameStateManager();
+        StateManager.PushState(new GameStateLoading());
 
         Systems = new();
         AddGameSystem(new AirDropSystem());
+    }
+
+    public GameState GetGameState()
+    {
+        return StateManager.CurrentState;
     }
 
     private void Start()
@@ -58,7 +60,7 @@ public class GameManager : MonoBehaviour
     
     void AddGameSystem(GameSystem system)
     {
-        system.GameStateManager = _stateManager;
+        system.GameStateManager = StateManager;
         Systems.Add(system);
     }
 
@@ -71,12 +73,12 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        _stateManager.Update();
+        StateManager.Update();
     }
 
     private void FixedUpdate()
     {
-        _stateManager.FixedUpdate();
+        StateManager.FixedUpdate();
     }
 
 

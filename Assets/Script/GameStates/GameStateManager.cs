@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ namespace GameStates
         private Stack<GameState> States;
 
         public GameState CurrentState;
+
+        public event Action<GameState> GameStateChangedEvent;
 
         public GameStateManager()
         {
@@ -49,7 +52,8 @@ namespace GameStates
             
             CurrentState = state;
             CurrentState.Init(this);
-            Debug.Log($"STATE: {state.GetType().Name}");
+            GameStateChangedEvent?.Invoke(CurrentState);
+            // Debug.Log($"STATE: {state.GetType().Name}");
         }
 
         void SetDefaultState()

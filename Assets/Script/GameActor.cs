@@ -3,12 +3,12 @@ using EntityComponents;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class GameEntity : MonoBehaviour
+public class GameActor : MonoBehaviour
 {
     private const int DEFAULT_LIFE = 100;
 
     [NonSerialized] public CharacterController CharController;
-    [NonSerialized] public ComponentManager ComponentManager;
+    // [NonSerialized] public ComponentManager ComponentManager;
 
     public GameObject Model;
     public bool IsGrounded;
@@ -20,10 +20,23 @@ public class GameEntity : MonoBehaviour
     protected virtual void Awake()
     {
         CharController = GetComponent<CharacterController>();
-        ComponentManager = gameObject.AddComponent<ComponentManager>();
-        Model = GameObject.Find("Model");
+        // ComponentManager = gameObject.AddComponent<ComponentManager>();
+        Model = transform.Find("Model").gameObject;// GameObject.Find("Model");
         Life = new EntityLife(DEFAULT_LIFE);
-        Body = new SimpleBody(CharController);
+        Body = gameObject.AddComponent<SimpleBody>();
+        
+        Life.DeathEvent += LifeOnDeathEvent;
+    }
+
+    private void Start()
+    {
+        // ComponentManager.AddGameComponent(new LifeBoundsComponent());
+        gameObject.AddComponent<LifeBoundsComponent>();
+    }
+
+    private void LifeOnDeathEvent()
+    {
+        // ComponentManager.AddGameComponent(new DeadComponent());
     }
 
     protected virtual void Update()
@@ -40,8 +53,14 @@ public class GameEntity : MonoBehaviour
     {
         Body.LateUpdate();
     }
+
+    public virtual void Kill()
+    {
+    }
+    
 }
 
+[RequireComponent(typeof(CharacterController))]
 public class SimpleBody : BaseEntityComponent
 {
     private CharacterController _con;
@@ -53,9 +72,15 @@ public class SimpleBody : BaseEntityComponent
     private float _mass = 2f;
     private float _jumpMass = 6f;
 
-    public SimpleBody(CharacterController con)
+    // public SimpleBody(CharacterController con)
+    // {
+        // _con = con;
+    // }
+
+    public override void Start()
     {
-        _con = con;
+        base.Start();
+        _con = gameObject.GetComponent<CharacterController>();
     }
 
     public void Push(Vector3 direction, float force)

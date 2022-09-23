@@ -23,6 +23,11 @@ public class MainCanvas : MonoBehaviour
 
     private void Start()
     {
+        RegisterAllPrefabPanels();
+    }
+
+    private void RegisterAllPrefabPanels()
+    {
         var uiPanels = PrefabManager.Get.GetPrefabs("Ui/Panels/");
         for(int i = 0; i < uiPanels.Length; i++)
         {
@@ -44,29 +49,30 @@ public class MainCanvas : MonoBehaviour
 
         Debug.LogError($"Could not find panel type: {typeof(T).Name}");
     }
-    
+
     public void PushPanel(IUiPanel panel)
     {
         if(_panelStack.Count > 0)
         {
             SetEnableCurrent(false);
         }
+
         panel.Main = this;
         panel.gameObject.SetActive(true);
         panel.OnFocused(true);
         _panelStack.Push(panel);
     }
 
-    void SetEnableCurrent(bool isEnabled)
+    private void SetEnableCurrent(bool isEnabled)
     {
         if(_panelStack.Count <= 0)
             return;
-        
+
         var currentPanel = _panelStack.Peek();
         currentPanel.gameObject.SetActive(isEnabled);
         currentPanel.OnFocused(isEnabled);
     }
-    
+
     public void ExitPanel()
     {
         var current = _panelStack.Pop();
@@ -75,7 +81,7 @@ public class MainCanvas : MonoBehaviour
         current.OnRemoved();
         SetEnableCurrent(true);
     }
-    
+
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
