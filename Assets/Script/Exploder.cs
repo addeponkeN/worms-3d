@@ -77,6 +77,7 @@ public class Exploder : MonoBehaviour
         if(hits <= 0)
             Debug.Log("EXPLODE NO HITS");
 
-        World.Get.SetVoxelCube(transform.position, (int)data.Radius, 0);
+        // World.Get.SetVoxelCube(transform.position, (int)data.Radius, 0);
+        World.Get.SetVoxelSphere(transform.position, (int)data.Radius, 0);
     }
 }

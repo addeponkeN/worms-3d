@@ -53,28 +53,32 @@ namespace GameStates
 
         private void WepManagerOnWeaponDoneEvent(BaseWeapon wep)
         {
-            if(!wep.IsProjectile)
+            if(wep.IsProjectile)
+            {
+                Manager.PushState(new GameStateSpectatePlayer(_player));
+                if(wep.IsFired)
+                {
+                    var projectile = wep.GetProjectile();
+                    Manager.PushState(new GameStateFollowProjectile(projectile, 2f));
+                }
+                Exit();
+                Debug.Log("exit by fired");
+            }
+            else if(!wep.IsProjectile)
             {
                 Manager.PushState(new GameStateSpectatePlayer(_player));
                 Exit();
-                Debug.Log("weapon killed");
+                Debug.Log("exit by done");
             }
         }
 
         private void WepManagerOnWeaponFiredEvent(BaseWeapon wep)
         {
-            if(wep.IsProjectile)
-            {
-                var projectile = wep.GetProjectile();
-                Manager.PushState(new GameStateSpectatePlayer(_player));
-                Manager.PushState(new GameStateFollowProjectile(projectile, 2f));
-                Exit();
-            }
-            if(!wep.IsAlive)
-            {
-                Manager.PushState(new GameStateSpectatePlayer(_player));
-                Exit();
-            }
+            // if(!wep.IsAlive)
+            // {
+            // Manager.PushState(new GameStateSpectatePlayer(_player));
+            // Exit();
+            // }
         }
 
         private void OnTimeOut()

@@ -11,10 +11,10 @@ namespace VoxelEngine
     public class World : MonoBehaviour, ILoader
     {
         private const float WaterLevelStart = 1.025f;
-        
+
         public static readonly Vector3Int ChunkSize = new(10, 32, 10);
         public static World Get { get; private set; }
-        
+
         public bool LoadingComplete { get; set; }
 
         public Vector3Int WorldBounds => ChunkSize * _worldSize;
@@ -22,12 +22,12 @@ namespace VoxelEngine
         public GameObject Chunks;
         public GameObject Environment;
         public GameObject Prefab_Chunk;
-        
+
         [NonSerialized] public TextureLoader TextureLoader;
 
         public event Action OnGeneratedEvent;
         public float WaterLevel = WaterLevelStart;
-        
+
         private int _worldSize = 16;
         private int _heightOffset = 60;
         private int _heightIntensity = 5;
@@ -60,7 +60,7 @@ namespace VoxelEngine
         private void Start()
         {
         }
-        
+
         public void Load()
         {
             Generate();
@@ -113,7 +113,7 @@ namespace VoxelEngine
                     {
                         if(y < 1)
                             continue;
-                        
+
                         int voxelType = 0;
 
                         if(y == height)
@@ -141,7 +141,7 @@ namespace VoxelEngine
             OnGeneratedEvent?.Invoke();
         }
 
-        void AddChunk(Chunk chunk)
+        private void AddChunk(Chunk chunk)
         {
             _chunks.Add(chunk.PositionIndex, chunk);
             _chunkList.Add(chunk);
@@ -185,7 +185,6 @@ namespace VoxelEngine
             var position = new Vector3(x, y, z);
             if(!InWorldBounds(x, y, z))
             {
-                // Debug.Log($"out of bounds: {position}");
                 return;
             }
 
@@ -193,7 +192,6 @@ namespace VoxelEngine
 
             if(ch == null)
             {
-                Debug.Log($"chunk null: {position}");
                 return;
             }
 
@@ -212,14 +210,33 @@ namespace VoxelEngine
             var sz = (int)(worldPosition.z - radius);
             var ez = (int)(worldPosition.z + radius);
 
-            for(int x = sx; x < ex; x++)
-            for(int y = sy; y < ey; y++)
-            for(int z = sz; z < ez; z++)
+            for(int x = sx; x <= ex; x++)
+            for(int y = sy; y <= ey; y++)
+            for(int z = sz; z <= ez; z++)
             {
                 SetVoxel(x, y, z, voxelType);
             }
         }
 
-    }
+        public void SetVoxelSphere(Vector3 worldPosition, int radius, int voxelType)
+        {
+            var sx = (int)(worldPosition.x - radius);
+            var ex = (int)(worldPosition.x + radius);
+            var sy = (int)(worldPosition.y - radius);
+            var ey = (int)(worldPosition.y + radius);
+            var sz = (int)(worldPosition.z - radius);
+            var ez = (int)(worldPosition.z + radius);
 
+            for(int x = sx; x <= ex; x++)
+            for(int y = sy; y <= ey; y++)
+            for(int z = sz; z <= ez; z++)
+            {
+                var dis = Vector3.Distance(new Vector3(x, y, z), worldPosition);
+                if(dis < radius)
+                {
+                    SetVoxel(x, y, z, voxelType);
+                }
+            }
+        }
+    }
 }

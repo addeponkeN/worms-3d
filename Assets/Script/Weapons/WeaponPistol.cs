@@ -48,7 +48,7 @@ namespace Weapons
             base.FireStart();
 
             CanBeSwapped = false;
-            
+
             if(_magazineCount <= 0)
             {
                 if(_bullets <= 0)
@@ -56,7 +56,7 @@ namespace Weapons
                     Kill();
                     Debug.Log("no more bullets - time to die");
                 }
-                
+
                 Debug.Log("no bullets in mag - reload (R)");
                 return;
             }
@@ -76,6 +76,7 @@ namespace Weapons
                 {
                     Debug.Log("hit player");
                     player.Life.TakeDamage((int)Damage);
+                    player.Body.Push(ray.direction + Vector3.up * .25f, 1f);
                 }
                 else
                 {
@@ -97,8 +98,6 @@ namespace Weapons
         public override void Fired()
         {
             base.Fired();
-            
         }
-        
     }
 }

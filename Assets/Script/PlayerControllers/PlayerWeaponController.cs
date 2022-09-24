@@ -51,17 +51,15 @@ namespace PlayerControllers
             if(CurrentWeapon != null)
             {
                 CurrentWeapon.Update();
+                if(CurrentWeapon.IsFired)
+                {
+                    WeaponFiredEvent?.Invoke(CurrentWeapon);
+                }
                 if(!CurrentWeapon.IsAlive)
                 {
                     WeaponDoneEvent?.Invoke(CurrentWeapon);
                     UnequipWeapon();
                 }
-
-                if(CurrentWeapon.IsFired)
-                {
-                    WeaponFiredEvent?.Invoke(CurrentWeapon);
-                }
-
                 if(CurrentWeapon.CanBeSwapped)
                 {
                     SelectWeaponInput();
@@ -73,7 +71,7 @@ namespace PlayerControllers
             }
         }
 
-        void SelectWeaponInput()
+        private void SelectWeaponInput()
         {
             if(Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Alpha0))
             {
