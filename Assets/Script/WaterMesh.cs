@@ -10,6 +10,17 @@ public class WaterMesh : MonoBehaviour
     public float WaveSpeed = 1f;
     public float WavePower = 1f;
 
+    private float _waterLevel;
+    public float WaterLevel
+    {
+        get => transform.position.y;
+        set
+        {
+            var pos = transform.position;
+            transform.position = new Vector3(pos.x, value, pos.z);
+        }
+    }
+
     private MeshFilter _meshFilter;
 
     private Vector2 offset;

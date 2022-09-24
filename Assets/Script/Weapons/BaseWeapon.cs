@@ -17,22 +17,25 @@ namespace Weapons
 
     public abstract class BaseWeapon
     {
-        protected float ChargeTime = 1.5f;
+        public float ChargeTime = 1.5f;
 
         public abstract WeaponTypes WeaponType { get; }
 
+        public float GetWeaponChargeValue => _chargeTimer / ChargeTime;
+        public float GetFinalPower => Power * GetWeaponChargeValue;
+        
         public PlayerControllerManager Manager;
         public GameObject WeaponGo;
         public bool IsFired;
+        public bool IsFireDown;
         public bool IsAimDown;
         public bool IsProjectile;
         public bool IsAlive = true;
         public bool CanBeSwapped = true;
+        public bool AimeStanceChangedThisFrame;
 
-        protected bool IsFireDown;
         protected float Power = 5000f;
-        protected float GetFinalPower => Power * (_chargeTimer / ChargeTime);
-
+        
         private Vector3 _rotationOffset;
         private Transform _weaponOrigin;
         private bool _prevAimDown;
@@ -48,6 +51,8 @@ namespace Weapons
 
         public virtual void Update()
         {
+            AimeStanceChangedThisFrame = false;
+
             var tf = WeaponGo.transform;
             tf.position = _weaponOrigin.transform.position;
 
@@ -60,6 +65,7 @@ namespace Weapons
 
             if(IsAimDown != _prevAimDown)
             {
+                AimeStanceChangedThisFrame = true;
                 if(IsAimDown)
                 {
                     var camManager = GameManager.Get.CamManager;
@@ -128,7 +134,7 @@ namespace Weapons
         {
             IsFired = false;
         }
-        
+
         public virtual void Kill()
         {
             IsAlive = false;

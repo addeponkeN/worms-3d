@@ -24,11 +24,11 @@ namespace VoxelEngine
         public GameObject Prefab_Chunk;
 
         [NonSerialized] public TextureLoader TextureLoader;
+        public WaterMesh Water;
 
         public event Action OnGeneratedEvent;
-        public float WaterLevel = WaterLevelStart;
 
-        private int _worldSize = 16;
+        private int _worldSize = 10;
         private int _heightOffset = 60;
         private int _heightIntensity = 5;
 
@@ -51,6 +51,8 @@ namespace VoxelEngine
             _chunksToUpdate = new DistinctList<Chunk>();
             _chunkList = new List<Chunk>();
             _chunks = new Dictionary<Vector2Int, Chunk>();
+
+            Water.WaterLevel = WaterLevelStart;
 
             TextureLoader = gameObject.GetComponent<TextureLoader>();
 

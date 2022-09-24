@@ -28,7 +28,10 @@ namespace GameStates
                 States.Push(state);
             }
 
-            Debug.Log($"STATE PUSH: {state.GetType().Name}");
+            string val = "STATES: ";
+            foreach(var st in States)
+                val += $"{st.GetType().Name} < ";
+            Debug.Log(val);
         }
 
         public void ClearStack()
@@ -41,7 +44,7 @@ namespace GameStates
         {
             SetState(state);
         }
-        
+
         void SetState(GameState state)
         {
             //  if current state is (not null & is alive), exit it
@@ -49,7 +52,7 @@ namespace GameStates
             {
                 CurrentState.Exit();
             }
-            
+
             CurrentState = state;
             CurrentState.Init(this);
             GameStateChangedEvent?.Invoke(CurrentState);
@@ -82,10 +85,15 @@ namespace GameStates
 
             if(CurrentState != null)
             {
-                CurrentState.Update();
                 if(!CurrentState.IsAlive)
                 {
                     NextState();
+                }
+                else
+                {
+                    CurrentState.Update();
+                    if(!CurrentState.IsAlive)
+                        NextState();
                 }
             }
         }
@@ -97,6 +105,5 @@ namespace GameStates
                 CurrentState.FixedUpdate();
             }
         }
-        
     }
 }

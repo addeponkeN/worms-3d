@@ -1,8 +1,11 @@
 using System;
+using Teams;
 using UnityEngine;
 
-public class EntityLife
+public class ActorLife
 {
+    public GameActor Parent;
+    
     public bool IsAlive => Life > 0;
     public int Life { get; set; }
     public int MaxLife { get; set; }
@@ -10,11 +13,12 @@ public class EntityLife
     /// <summary>
     /// EntityLife(life), int(damage)
     /// </summary>
-    public event Action<EntityLife, int> LifeUpdatedEvent;
-    public event Action DeathEvent;
+    public event Action<ActorLife, int> LifeUpdatedEvent;
+    public event Action<GameActor> DeathEvent;
 
-    public EntityLife(int life)
+    public ActorLife(GameActor actor, int life)
     {
+        Parent = actor;
         Life = life;
         MaxLife = life;
     }
@@ -31,7 +35,7 @@ public class EntityLife
         LifeUpdatedEvent?.Invoke(this, -dmg);
         if(!IsAlive)
         {
-            DeathEvent?.Invoke();
+            DeathEvent?.Invoke(Parent);
         }
     }
 
@@ -50,18 +54,13 @@ public class EntityLife
     public void Kill()
     {
         Life = 0;
-        DeathEvent?.Invoke();
+        DeathEvent?.Invoke(Parent);
     }
     
 }
 
 public class Player : GameActor
 {
-    private const int PLAYER_START_LIFE = 100;
-
-    // public PlayerControllerManager ControlManager;
-    public bool IsControllersEnabled;
-
     public Transform CameraPosition;
     public Transform CameraAimPosition;
     public Transform WeaponOrigin;
@@ -73,18 +72,13 @@ public class Player : GameActor
     {
         base.Awake();
         CharController = GetComponent<CharacterController>();
-        // ControlManager = GetComponent<PlayerControllerManager>();
     }
+
+    public Team GetTeam() => _team;
 
     public void Init(Team team)
     {
         _team = team;
         _id = _team.Players.Count;
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-        // IsControllersEnabled = ControlManager.ControllersEnabled;
     }
 }

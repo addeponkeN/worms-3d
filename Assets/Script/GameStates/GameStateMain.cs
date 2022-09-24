@@ -13,17 +13,18 @@ namespace GameStates
 
         private void Think()
         {
-            var systems = GameManager.Get.Systems;
-            for(int i = 0; i < systems.Count; i++)
-            {
-                systems[i].OnNextPlayerTurn();
-            }
-
             var playerManager = GameManager.Get.PlayerManager;
             var player = playerManager.GetNextActivePlayer();
             playerManager.SetActivePlayer(player);
             
             Manager.PushState(new GameStateActivePlayer(player));
+            
+            var systems = GameManager.Get.Systems;
+            for(int i = 0; i < systems.Count; i++)
+            {
+                systems[i].OnNextPlayerTurn();
+            }
+            
             Exit();
         }
         

@@ -75,8 +75,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.4421749, y: 2.323266, z: 1}
-  m_Center: {x: 0.039263934, y: 0.8127589, z: 0}
+  m_Size: {x: 0.88962305, y: 1.312995, z: 1}
+  m_Center: {x: 0.010786459, y: 0.6371865, z: 0}
 --- !u!54 &7455835857099472397
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -154,8 +154,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.4046535, y: 2.4813333, z: 1.335298}
-  m_Center: {x: -0.0278337, y: 0.7406666, z: -0.09983033}
+  m_Size: {x: 0.90739787, y: 1.3146765, z: 1.2287533}
+  m_Center: {x: 0.03044647, y: 0.6036223, z: 0.018935055}
 --- !u!114 &3587807741585354042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,6 +168,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 827f04aea997483fa648a9a5f808ab03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &5976778172365079544
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1487011408120578514}
+  m_Layer: 0
+  m_Name: WeaponOrigin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1487011408120578514
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5976778172365079544}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.392, y: 0.663, z: -0.02}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7116960372577788636}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6588089224399638544
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,6 +264,7 @@ Transform:
   - {fileID: 7118976618903469993}
   - {fileID: 5505223264548677139}
   - {fileID: 3689608863642237744}
+  - {fileID: 1487011408120578514}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -267,16 +299,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Model: {fileID: 0}
-  IsGrounded: 0
   Stats:
-    MoveSpeed: 8
+    MoveSpeed: 3
     Gravity: 0.05
-    JumpStrength: 8
+    JumpStrength: 4
   Body: {fileID: 0}
-  IsControllersEnabled: 0
   CameraPosition: {fileID: 5680805877331183130}
   CameraAimPosition: {fileID: 0}
-  WeaponOrigin: {fileID: 8884707634172049402}
+  WeaponOrigin: {fileID: 1487011408120578514}
 --- !u!1001 &5505990105972367007
 PrefabInstance:
   m_ObjectHideFlags: 0

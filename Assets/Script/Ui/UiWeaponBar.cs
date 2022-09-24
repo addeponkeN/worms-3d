@@ -10,10 +10,9 @@ namespace Ui
     {
         public int Spacing = 4;
 
-        private int _weaponCount;
-        private float _slotDimensions;
-
         private UiWeaponSlot[] _slots;
+        private int _weaponCount;
+        private float _slotWidth;
 
         private void Start()
         {
@@ -23,7 +22,7 @@ namespace Ui
             var prefItem = PrefabManager.Get.GetPrefab("weapon_slot");
 
             var prefImage = prefItem.GetComponentInChildren<Image>();
-            _slotDimensions = prefImage.sprite.bounds.extents.x;
+            _slotWidth = prefImage.sprite.bounds.extents.x;
 
             var basePos = transform.position;
 
@@ -35,7 +34,7 @@ namespace Ui
                 var weaponGo = Instantiate(prefItem, transform);
                 weaponGo.name = $"Weapon_{wepType}";
                 weaponGo.transform.position =
-                    new Vector3(basePos.x + Spacing * i + _slotDimensions * i, basePos.y, basePos.y);
+                    new Vector3(basePos.x + Spacing * i + _slotWidth * i, basePos.y, basePos.y);
 
                 _slots[i] = weaponGo.GetComponent<UiWeaponSlot>().SetSlot(wepType, i);
             }
@@ -43,11 +42,11 @@ namespace Ui
             SetBarInCenter();
 
             var controllerManager = GameManager.Get.PlayerManager.ControllerManager;
-            var wepManager = controllerManager.GetController<PlayerWeaponController>();
-            wepManager.WeaponChangedEvent += WepManagerOnWeaponChangedEvent;
+            var wepController = controllerManager.GetController<PlayerWeaponController>();
+            wepController.WeaponChangedEvent += WeaponControllerOnWeaponChangedEvent;
         }
 
-        private void WepManagerOnWeaponChangedEvent(BaseWeapon wep)
+        private void WeaponControllerOnWeaponChangedEvent(BaseWeapon wep)
         {
             for(int i = 0; i < _slots.Length; i++)
                 _slots[i].SetSelected(false);
@@ -58,8 +57,8 @@ namespace Ui
         private void SetBarInCenter()
         {
             var rect = GetComponent<RectTransform>();
-            float x = -(_slotDimensions * _weaponCount + Spacing * _weaponCount) * .5f;
-            float y = _slotDimensions * .5f;
+            float x = -(_slotWidth * _weaponCount + Spacing * _weaponCount) * .5f;
+            float y = _slotWidth * .5f;
             rect.anchoredPosition = new Vector2(x, y);
         }
     }

@@ -42,7 +42,7 @@ namespace GameStates
 
             if(!_followAble.EndFollow)
                 return;
-            
+
             if(_timer > 0)
             {
                 if(!_ended)
@@ -50,13 +50,9 @@ namespace GameStates
                     _ended = true;
                     SpectateCorpse();
                 }
+            }
 
-                _timer -= Time.deltaTime;
-            }
-            else
-            {
-                Exit();
-            }
+            Exit();
         }
 
         public override void Exit()

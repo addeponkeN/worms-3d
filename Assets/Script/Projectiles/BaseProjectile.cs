@@ -1,4 +1,3 @@
-using System;
 using GameStates;
 using UnityEngine;
 using VoxelEngine;
@@ -33,7 +32,7 @@ namespace Projectiles
         public bool EndFollow { get; set; }
         public Transform Transform => transform;
         //  -----------
-        
+
         public bool IsAlive { get; set; } = true;
 
         protected Rigidbody Body;
@@ -43,15 +42,15 @@ namespace Projectiles
         {
             Body = GetComponent<Rigidbody>();
         }
-        
+
         protected virtual void FixedUpdate()
         {
-            if(transform.position.y < World.Get.WaterLevel)
+            if(transform.position.y < World.Get.Water.WaterLevel)
             {
                 Kill();
             }
         }
-        
+
         public virtual void Init(ProjectileData data)
         {
             Data = data;
@@ -69,6 +68,5 @@ namespace Projectiles
         {
             Destroy(Body.gameObject);
         }
-
     }
 }

@@ -9,8 +9,10 @@ namespace PlayerControllers
         public BaseWeapon CurrentWeapon;
 
         public event Action<BaseWeapon> WeaponFiredEvent;
+        public event Action<BaseWeapon> WeaponChargingEvent;
         public event Action<BaseWeapon> WeaponChangedEvent;
         public event Action<BaseWeapon> WeaponDoneEvent;
+        public event Action<BaseWeapon> WeaponAimingEvent;
 
         private bool _isWeaponActive;
 
@@ -51,6 +53,14 @@ namespace PlayerControllers
             if(CurrentWeapon != null)
             {
                 CurrentWeapon.Update();
+                if(CurrentWeapon.AimeStanceChangedThisFrame)
+                {
+                    WeaponAimingEvent?.Invoke(CurrentWeapon);
+                }
+                if(CurrentWeapon.IsFireDown)
+                {
+                    WeaponChargingEvent?.Invoke(CurrentWeapon);
+                }
                 if(CurrentWeapon.IsFired)
                 {
                     WeaponFiredEvent?.Invoke(CurrentWeapon);
@@ -90,5 +100,6 @@ namespace PlayerControllers
                 EquipWeapon(new WeaponPistol());
             }
         }
+        
     }
 }

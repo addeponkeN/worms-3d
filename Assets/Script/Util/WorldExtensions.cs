@@ -45,7 +45,7 @@ namespace Util
 
             if(Physics.Raycast(ray, out var info))
             {
-                if(info.point.y > world.WaterLevel)
+                if(info.point.y > world.Water.WaterLevel)
                 {
                     pos = new Vector3(info.point.x, info.point.y + 1, info.point.z);
                     return true;

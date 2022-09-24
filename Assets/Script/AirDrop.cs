@@ -100,7 +100,7 @@ public class AirDrop : MonoBehaviour, IFollowable
             }
         }
 
-        if(transform.position.y < World.Get.WaterLevel)
+        if(transform.position.y < World.Get.Water.WaterLevel)
         {
             Crash();
         }

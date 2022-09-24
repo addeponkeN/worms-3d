@@ -14,7 +14,7 @@ namespace GameStates
         public override void Init(GameStateManager manager)
         {
             base.Init(manager);
-            Debug.Log("!! AIR DROP IS HAPPENING !!");
+            // Debug.Log("!! AIR DROP IS HAPPENING !!");
             _timer = 2f;
 
             var prefab = PrefabManager.Get.GetPrefab("airdrop");
@@ -29,10 +29,8 @@ namespace GameStates
         {
             base.Update();
 
-
             //                              this new input system rarely works
             // if(!_drop.ReleasedParachute && skipAction.triggered)
-
             if(!_drop.ReleasedParachute && Input.GetKeyDown(KeyCode.Space))
             {
                 _drop.ReleaseParachute();
@@ -51,7 +49,7 @@ namespace GameStates
         public override void Exit()
         {
             base.Exit();
-            Debug.Log("!! AIR DROP ENDED !!");
+            // Debug.Log("!! AIR DROP ENDED !!");
         }
     }
 }

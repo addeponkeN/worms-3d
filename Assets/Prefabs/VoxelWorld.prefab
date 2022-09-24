@@ -31,8 +31,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2466198445533622916}
-  - {fileID: 2466198445159497619}
   - {fileID: 2466198445307093173}
+  - {fileID: 2466198445159497619}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -51,6 +51,7 @@ MonoBehaviour:
   Chunks: {fileID: 2466198445159497618}
   Environment: {fileID: 0}
   Prefab_Chunk: {fileID: 1685222607203126458, guid: ad08d12444edeb84ca3b7659dd14646c, type: 3}
+  Water: {fileID: 2466198445307093172}
   WaterLevel: 1.025
 --- !u!114 &8798921458561034938
 MonoBehaviour:
@@ -109,7 +110,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2466198443618698442}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2466198445307093163
 GameObject:
@@ -143,7 +144,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2466198443618698442}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2466198445307093172
 MonoBehaviour:

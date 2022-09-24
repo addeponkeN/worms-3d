@@ -44,12 +44,6 @@ namespace GameStates
         public override void Update()
         {
             base.Update();
-        }
-
-        public override void FixedUpdate()
-        {
-            base.FixedUpdate();
-            
             if(_loaders.Count > 0)
             {
                 var loader = _loaders.Dequeue();
@@ -59,7 +53,6 @@ namespace GameStates
             {
                 Exit();
             }
-            
         }
 
         public override void Exit()

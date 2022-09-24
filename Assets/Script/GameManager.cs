@@ -45,7 +45,8 @@ public class GameManager : MonoBehaviour
         StateManager.PushState(new GameStateLoading());
 
         Systems = new();
-        AddGameSystem(new AirDropSystem());
+        // AddGameSystem(new AirDropSystem());
+        AddGameSystem(new WaterLevelSystem());
     }
 
     public GameState GetGameState()

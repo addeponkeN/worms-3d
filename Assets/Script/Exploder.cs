@@ -69,7 +69,7 @@ public class Exploder : MonoBehaviour
             var finalDamage = (int)(multiplier * data.Damage);
             ent.Life.TakeDamage(finalDamage);
 
-            var force = 5f * multiplier;
+            var force = data.Damage / 8f * multiplier;
             var dir = (target.transform.position - data.Position + Vector3.up).normalized;
             ent.Body.Push(dir, force);
         }

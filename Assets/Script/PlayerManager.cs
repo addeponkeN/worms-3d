@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using GameStates;
 using PlayerControllers;
+using Teams;
 using UnityEngine;
 using Util;
 using VoxelEngine;
@@ -12,10 +13,9 @@ public class PlayerManager : MonoBehaviour, ILoader
     //  for teams & players
     public List<Team> Teams;
     public Player ActivePlayer;
-    public int CurrentTeamIndex => _index = (_index + 1) % Teams.Count;
-    public event Action WeaponChangedEvent;
-
     public PlayerControllerManager ControllerManager;
+
+    public int CurrentTeamIndex => _index = (_index + 1) % Teams.Count;
     
     private int _index;
     
@@ -30,6 +30,11 @@ public class PlayerManager : MonoBehaviour, ILoader
         ControllerManager = gameObject.AddComponent<PlayerControllerManager>();
     }
 
+    Team GetTeam(int teamId)
+    {
+        return Teams[teamId];
+    }
+
     public void Load()
     {
         var testData = new GameData()
@@ -38,11 +43,19 @@ public class PlayerManager : MonoBehaviour, ILoader
             {
                 new TeamData()
                 {
-                    PlayerCount = 5
+                    PlayerCount = 4
                 },
                 new TeamData()
                 {
-                    PlayerCount = 5
+                    PlayerCount = 4
+                },
+                new TeamData()
+                {
+                    PlayerCount = 4
+                },
+                new TeamData()
+                {
+                    PlayerCount = 4
                 }
             }
         };
@@ -64,6 +77,30 @@ public class PlayerManager : MonoBehaviour, ILoader
         ControllerManager.SetPlayer(player);
     }
 
+    Player CreatePlayer()
+    {
+         var player = Instantiate(PrefabManager.Get.GetPrefab("player")).GetComponent<Player>();
+         player.Life.DeathEvent += LifeOnDeathEvent;
+         return player;
+    }
+
+    private void LifeOnDeathEvent(GameActor player)
+    {
+        player.Life.DeathEvent -= LifeOnDeathEvent;
+        RemovePlayer(player as Player);
+        player.Kill();
+    }
+
+    private void RemovePlayer(Player player)
+    {
+        var team = player.GetTeam();
+        team.RemovePlayer(player);
+        if(team.Players.Count <= 0)
+        {
+            Teams.Remove(team);
+        }
+    }
+
     private void CreateTeams(GameData gameData)
     {
         Teams.Clear();
@@ -75,7 +112,7 @@ public class PlayerManager : MonoBehaviour, ILoader
 
             for(int j = 0; j < teamData.PlayerCount; j++)
             {
-                var player = Instantiate(PrefabManager.Get.GetPrefab("player")).GetComponent<Player>();
+                var player = CreatePlayer();
                 player.Init(team);
                 team.Players.Add(player);
             }
@@ -110,9 +147,6 @@ public class PlayerManager : MonoBehaviour, ILoader
 
             }
         }
-
-        // Teams[0].Players[0].transform.position = new Vector3(1, 40, 1);
-
     }
 
     private bool IsSpawnPointValid(ref Vector3 pos)
@@ -124,7 +158,7 @@ public class PlayerManager : MonoBehaviour, ILoader
 
         if(Physics.Raycast(ray, out var info))
         {
-            if(info.point.y > World.Get.WaterLevel)
+            if(info.point.y > World.Get.Water.WaterLevel)
             {
                 pos = new Vector3(info.point.x, info.point.y + 1, info.point.z);
                 return true;
@@ -140,32 +174,4 @@ public class PlayerManager : MonoBehaviour, ILoader
     {
     }
     
-}
-
-public struct GameData
-{
-    public TeamData[] Teams;
-}
-
-public struct TeamData
-{
-    public int PlayerCount;
-}
-
-public class Team
-{
-    public int CurrentPlayerIndex => _index = (_index + 1) % Players.Count;
-    
-    public List<Player> Players;
-    private int _index;
-
-    public Team(int playerCount)
-    {
-        Players = new List<Player>(playerCount);
-    }
-
-    public Player GetNextPlayer()
-    {
-        return Players[CurrentPlayerIndex];
-    }
 }

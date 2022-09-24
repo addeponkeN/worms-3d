@@ -1,4 +1,5 @@
 using System;
+using EntityComponents;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,8 +18,6 @@ namespace PlayerControllers
         {
             _jumpAction = Manager.Input.actions["Jump"];
             _body = Player.gameObject.GetComponent<SimpleBody>();
-            // .GetComponent<ComponentManager>()
-            // .GetGameComponent<SimpleBody>();
         }
 
         public override void Update()
@@ -37,6 +36,7 @@ namespace PlayerControllers
             _jumpCooldownTimer = 0.1f;
             if(Player.CharController.isGrounded)
                 _body.Jump(Player.Stats.JumpStrength);
+            // _body.Push(Vector3.up, 3f);
             JumpedEvent?.Invoke();
         }
     }

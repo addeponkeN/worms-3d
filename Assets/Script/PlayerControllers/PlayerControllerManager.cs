@@ -47,7 +47,6 @@ namespace PlayerControllers
         {
             PlayerGo = player.gameObject;
             Player = player;
-            
             ControlSet.Init();
         }
 
