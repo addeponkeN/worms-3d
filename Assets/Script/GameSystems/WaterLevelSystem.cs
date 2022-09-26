@@ -1,24 +1,24 @@
 using GameStates;
-using VoxelEngine;
 
 namespace GameSystems
 {
     public class WaterLevelSystem : GameSystem
     {
-        //  increase water level every 2 turns
-        private int _turnInterval = 2;
+        //  increase water level every 4 turns
+        private int _turnInterval = 4;
         private int _counter;
 
-        private float _increaseAmount = 1f;
+        private float _increaseAmount = 2f;
 
         public override void OnNextPlayerTurn()
         {
             base.OnNextPlayerTurn();
 
             _counter++;
-            IncreaseWaterLevel();
             if(_counter >= _turnInterval)
             {
+                IncreaseWaterLevel();
+                _counter = 0;
             }
         }
 

@@ -1,21 +1,23 @@
 using GameStates;
 using TMPro;
-using Ui;
 using UnityEngine;
 
-public class GamePanel : MonoBehaviour
+namespace Ui
 {
-    [SerializeField] private TextMeshProUGUI lbPlayTimer;
-
-    public UiWeaponBar WeaponBar;
-
-    private void Update()
+    public class GamePanel : MonoBehaviour
     {
-        var state = GameManager.Get.GetGameState();
+        [SerializeField] private TextMeshProUGUI lbPlayTimer;
 
-        if(state is GameStateActivePlayer player)
+        public UiWeaponBar WeaponBar;
+
+        private void Update()
         {
-            lbPlayTimer.text = $"{(int)player.PlayTimer}";
+            var state = GameManager.Get.GetGameState();
+
+            if(state is GameStateActivePlayer player)
+            {
+                lbPlayTimer.text = $"{(int)player.PlayTimer}";
+            }
         }
     }
 }

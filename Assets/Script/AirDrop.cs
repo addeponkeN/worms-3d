@@ -17,16 +17,15 @@ public class AirDrop : MonoBehaviour, IFollowable
 
     public bool EndFollow { get; set; }
     public Transform Transform => _collider.transform;
-    [NonSerialized] public bool ReleasedParachute = false;
+    
+    [NonSerialized] public bool ReleasedParachute;
 
-    private float _waitTimer = 1.5f;
-
-    private Animator _animator;
     [SerializeField] private GameObject _parachute;
     [SerializeField] private GameObject _collider;
     [SerializeField] private GameObject _playerCollider;
     
-    private bool _landed;
+    private float _waitTimer = 1.5f;
+    private Animator _animator;
 
     private void Awake()
     {
@@ -52,8 +51,6 @@ public class AirDrop : MonoBehaviour, IFollowable
         Destroy(GetComponent<BoxCollider>());
         Destroy(GetComponent<Rigidbody>());
 
-        // var boxCollider = _collider.GetComponent<BoxCollider>();
-        // boxCollider.enabled = true;
         var body = _collider.GetComponent<Rigidbody>();
         body.useGravity = true;
         body.mass = 1f;
@@ -110,7 +107,6 @@ public class AirDrop : MonoBehaviour, IFollowable
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("World"))
         {
-            _landed = true;
             ReleaseParachute();
         }
     }

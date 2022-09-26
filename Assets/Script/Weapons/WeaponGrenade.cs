@@ -7,17 +7,17 @@ namespace Weapons
         public override WeaponTypes WeaponType { get; } = WeaponTypes.Grenade;
 
         private BaseProjectile _projectile;
-        
-        public override BaseProjectile GetProjectile()
-        {
-            return _projectile;
-        }
-        
+
         public override void Init()
         {
             base.Init();
             IsProjectile = true;
             Power = 5000f;
+        }
+        
+        public override BaseProjectile GetProjectile()
+        {
+            return _projectile;
         }
 
         public override void Fired()

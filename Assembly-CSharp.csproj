@@ -76,7 +76,6 @@
      <Compile Include="Assets\Script\EntityComponents\ComponentManager.cs" />
      <Compile Include="Assets\Script\GameStates\GameState.cs" />
      <Compile Include="Assets\Script\Ui\UiManager.cs" />
-     <Compile Include="Assets\Script\Life.cs" />
      <Compile Include="Assets\Script\PlayerControllers\PlayerWeaponController.cs" />
      <Compile Include="Assets\Script\Projectiles\ProjectileMissile.cs" />
      <Compile Include="Assets\Script\CameraSystem\CameraStates\FollowState.cs" />
@@ -108,7 +107,6 @@
      <Compile Include="Assets\Script\GameStates\GameStateIncreaseWaterLevel.cs" />
      <Compile Include="Assets\Script\Weapons\WeaponBazooka.cs" />
      <Compile Include="Assets\Script\GameSystems\WaterLevelSystem.cs" />
-     <Compile Include="Assets\Script\EnvironmentManager.cs" />
      <Compile Include="Assets\Script\GameStates\GameStateSpectatePlayer.cs" />
      <Compile Include="Assets\Script\StatContainer.cs" />
      <Compile Include="Assets\Script\PlayerManager.cs" />
@@ -125,6 +123,10 @@
      <Compile Include="Assets\Script\Teams\GameData.cs" />
      <Compile Include="Assets\Script\Teams\TeamData.cs" />
      <Compile Include="Assets\Script\Teams\TeamHelper.cs" />
+     <Compile Include="Assets\Script\Ui\MenuManager.cs" />
+     <Compile Include="Assets\Script\TeamBanner.cs" />
+     <Compile Include="Assets\Script\Ui\Panels\MainMenuPanel.cs" />
+     <Compile Include="Assets\Script\Corpse.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

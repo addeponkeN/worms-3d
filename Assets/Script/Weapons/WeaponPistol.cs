@@ -6,12 +6,11 @@ namespace Weapons
     {
         public override WeaponTypes WeaponType { get; } = WeaponTypes.Pistol;
 
+        public int Damage = 12;
+        
         private int _maxBulletCount = 3;
         private int _bullets;
-
         private int _magazineCount;
-
-        public int Damage = 12;
 
         public override void Init()
         {
@@ -93,11 +92,6 @@ namespace Weapons
                 Kill();
                 Debug.Log("no more bullets - time to die");
             }
-        }
-
-        public override void Fired()
-        {
-            base.Fired();
         }
     }
 }

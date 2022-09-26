@@ -31,7 +31,7 @@ public class PrefabManager : MonoBehaviour
         
     }
 
-    public GameObject[] GetPrefabs(string prefabFolder)
+    public static GameObject[] GetPrefabs(string prefabFolder)
     {
         var prefabGuids = AssetDatabase.FindAssets("t:prefab", new[] {$"Assets/Prefabs/{prefabFolder}"});
 

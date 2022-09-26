@@ -23,6 +23,5 @@ namespace GameStates
         {
             IsAlive = false;
         }
-        
     }
 }

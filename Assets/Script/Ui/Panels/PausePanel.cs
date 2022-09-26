@@ -2,10 +2,8 @@ using UnityEngine;
 
 namespace Ui
 {
-    public class PausePanel : MonoBehaviour, IUiPanel
+    public class PausePanel : MenuPanel
     {
-        public MainCanvas Main { get; set; }
-
         public void Button_Resume()
         {
             Main.ExitPanel();
@@ -26,13 +24,17 @@ namespace Ui
             GameManager.Get.IsGamePaused = isPaused;
         }
     
-        public void OnFocused(bool isFocused)
+        public override void OnFocused(bool isFocused)
         {
             if(isFocused)
+            {
                 SetGamePaused(true);
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
         }
     
-        public void OnRemoved()
+        public override void OnRemoved()
         {
             SetGamePaused(false);
         }

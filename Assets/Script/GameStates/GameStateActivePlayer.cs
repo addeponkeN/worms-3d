@@ -1,27 +1,10 @@
 using CameraSystem.CameraStates;
 using PlayerControllers;
 using UnityEngine;
-using Util;
 using Weapons;
 
 namespace GameStates
 {
-    public class Corpse : MonoBehaviour, IFollowable
-    {
-        public bool EndFollow { get; set; } = true;
-        public Transform Transform => transform;
-
-        private Timer _life = 3f;
-
-        private void Update()
-        {
-            if(_life.Update())
-            {
-                Destroy(gameObject);
-            }
-        }
-    }
-
     public class GameStateActivePlayer : GameState
     {
         public float PlayTimer => _playTimer;
@@ -42,7 +25,7 @@ namespace GameStates
             base.Init(manager);
 
             Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.lockState = CursorLockMode.Confined;
             
             _playTimer = 30f;
             _wepManager.WeaponDoneEvent += WepManagerOnWeaponDoneEvent;

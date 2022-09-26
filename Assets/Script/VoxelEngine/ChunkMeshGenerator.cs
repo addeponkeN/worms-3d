@@ -5,6 +5,8 @@ namespace VoxelEngine
 {
     public static class ChunkMeshGenerator
     {
+        public delegate bool InBounds(int x, int y, int z);
+        
         private static Dictionary<Vector3Int, FaceData> _faces;
 
         public static Dictionary<Vector3Int, FaceData> Faces
@@ -36,7 +38,7 @@ namespace VoxelEngine
             }
         }
 
-        public static Mesh CreateMesh(Voxel[,,] data, TextureLoader textureLoader)
+        public static Mesh CreateMesh(Voxel[,,] data, TextureLoader textureLoader, InBounds chunkBoundsCheck)
         {
             var vertices = new List<Vector3>();
             var indices = new List<int>();
@@ -54,7 +56,7 @@ namespace VoxelEngine
                     var faceDirection = FaceData.Directions[i];
                     var nei = pos + faceDirection;
 
-                    if(World.Get.InChunkBounds(nei.x, nei.y, nei.z))
+                    if(chunkBoundsCheck(nei.x, nei.y, nei.z))
                     {
                         if(data[nei.x, nei.y, nei.z].Type == 0 &&
                            data[pos.x, pos.y, pos.z].Type != 0)

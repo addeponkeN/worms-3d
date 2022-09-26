@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: button text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0dbbcab3eef4e47489e93c3c40836b37, type: 2}
+  m_sharedMaterial: {fileID: -2031930040742620538, guid: 0dbbcab3eef4e47489e93c3c40836b37, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -147,7 +147,6 @@ GameObject:
   - component: {fileID: 3924332877859876963}
   - component: {fileID: 3924332877859876960}
   - component: {fileID: 3924332877859876961}
-  - component: {fileID: 3924332877859876957}
   - component: {fileID: 3924332877859876962}
   m_Layer: 5
   m_Name: button
@@ -271,18 +270,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &3924332877859876957
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3924332877859876967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 736c5f78341dc324eb4717528e7fe3ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &3924332877859876962
 Animator:
   serializedVersion: 4

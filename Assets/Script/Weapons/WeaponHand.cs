@@ -27,7 +27,7 @@ namespace Weapons
                     World.Get.SetVoxelSphere(info.point, 5, 0);
                 }
             }
-            
         }
+        
     }
 }

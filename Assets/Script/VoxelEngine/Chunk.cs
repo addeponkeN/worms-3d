@@ -30,7 +30,7 @@ namespace VoxelEngine
 
         public void UpdateMesh()
         {
-            var mesh = ChunkMeshGenerator.CreateMesh(Voxels, World.Get.TextureLoader);
+            var mesh = ChunkMeshGenerator.CreateMesh(Voxels, World.Get.TextureLoader, World.Get.InChunkBounds);
             _meshFilter.mesh = mesh;
             _meshCollider.sharedMesh = mesh;
         }

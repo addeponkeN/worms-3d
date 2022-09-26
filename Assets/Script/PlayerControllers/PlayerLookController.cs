@@ -6,8 +6,7 @@ namespace PlayerControllers
     public class PlayerLookController : BasePlayerController
     {
         private const float PlayerRotationSpeed = 6f;
-        public bool IsAiming;
-
+        
         private InputAction _aimAction;
 
         public override void Init()
@@ -20,7 +19,6 @@ namespace PlayerControllers
         {
             base.Update();
 
-            // if(Input.GetMouseButton(1))
             if(_aimAction.inProgress)
             {
                 var cam = GameManager.Get.CamManager.Cam.transform;
@@ -28,12 +26,6 @@ namespace PlayerControllers
                 Transform.rotation =
                     Quaternion.Lerp(Transform.rotation, rotation, PlayerRotationSpeed * Time.deltaTime);
             }
-        }
-
-        public void SetAimDown(bool isAiming)
-        {
-            IsAiming = isAiming;
-            GameManager.Get.Ui.AimCanvas.enabled = IsAiming;
         }
     }
 }

@@ -57,7 +57,6 @@ namespace PlayerControllers
 
         public void Load()
         {
-            
         }
 
         public void AddController(BasePlayerController controller)

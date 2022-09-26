@@ -3,10 +3,8 @@ using UnityEngine.UI;
 
 namespace Ui
 {
-    public class SettingsPanel : MonoBehaviour, IUiPanel
+    public class SettingsPanel : MenuPanel
     {
-        public MainCanvas Main { get; set; }
-
         [SerializeField] private Slider _slMasterVolume;
 
         public void Slider_MasterVolumeChanged()
@@ -29,13 +27,13 @@ namespace Ui
             Main.ExitPanel();
         }
         
-        public void OnFocused(bool isFocused)
+        
+        public override void OnFocused(bool isFocused)
         {
         }
 
-        public void OnRemoved()
+        public override void OnRemoved()
         {
         }
-        
     }
 }

@@ -25,9 +25,9 @@ public class Exploder : MonoBehaviour
 {
     private static RaycastHit[] _buffer = new RaycastHit[16];
 
-    private IExploder _targetExploder;
     [SerializeField] private Component _exploder;
-
+    
+    private IExploder _targetExploder;
     private int _layer;
 
     private void Awake()
@@ -77,7 +77,6 @@ public class Exploder : MonoBehaviour
         if(hits <= 0)
             Debug.Log("EXPLODE NO HITS");
 
-        // World.Get.SetVoxelCube(transform.position, (int)data.Radius, 0);
         World.Get.SetVoxelSphere(transform.position, (int)data.Radius, 0);
     }
 }

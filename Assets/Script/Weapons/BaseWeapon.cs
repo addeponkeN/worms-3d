@@ -17,7 +17,6 @@ namespace Weapons
 
     public abstract class BaseWeapon
     {
-        public float ChargeTime = 1.5f;
 
         public abstract WeaponTypes WeaponType { get; }
 
@@ -33,6 +32,7 @@ namespace Weapons
         public bool IsAlive = true;
         public bool CanBeSwapped = true;
         public bool AimeStanceChangedThisFrame;
+        public float ChargeTime = 1.5f;
 
         protected float Power = 5000f;
         

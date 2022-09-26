@@ -7,11 +7,10 @@ namespace PlayerControllers
 {
     public class PlayerJumpController : BasePlayerController
     {
-        private SimpleBody _body;
-
         public event Action JumpedEvent;
-        private InputAction _jumpAction;
 
+        private SimpleBody _body;
+        private InputAction _jumpAction;
         private float _jumpCooldownTimer;
 
         public override void Init()
@@ -36,7 +35,6 @@ namespace PlayerControllers
             _jumpCooldownTimer = 0.1f;
             if(Player.CharController.isGrounded)
                 _body.Jump(Player.Stats.JumpStrength);
-            // _body.Push(Vector3.up, 3f);
             JumpedEvent?.Invoke();
         }
     }

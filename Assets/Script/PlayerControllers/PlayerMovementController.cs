@@ -5,14 +5,12 @@ namespace PlayerControllers
 {
     public class PlayerMovementController : BasePlayerController
     {
-        private static readonly int AnimationParId = Animator.StringToHash("AnimationPar");
-
         public bool IsMoving;
 
+        private InputAction _moveAction;
         private Animator _anim;
         private Vector3 _moveDir;
         private float _turnVel;
-        private InputAction _moveAction;
 
         public override void Init()
         {
@@ -44,20 +42,7 @@ namespace PlayerControllers
                 }
             }
 
-            //  temp
-            if(IsMoving)
-            {
-                _anim.SetInteger(AnimationParId, 1);
-            }
-            else
-            {
-                _anim.SetInteger(AnimationParId, 0);
-            }
-
             Player.Body.Move(_moveDir.normalized * (Player.Stats.MoveSpeed * Time.deltaTime));
-            // Player.CharController.Move(_moveDir.normalized * (Player.Stats.MoveSpeed * Time.deltaTime));
-            //  CharacterController.isGrounded is always false if this isnt added
-            // Player.CharController.Move(Vector3.down * 0.0000001f);
         }
 
         public override void FixedUpdate()

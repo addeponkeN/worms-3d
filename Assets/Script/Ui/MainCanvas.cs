@@ -1,98 +1,140 @@
+using System;
 using System.Collections.Generic;
-using Ui;
 using UnityEngine;
 
-public interface IUiPanel
+namespace Ui
 {
-    MainCanvas Main { get; set; }
-    GameObject gameObject { get; }
-    void OnFocused(bool isFocused);
-    void OnRemoved();
-}
-
-public class MainCanvas : MonoBehaviour
-{
-    private List<IUiPanel> _registeredPanels;
-    private Stack<IUiPanel> _panelStack;
-
-    private void Awake()
+    public interface IUiPanel
     {
-        _panelStack = new Stack<IUiPanel>();
-        _registeredPanels = new List<IUiPanel>();
+        MainCanvas Main { get; set; }
+        GameObject gameObject { get; }
+        void OnFocused(bool isFocused);
+        void OnRemoved();
     }
 
-    private void Start()
+    public abstract class MenuPanel : MonoBehaviour, IUiPanel
     {
-        RegisterAllPrefabPanels();
+        public MainCanvas Main { get; set; }
+        public abstract void OnFocused(bool isFocused);
+        public abstract void OnRemoved();
     }
 
-    private void RegisterAllPrefabPanels()
+    public class MainCanvas : MonoBehaviour
     {
-        var uiPanels = PrefabManager.Get.GetPrefabs("Ui/Panels/");
-        for(int i = 0; i < uiPanels.Length; i++)
+        [SerializeField] private MenuPanel DefaultPanelPrefab;
+
+        public bool KeepBottomPanel;
+
+        private List<IUiPanel> _registeredPanels;
+        private Stack<IUiPanel> _panelStack;
+
+        private void Awake()
         {
-            var panelGo = uiPanels[i];
-            var go = Instantiate(panelGo, transform);
-            _registeredPanels.Add(go.GetComponent<IUiPanel>());
-            go.SetActive(false);
+            _panelStack = new Stack<IUiPanel>();
+            _registeredPanels = new List<IUiPanel>();
         }
-    }
 
-    public void PushPanel<T>() where T : IUiPanel
-    {
-        for(int i = 0; i < _registeredPanels.Count; i++)
-            if(_registeredPanels[i] is T ret)
+        private void Start()
+        {
+            RegisterAllPrefabPanels();
+        }
+
+        private void RegisterAllPrefabPanels()
+        {
+            var uiPanels = PrefabManager.GetPrefabs("Ui/Panels/");
+            for(int i = 0; i < uiPanels.Length; i++)
             {
-                PushPanel(ret);
+                var panelGo = uiPanels[i];
+                var go = Instantiate(panelGo, transform);
+                var uiPanel = go.GetComponent<IUiPanel>();
+                if(uiPanel == null)
+                {
+                    Debug.LogWarning($"UiPanel does not inherit IUiPanel: {panelGo.name}");
+                    continue;
+                }
+
+                _registeredPanels.Add(uiPanel);
+                go.SetActive(false);
+            }
+        }
+
+        public void PushPanel<T>() where T : IUiPanel
+        {
+            for(int i = 0; i < _registeredPanels.Count; i++)
+                if(_registeredPanels[i] is T ret)
+                {
+                    PushPanel(ret);
+                    return;
+                }
+
+            Debug.LogError($"Could not find panel type: {typeof(T).Name}");
+        }
+
+        public void PushPanel(Type type)
+        {
+            if(type == null)
+            {
+                Debug.LogError("Panel type was null");
                 return;
             }
 
-        Debug.LogError($"Could not find panel type: {typeof(T).Name}");
-    }
+            for(int i = 0; i < _registeredPanels.Count; i++)
+            {
+                var regType = _registeredPanels[i].GetType();
+                if(regType == type)
+                {
+                    PushPanel(_registeredPanels[i]);
+                    return;
+                }
+            }
 
-    public void PushPanel(IUiPanel panel)
-    {
-        if(_panelStack.Count > 0)
-        {
-            SetEnableCurrent(false);
+            Debug.LogError($"Could not find panel type: {type.Name}");
         }
 
-        panel.Main = this;
-        panel.gameObject.SetActive(true);
-        panel.OnFocused(true);
-        _panelStack.Push(panel);
-    }
+        public void PushPanel(IUiPanel panel)
+        {
+            if(_panelStack.Count > 0)
+            {
+                SetCurrentIsEnabled(false);
+            }
 
-    private void SetEnableCurrent(bool isEnabled)
-    {
-        if(_panelStack.Count <= 0)
-            return;
+            panel.Main = this;
+            panel.gameObject.SetActive(true);
+            panel.OnFocused(true);
+            _panelStack.Push(panel);
+        }
 
-        var currentPanel = _panelStack.Peek();
-        currentPanel.gameObject.SetActive(isEnabled);
-        currentPanel.OnFocused(isEnabled);
-    }
-
-    public void ExitPanel()
-    {
-        var current = _panelStack.Pop();
-        current.gameObject.SetActive(false);
-        current.OnFocused(false);
-        current.OnRemoved();
-        SetEnableCurrent(true);
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        private void SetCurrentIsEnabled(bool isEnabled)
         {
             if(_panelStack.Count <= 0)
+                return;
+
+            var currentPanel = _panelStack.Peek();
+            currentPanel.gameObject.SetActive(isEnabled);
+            currentPanel.OnFocused(isEnabled);
+        }
+
+        public void ExitPanel()
+        {
+            var current = _panelStack.Pop();
+            current.gameObject.SetActive(false);
+            current.OnFocused(false);
+            current.OnRemoved();
+            SetCurrentIsEnabled(true);
+        }
+
+        private void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.Escape))
             {
-                PushPanel<PausePanel>();
-            }
-            else
-            {
-                ExitPanel();
+                if(_panelStack.Count <= 0)
+                {
+                    PushPanel(DefaultPanelPrefab.GetType());
+                }
+                else if(_panelStack.Count == 1 && !KeepBottomPanel)
+                {
+                    ExitPanel();
+                }
             }
         }
     }

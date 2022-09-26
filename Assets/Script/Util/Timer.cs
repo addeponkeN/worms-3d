@@ -13,12 +13,12 @@ namespace Util
 
         /// <summary>
         /// </summary>
-        /// <returns>timer is done (below 0)</returns>
-        public bool Update()
+        /// <returns>if timer is done (equal or below 0)</returns>
+        public bool CheckUpdate()
         {
             return (_timer -= Time.deltaTime) <= 0;
         }
 
-        public static implicit operator Timer(float time) => new Timer(time);
+        public static implicit operator Timer(float time) => new(time);
     }
 }

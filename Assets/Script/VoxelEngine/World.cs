@@ -45,7 +45,13 @@ namespace VoxelEngine
         private void Awake()
         {
             if(Get == null)
+            {
                 Get = this;
+            }
+            else
+            {
+                Destroy(this);
+            }
 
             _generators = new List<IGenerator>();
             _chunksToUpdate = new DistinctList<Chunk>();

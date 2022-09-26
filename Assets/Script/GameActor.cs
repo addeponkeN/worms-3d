@@ -12,7 +12,6 @@ public class GameActor : MonoBehaviour
     public GameObject Model;
     public StatContainer Stats;
     public ActorLife Life;
-
     public SimpleBody Body;
 
     protected virtual void Awake()

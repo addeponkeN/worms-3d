@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using GameStates;
 using PlayerControllers;
@@ -30,13 +29,10 @@ public class PlayerManager : MonoBehaviour, ILoader
         ControllerManager = gameObject.AddComponent<PlayerControllerManager>();
     }
 
-    Team GetTeam(int teamId)
-    {
-        return Teams[teamId];
-    }
-
     public void Load()
     {
+        //  4 teams
+        //  4 players per team
         var testData = new GameData()
         {
             Teams = new TeamData[]
@@ -77,7 +73,7 @@ public class PlayerManager : MonoBehaviour, ILoader
         ControllerManager.SetPlayer(player);
     }
 
-    Player CreatePlayer()
+    private Player CreatePlayer()
     {
          var player = Instantiate(PrefabManager.Get.GetPrefab("player")).GetComponent<Player>();
          player.Life.DeathEvent += LifeOnDeathEvent;
@@ -105,16 +101,17 @@ public class PlayerManager : MonoBehaviour, ILoader
     {
         Teams.Clear();
 
+        int teamId = 0;
+
         for(int i = 0; i < gameData.Teams.Length; i++)
         {
             var teamData = gameData.Teams[i];
-            var team = new Team(teamData.PlayerCount);
+            var team = new Team(teamId++, teamData.PlayerCount);
 
             for(int j = 0; j < teamData.PlayerCount; j++)
             {
                 var player = CreatePlayer();
-                player.Init(team);
-                team.Players.Add(player);
+                team.AddPlayer(player);
             }
 
             Teams.Add(team);
@@ -137,7 +134,10 @@ public class PlayerManager : MonoBehaviour, ILoader
                 {
                     tries++;
                     if(tries > 10)
+                    {
+                        Debug.LogError("failed to find a spawn position");
                         break;
+                    }
                     var randomChunk = chunks.Random();
                     finalPosition = randomChunk.ChunkGo.transform.position;
                     finalPosition.y = World.ChunkSize.y;
@@ -151,9 +151,6 @@ public class PlayerManager : MonoBehaviour, ILoader
 
     private bool IsSpawnPointValid(ref Vector3 pos)
     {
-        var worldLayer = LayerMask.NameToLayer("World");
-        const float distanceToCheck = 500f;
-
         var ray = new Ray(pos, Vector3.down);
 
         if(Physics.Raycast(ray, out var info))
@@ -169,9 +166,4 @@ public class PlayerManager : MonoBehaviour, ILoader
 
         return false;
     }
-
-    private void Update()
-    {
-    }
-    
 }

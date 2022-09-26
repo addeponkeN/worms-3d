@@ -65,20 +65,25 @@ public class Player : GameActor
     public Transform CameraAimPosition;
     public Transform WeaponOrigin;
 
+
+    private TeamBanner _banner;
     private Team _team;
     private int _id;
 
     protected override void Awake()
     {
         base.Awake();
+        _banner = GetComponentInChildren<TeamBanner>();
         CharController = GetComponent<CharacterController>();
     }
 
     public Team GetTeam() => _team;
 
-    public void Init(Team team)
+    public void AssignTeam(Team team)
     {
         _team = team;
+        _banner.SetColor(team.GetColor());
         _id = _team.Players.Count;
     }
+
 }

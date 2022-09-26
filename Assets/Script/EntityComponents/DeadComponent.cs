@@ -17,7 +17,7 @@ namespace EntityComponents
         {
             base.Update();
 
-            if(_timer.Update())
+            if(_timer.CheckUpdate())
             {
                 Finish();
             }

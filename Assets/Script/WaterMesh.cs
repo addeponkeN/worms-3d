@@ -5,12 +5,6 @@ using VoxelEngine;
 [RequireComponent(typeof(MeshRenderer), typeof(MeshFilter))]
 public class WaterMesh : MonoBehaviour
 {
-    public float Size = 1f;
-    public int GridSize = 16;
-    public float WaveSpeed = 1f;
-    public float WavePower = 1f;
-
-    private float _waterLevel;
     public float WaterLevel
     {
         get => transform.position.y;
@@ -20,18 +14,19 @@ public class WaterMesh : MonoBehaviour
             transform.position = new Vector3(pos.x, value, pos.z);
         }
     }
+    
+    public float Size = 1f;
+    public int GridSize = 16;
+    public float WaveSpeed = 1f;
+    public float WavePower = 1f;
 
+    private float _waterLevel;
     private MeshFilter _meshFilter;
-
     private Vector2 offset;
-
-    private void Awake()
-    {
-        World.Get.OnGeneratedEvent += GetOnOnGeneratedEvent;
-    }
 
     private void Start()
     {
+        World.Get.OnGeneratedEvent += GetOnOnGeneratedEvent;
         _meshFilter = GetComponent<MeshFilter>();
         _meshFilter.mesh = GenerateMesh();
         Noise();
@@ -48,7 +43,7 @@ public class WaterMesh : MonoBehaviour
         Noise();
     }
 
-    void Noise()
+    private void Noise()
     {
         offset.x += WaveSpeed * Time.deltaTime;
         offset.y += WaveSpeed * Time.deltaTime;
