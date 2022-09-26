@@ -26,8 +26,8 @@ namespace VoxelEngine
         public WaterMesh Water;
 
         [SerializeField] public int WorldSize = 14;
-        [SerializeField] private int _heightOffset = 60;
-        [SerializeField] private int _heightIntensity = 5;
+        // [SerializeField] private int _heightOffset = 60;
+        // [SerializeField] private int _heightIntensity = 5;
         private Dictionary<Vector2Int, Chunk> _chunks;
         private List<Chunk> _chunkList;
         private DistinctList<Chunk> _chunksToUpdate;

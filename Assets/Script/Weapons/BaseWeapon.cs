@@ -13,11 +13,11 @@ namespace Weapons
         Grenade,
         Bazooka,
         Pistol,
+        Airstrike,
     }
 
     public abstract class BaseWeapon
     {
-
         public abstract WeaponTypes WeaponType { get; }
 
         public float GetWeaponChargeValue => _chargeTimer / ChargeTime;
@@ -33,6 +33,7 @@ namespace Weapons
         public bool CanBeSwapped = true;
         public bool AimeStanceChangedThisFrame;
         public float ChargeTime = 1.5f;
+
 
         protected float Power = 5000f;
         
@@ -101,7 +102,7 @@ namespace Weapons
             projDirection.Normalize();
 
             var projectileGo = Object.Instantiate(PrefabManager.Get.GetPrefab(type));
-            projectileGo.transform.position = WeaponGo.transform.position + projDirection * 0.75f;
+            projectileGo.transform.position = WeaponGo.transform.position + projDirection * 2f;
             var projectile = projectileGo.GetComponent<BaseProjectile>();
             projectile.Init(new ProjectileData(GetFinalPower, projDirection));
             return projectile;

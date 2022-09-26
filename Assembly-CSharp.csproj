@@ -132,6 +132,10 @@
      <Compile Include="Assets\Script\VoxelEngine\Generation\ForestyGenerator.cs" />
      <Compile Include="Assets\Script\ExplosionTargetObject.cs" />
      <Compile Include="Assets\Script\EnvironmentObject.cs" />
+     <Compile Include="Assets\Airplane.cs" />
+     <Compile Include="Assets\Script\Weapons\WeaponAirstrike.cs" />
+     <Compile Include="Assets\Laser.cs" />
+     <Compile Include="Assets\Script\GameStates\GameStateAirstrike.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

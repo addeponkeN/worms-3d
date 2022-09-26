@@ -67,9 +67,7 @@ public class Exploder : MonoBehaviour
             var target = _buffer[i].transform.gameObject;
             var exploTarget = target.GetComponent<ExplosionTargetObject>();
             if(exploTarget == null)
-            {
-                Debug.LogError($"explotarget null!  go: {target.name}");
-            }
+                continue;
 
             exploTarget.OnTriggerDamageable(data);
             Debug.Log(target.name + " hit");

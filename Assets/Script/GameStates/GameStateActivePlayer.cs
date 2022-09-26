@@ -27,7 +27,7 @@ namespace GameStates
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Confined;
             
-            _playTimer = 30f;
+            _playTimer = 45f;
             _wepManager.WeaponDoneEvent += WepManagerOnWeaponDoneEvent;
             _player.Life.DeathEvent += LifeOnDeathEvent;
             GameManager.Get.PlayerManager.ControllerManager.ControllersEnabled = true;
@@ -41,7 +41,12 @@ namespace GameStates
 
         private void WepManagerOnWeaponDoneEvent(BaseWeapon wep)
         {
-            if(wep.IsProjectile)
+            if(wep.WeaponType == WeaponTypes.Airstrike)
+            {
+                Manager.PushState(new GameStateAirstrike(wep as WeaponAirstrike));
+                Exit();
+            }
+            else if(wep.IsProjectile)
             {
                 Manager.PushState(new GameStateSpectatePlayer(_player));
                 if(wep.IsFired)

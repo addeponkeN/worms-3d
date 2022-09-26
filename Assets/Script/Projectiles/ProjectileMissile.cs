@@ -7,16 +7,12 @@ namespace Projectiles
     {
         public override ProjectileTypes Type { get; } = ProjectileTypes.Missile;
 
-        //  IExploder
         public event Action<ExplodeData> ExplodeEvent;
-        //  ---------
 
         public float ExplodeRadius = 6;
         public int Damage = 35;
 
         private Vector3 _baseRot;
-
-        private bool _exploded;
 
         public override void Init(ProjectileData data)
         {
@@ -26,7 +22,8 @@ namespace Projectiles
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.transform.gameObject.layer == LayerMask.NameToLayer("World"))
+            if(other.transform.gameObject.layer == LayerMask.NameToLayer("World") || 
+               other.transform.gameObject.layer == LayerMask.NameToLayer("Damageable"))
                 Explode();
         }
 
@@ -40,7 +37,6 @@ namespace Projectiles
 
         void Explode()
         {
-            _exploded = true;
             ExplodeEvent?.Invoke(new ExplodeData(transform.position, ExplodeRadius, Damage));
             Kill();
         }

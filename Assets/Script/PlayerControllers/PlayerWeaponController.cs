@@ -99,6 +99,14 @@ namespace PlayerControllers
             {
                 EquipWeapon(new WeaponPistol());
             }
+            else if(Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                EquipWeapon(new WeaponAirstrike());
+            }
+            // else if(Input.GetKeyDown(KeyCode.Alpha4))
+            // {
+                // EquipWeapon(new WeaponPistol());
+            // }
         }
         
     }

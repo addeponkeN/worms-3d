@@ -8,7 +8,8 @@ namespace Projectiles
     {
         None,
         Grenade,
-        Missile
+        Missile,
+        Bomb
     }
 
     public struct ProjectileData

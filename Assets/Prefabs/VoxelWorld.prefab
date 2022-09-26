@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2466198443618698443}
   - component: {fileID: 8798921458561034938}
   m_Layer: 0
-  m_Name: VoxelWorld
+  m_Name: voxelworld
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
