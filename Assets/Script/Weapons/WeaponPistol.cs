@@ -75,7 +75,7 @@ namespace Weapons
                 {
                     Debug.Log("hit player");
                     player.Life.TakeDamage((int)Damage);
-                    player.Body.Push(ray.direction + Vector3.up * .25f, 1f);
+                    player.Body.Push(ray.direction + Vector3.up * .4f, 1.5f);
                 }
                 else
                 {

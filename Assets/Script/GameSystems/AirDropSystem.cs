@@ -5,15 +5,31 @@ namespace GameSystems
 {
     public class AirDropSystem : GameSystem
     {
+        private int _roundInterval = 3;
+        private int _counter;
+
         public override void OnGameStarted()
         {
             base.OnGameStarted();
             GameStateManager.PushState(new GameStateAirDrop());
-            // Debug.Log("Game started: added airdrop");
         }
 
+        public override void OnNextPlayerTurn()
+        {
+            base.OnNextPlayerTurn();
+
+            _counter++;
+
+            if(_counter >= _roundInterval)
+            {
+                GameStateManager.PushState(new GameStateAirDrop());
+                _counter = 0;
+            }
+        }
+        
         private void OmegaSpawnAirDrops()
         {
+            //  spawns many airdrops near all players
             var teams = GameManager.Get.PlayerManager.Teams;
             for(int i = 0; i < teams.Count; i++)
             {
@@ -27,13 +43,6 @@ namespace GameSystems
                     drop.ReleaseParachute();
                 }
             }
-        }
-
-        public override void OnNextPlayerTurn()
-        {
-            base.OnNextPlayerTurn();
-            // Debug.Log("next player turn: added airdrop");
-            GameStateManager.PushState(new GameStateAirDrop());
         }
     }
 }

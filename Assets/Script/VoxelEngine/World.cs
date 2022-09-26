@@ -4,7 +4,6 @@ using GameStates;
 using UnityEngine;
 using Util;
 using VoxelEngine.Generation;
-using Random = UnityEngine.Random;
 
 namespace VoxelEngine
 {
@@ -15,32 +14,24 @@ namespace VoxelEngine
         public static readonly Vector3Int ChunkSize = new(10, 32, 10);
         public static World Get { get; private set; }
 
+        public Vector3Int WorldBounds => ChunkSize * WorldSize;
         public bool LoadingComplete { get; set; }
 
-        public Vector3Int WorldBounds => ChunkSize * _worldSize;
-
+        public event Action OnGeneratedEvent;
+        
+        [NonSerialized] public TextureLoader TextureLoader;
         public GameObject Chunks;
         public GameObject Environment;
         public GameObject Prefab_Chunk;
-
-        [NonSerialized] public TextureLoader TextureLoader;
         public WaterMesh Water;
 
-        public event Action OnGeneratedEvent;
-
-        private int _worldSize = 10;
-        private int _heightOffset = 60;
-        private int _heightIntensity = 5;
-
+        [SerializeField] public int WorldSize = 14;
+        [SerializeField] private int _heightOffset = 60;
+        [SerializeField] private int _heightIntensity = 5;
         private Dictionary<Vector2Int, Chunk> _chunks;
         private List<Chunk> _chunkList;
         private DistinctList<Chunk> _chunksToUpdate;
-        private List<IGenerator> _generators;
-
-        public List<Chunk> GetChunkList()
-        {
-            return _chunkList;
-        }
+        private List<MapGeneratorComponent> _generators;
 
         private void Awake()
         {
@@ -53,7 +44,7 @@ namespace VoxelEngine
                 Destroy(this);
             }
 
-            _generators = new List<IGenerator>();
+            _generators = new List<MapGeneratorComponent>();
             _chunksToUpdate = new DistinctList<Chunk>();
             _chunkList = new List<Chunk>();
             _chunks = new Dictionary<Vector2Int, Chunk>();
@@ -65,21 +56,21 @@ namespace VoxelEngine
             GridHelper.Init(ChunkSize);
         }
 
-        private void Start()
-        {
-        }
-
         public void Load()
         {
+            _generators.Add(new WorldGenerator());
+            _generators.Add(new TreeGenerator());
+            _generators.Add(new RockGenerator());
+            _generators.Add(new ForestyGenerator());
+            
             Generate();
-            UpdateChunkMeshes();
         }
 
         private void Update()
         {
             UpdateChunkMeshes();
         }
-
+        
         public void UpdateChunkMeshes()
         {
             if(_chunksToUpdate.Count > 0)
@@ -87,70 +78,38 @@ namespace VoxelEngine
                 for(int i = 0; i < _chunksToUpdate.Count; i++)
                     _chunksToUpdate[i].UpdateMesh();
                 _chunksToUpdate.Clear();
-
-                // _chunksToUpdate[_chunksToUpdate.Count - 1].UpdateMesh();
-                // _chunksToUpdate.RemoveAt(_chunksToUpdate.Count - 1);
             }
         }
 
+        public List<Chunk> GetChunkList()
+        {
+            return _chunkList;
+        }
+        
         public void Generate()
         {
-            Vector2Int globalOffset = new Vector2Int(Random.Range(0, 1000), Random.Range(0, 1000));
-
-            for(int wx = 0; wx < _worldSize; wx++)
-            for(int wz = 0; wz < _worldSize; wz++)
-            {
-                var chunk = new Chunk(ChunkSize);
-                int offX = wx * ChunkSize.x + globalOffset.x;
-                int offZ = wz * ChunkSize.z + globalOffset.y;
-
-                for(int x = 0; x < ChunkSize.x; x++)
-                for(int z = 0; z < ChunkSize.z; z++)
-                {
-                    const float scale = 0.2f;
-
-                    float perX = (offX + x) / (float)WorldBounds.x;
-                    float perZ = (offZ + z) / (float)WorldBounds.z;
-
-                    var noise = Mathf.PerlinNoise(perX / scale, perZ / scale);
-                    int height = Mathf.RoundToInt(noise * ChunkSize.y - 10);
-
-                    height = Mathf.Clamp(height, 0, ChunkSize.y - 1);
-
-                    for(int y = height; y >= 0; y--)
-                    {
-                        if(y < 1)
-                            continue;
-
-                        int voxelType = 0;
-
-                        if(y == height)
-                            voxelType = 1;
-                        else if(y > 0)
-                            voxelType = 2;
-
-                        // if(voxelType > 0)
-                        chunk.SetVoxel(x, y, z, voxelType);
-                    }
-                }
-
-                var ob = Instantiate(Prefab_Chunk, Chunks.transform);
-                chunk.Init(ob);
-                chunk.PositionIndex = new Vector2Int(wx, wz);
-
-                var position = new Vector3(wx * ChunkSize.x * FaceData.s, 0, wz * ChunkSize.z * FaceData.s);
-                ob.transform.position = position;
-
-                _chunksToUpdate.Add(chunk);
-
-                AddChunk(chunk);
-            }
-
+            for(int i = 0; i < _generators.Count; i++)
+                _generators[i].Init();
+            for(int i = 0; i < _generators.Count; i++)
+                _generators[i].Generate();
             OnGeneratedEvent?.Invoke();
         }
 
-        private void AddChunk(Chunk chunk)
+        public GameObject InstantiateEnvironment(GameObject prefab, Vector3 position, Quaternion rotation)
         {
+            var go = Instantiate(prefab, position, rotation, Environment.transform);
+            go.AddComponent<EnvironmentObject>();
+            return go;
+        }
+        
+        public GameObject InstantiateEnvironment(GameObject prefab, Vector3 position, Vector3 rotationEuler)
+        {
+            return InstantiateEnvironment(prefab, position, Quaternion.Euler(rotationEuler));
+        }
+
+        public void AddChunk(Chunk chunk)
+        {
+            _chunksToUpdate.Add(chunk);
             _chunks.Add(chunk.PositionIndex, chunk);
             _chunkList.Add(chunk);
         }
@@ -209,7 +168,7 @@ namespace VoxelEngine
             _chunksToUpdate.Add(ch);
         }
 
-        public void SetVoxelCube(Vector3 worldPosition, int radius, int voxelType)
+        public void SetVoxelsCube(Vector3 worldPosition, int radius, int voxelType)
         {
             var sx = (int)(worldPosition.x - radius);
             var ex = (int)(worldPosition.x + radius);
@@ -226,7 +185,7 @@ namespace VoxelEngine
             }
         }
 
-        public void SetVoxelSphere(Vector3 worldPosition, int radius, int voxelType)
+        public void SetVoxelsSphere(Vector3 worldPosition, int radius, int voxelType)
         {
             var sx = (int)(worldPosition.x - radius);
             var ex = (int)(worldPosition.x + radius);

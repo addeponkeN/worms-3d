@@ -8,20 +8,15 @@ using VoxelEngine;
 
 public class PlayerManager : MonoBehaviour, ILoader
 {
-    //  create a looping item get list
-    //  for teams & players
+    public int CurrentTeamIndex => _index = (_index + 1) % Teams.Count;
+    
     public List<Team> Teams;
     public Player ActivePlayer;
     public PlayerControllerManager ControllerManager;
 
-    public int CurrentTeamIndex => _index = (_index + 1) % Teams.Count;
-    
     private int _index;
-    
-    public Team GetNextActiveTeam()
-    {
-        return Teams[CurrentTeamIndex];
-    }
+
+
 
     private void Awake()
     {
@@ -57,10 +52,14 @@ public class PlayerManager : MonoBehaviour, ILoader
         };
 
         CreateTeams(testData);
-        SpawnPlayers();
         ActivePlayer = Teams[0].Players[0];
     }
 
+    public Team GetNextActiveTeam()
+    {
+        return Teams[CurrentTeamIndex];
+    }
+    
     public Player GetNextActivePlayer()
     {
         var team = GetNextActiveTeam();
@@ -73,11 +72,12 @@ public class PlayerManager : MonoBehaviour, ILoader
         ControllerManager.SetPlayer(player);
     }
 
-    private Player CreatePlayer()
+    private Player CreatePlayer(Vector3 position)
     {
-         var player = Instantiate(PrefabManager.Get.GetPrefab("player")).GetComponent<Player>();
-         player.Life.DeathEvent += LifeOnDeathEvent;
-         return player;
+        var player = Instantiate(PrefabManager.Get.GetPrefab("player"), position, Quaternion.identity)
+            .GetComponent<Player>();
+        player.Life.DeathEvent += LifeOnDeathEvent;
+        return player;
     }
 
     private void LifeOnDeathEvent(GameActor player)
@@ -110,7 +110,8 @@ public class PlayerManager : MonoBehaviour, ILoader
 
             for(int j = 0; j < teamData.PlayerCount; j++)
             {
-                var player = CreatePlayer();
+                var position = World.Get.GetRandomSafePosition();
+                var player = CreatePlayer(position);
                 team.AddPlayer(player);
             }
 
@@ -118,52 +119,4 @@ public class PlayerManager : MonoBehaviour, ILoader
         }
     }
 
-    private void SpawnPlayers()
-    {
-        var chunks = World.Get.GetChunkList();
-        for(int i = 0; i < Teams.Count; i++)
-        {
-            var team = Teams[i];
-            for(int j = 0; j < team.Players.Count; j++)
-            {
-                var p = team.Players[j];
-
-                Vector3 finalPosition = Vector3.zero;
-                int tries = 0;
-                do
-                {
-                    tries++;
-                    if(tries > 10)
-                    {
-                        Debug.LogError("failed to find a spawn position");
-                        break;
-                    }
-                    var randomChunk = chunks.Random();
-                    finalPosition = randomChunk.ChunkGo.transform.position;
-                    finalPosition.y = World.ChunkSize.y;
-                } while(!IsSpawnPointValid(ref finalPosition));
-
-                p.transform.position = finalPosition;
-
-            }
-        }
-    }
-
-    private bool IsSpawnPointValid(ref Vector3 pos)
-    {
-        var ray = new Ray(pos, Vector3.down);
-
-        if(Physics.Raycast(ray, out var info))
-        {
-            if(info.point.y > World.Get.Water.WaterLevel)
-            {
-                pos = new Vector3(info.point.x, info.point.y + 1, info.point.z);
-                return true;
-            }
-
-            return false;
-        }
-
-        return false;
-    }
 }

@@ -24,7 +24,7 @@ namespace Weapons
 
                 if(Physics.Raycast(ray, out var info))
                 {
-                    World.Get.SetVoxelSphere(info.point, 5, 0);
+                    World.Get.SetVoxelsSphere(info.point, 5, 0);
                 }
             }
         }

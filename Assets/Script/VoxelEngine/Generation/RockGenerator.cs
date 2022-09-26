@@ -3,7 +3,7 @@ using Util;
 
 namespace VoxelEngine.Generation
 {
-    public class TreeGenerator : MapGeneratorComponent
+    public class RockGenerator : MapGeneratorComponent
     {
         public override void Init()
         {
@@ -11,17 +11,17 @@ namespace VoxelEngine.Generation
 
         public override void Generate()
         {
-            int treeCount = Random.Range(10, 20);
+            int treeCount = Random.Range(20, 40);
 
             var w = World.Get;
-            var treePrefabs = PrefabManager.GetPrefabs("Environment/", "Tree");
+            var treePrefabs = PrefabManager.GetPrefabs("Environment/", "Rock");
             
             for(int i = 0; i < treeCount; i++)
             {
                 var randomPosition = w.GetRandomSafePosition();
                 var randomRotation = new Vector3(0, Random.Range(0, 360f), 0);
                 var prefab = treePrefabs.Random();
-                w.InstantiateEnvironment(prefab, randomPosition, randomRotation);
+                w.InstantiateEnvironment(prefab, randomPosition, Quaternion.Euler(randomRotation));
             }
         }
     }

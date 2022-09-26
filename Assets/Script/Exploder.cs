@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using VoxelEngine;
 
@@ -26,7 +27,7 @@ public class Exploder : MonoBehaviour
     private static RaycastHit[] _buffer = new RaycastHit[16];
 
     [SerializeField] private Component _exploder;
-    
+
     private IExploder _targetExploder;
     private int _layer;
 
@@ -59,24 +60,21 @@ public class Exploder : MonoBehaviour
 
         var hits = Physics.SphereCastNonAlloc(ray, data.Radius, _buffer, 1f, _layer);
 
+        Debug.Log($"{hits} explosion hits");
+
         for(int i = 0; i < hits; i++)
         {
             var target = _buffer[i].transform.gameObject;
-            var ent = target.GetComponentInParent<GameActor>();
+            var exploTarget = target.GetComponent<ExplosionTargetObject>();
+            if(exploTarget == null)
+            {
+                Debug.LogError($"explotarget null!  go: {target.name}");
+            }
 
-            var distance = Vector3.Distance(target.transform.position, data.Position);
-            var multiplier = Mathf.Clamp(1.15f - distance / data.Radius, 0.1f, 1f);
-            var finalDamage = (int)(multiplier * data.Damage);
-            ent.Life.TakeDamage(finalDamage);
-
-            var force = data.Damage / 8f * multiplier;
-            var dir = (target.transform.position - data.Position + Vector3.up).normalized;
-            ent.Body.Push(dir, force);
+            exploTarget.OnTriggerDamageable(data);
+            Debug.Log(target.name + " hit");
         }
 
-        if(hits <= 0)
-            Debug.Log("EXPLODE NO HITS");
-
-        World.Get.SetVoxelSphere(transform.position, (int)data.Radius, 0);
+        World.Get.SetVoxelsSphere(transform.position, (int)data.Radius, 0);
     }
 }

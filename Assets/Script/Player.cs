@@ -86,4 +86,19 @@ public class Player : GameActor
         _id = _team.Players.Count;
     }
 
+    protected override void OnExplosionDamagedEvent(ExplodeData data)
+    {
+        base.OnExplosionDamagedEvent(data);
+
+        var distance = Vector3.Distance(transform.position, data.Position);
+        var multiplier = Mathf.Clamp(1.15f - distance / data.Radius, 0.1f, 1f);
+        var finalDamage = (int)(multiplier * data.Damage);
+        Life.TakeDamage(finalDamage);
+
+        Debug.Log($"player took dmg from explo: {finalDamage}");
+
+        var force = data.Damage / 8f * multiplier;
+        var dir = (transform.position - data.Position + Vector3.up).normalized;
+        Body.Push(dir, force);
+    }
 }
