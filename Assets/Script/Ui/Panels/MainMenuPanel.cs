@@ -1,3 +1,4 @@
+using AudioSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VoxelEngine;
@@ -10,6 +11,8 @@ namespace Ui
         {
             Main.KeepBottomPanel = true;
             World.Get.Load();
+            AudioManager.PlayMusic("menu");
+            Debug.Log("playing menu song");
         }
 
         public void Button_Start()

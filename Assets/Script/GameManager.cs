@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using AudioSystem;
 using CameraSystem;
 using GameStates;
 using GameSystems;
@@ -39,6 +40,11 @@ public class GameManager : MonoBehaviour
         {
             Get = this;
         }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
         
         PlayerInput = GetComponent<PlayerInput>();
         
@@ -46,7 +52,7 @@ public class GameManager : MonoBehaviour
         StateManager.PushState(new GameStateLoading());
 
         Systems = new();
-        AddGameSystem(new AirDropSystem());
+        // AddGameSystem(new AirDropSystem());
         AddGameSystem(new WaterLevelSystem());
     }
 
@@ -58,6 +64,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
+        
+        AudioManager.PlayMusic("gameplay1");
     }
     
     void AddGameSystem(GameSystem system)

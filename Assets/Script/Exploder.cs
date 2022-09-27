@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using AudioSystem;
 using UnityEngine;
 using VoxelEngine;
+using Random = UnityEngine.Random;
 
 public interface IExploder
 {
@@ -27,7 +29,6 @@ public class Exploder : MonoBehaviour
     private static RaycastHit[] _buffer = new RaycastHit[16];
 
     [SerializeField] private Component _exploder;
-
     private IExploder _targetExploder;
     private int _layer;
 
@@ -35,7 +36,7 @@ public class Exploder : MonoBehaviour
     {
         if(_exploder == null)
         {
-            throw new Exception("Exploder.Target is null");
+            throw new Exception("exploder is null");
         }
 
         if(_exploder is IExploder exp)
@@ -60,8 +61,6 @@ public class Exploder : MonoBehaviour
 
         var hits = Physics.SphereCastNonAlloc(ray, data.Radius, _buffer, 1f, _layer);
 
-        Debug.Log($"{hits} explosion hits");
-
         for(int i = 0; i < hits; i++)
         {
             var target = _buffer[i].transform.gameObject;
@@ -70,9 +69,10 @@ public class Exploder : MonoBehaviour
                 continue;
 
             exploTarget.OnTriggerDamageable(data);
-            Debug.Log(target.name + " hit");
         }
 
+        AudioManager.PlaySfx($"explosion{Random.Range(1, 4)}");
+        
         World.Get.SetVoxelsSphere(transform.position, (int)data.Radius, 0);
     }
 }

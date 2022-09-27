@@ -139,6 +139,10 @@
      <Compile Include="Assets\Script\Ui\Panels\GameOverPanel.cs" />
      <Compile Include="Assets\Script\GameStates\GameStateGameOver.cs" />
      <Compile Include="Assets\PlayerGui.cs" />
+     <Compile Include="Assets\Script\AudioSystem\AudioManager.cs" />
+     <Compile Include="Assets\Script\GameCore.cs" />
+     <Compile Include="Assets\Script\AudioSystem\AudioExtensions.cs" />
+     <Compile Include="Assets\Script\AudioSystem\AudioPlayer.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

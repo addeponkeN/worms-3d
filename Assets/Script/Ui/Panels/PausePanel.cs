@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Ui
 {
@@ -12,6 +13,11 @@ namespace Ui
         public void Button_Settings()
         {
             Main.PushPanel<SettingsPanel>();
+        }
+        
+        public void Button_MainMenu()
+        {
+            SceneManager.LoadScene("Scenes/MenuScene");
         }
 
         public void Button_Quit()

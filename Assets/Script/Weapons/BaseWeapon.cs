@@ -1,3 +1,4 @@
+using AudioSystem;
 using CameraSystem.CameraStates;
 using GameStates;
 using PlayerControllers;
@@ -20,9 +21,14 @@ namespace Weapons
     {
         public abstract WeaponTypes WeaponType { get; }
 
+        protected string GetWeaponName()
+        {
+            return WeaponType.ToString().ToLower();
+        }
+
         public float GetWeaponChargeValue => _chargeTimer / ChargeTime;
         public float GetFinalPower => Power * GetWeaponChargeValue;
-        
+
         public PlayerControllerManager Manager;
         public GameObject WeaponGo;
         public bool IsFired;
@@ -34,9 +40,9 @@ namespace Weapons
         public bool AimeStanceChangedThisFrame;
         public float ChargeTime = 1.5f;
 
-
         protected float Power = 5000f;
-        
+
+        private AudioSource _chargeAudio;
         private Vector3 _rotationOffset;
         private Transform _weaponOrigin;
         private bool _prevAimDown;
@@ -45,6 +51,7 @@ namespace Weapons
         public virtual void Init()
         {
             WeaponGo = Object.Instantiate(PrefabManager.Get.GetPrefab(WeaponType));
+            // _audio = WeaponGo.AddComponent<AudioSource>();
 
             _weaponOrigin = Manager.Player.WeaponOrigin.transform;
             _rotationOffset = WeaponGo.transform.eulerAngles;
@@ -117,6 +124,7 @@ namespace Weapons
         {
             IsFireDown = true;
             _chargeTimer = 0f;
+            _chargeAudio= AudioManager.PlaySfx("weaponcharging");
         }
 
         public virtual void OnEnabled(bool enabled)
@@ -129,6 +137,9 @@ namespace Weapons
         {
             IsFired = true;
             IsFireDown = false;
+            if(_chargeAudio.isPlaying)
+                _chargeAudio.Stop();
+            AudioManager.PlaySfx($"weapon_{GetWeaponName()}");
         }
 
         protected void ResetFire()
