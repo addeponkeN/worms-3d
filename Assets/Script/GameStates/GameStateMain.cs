@@ -17,7 +17,7 @@ namespace GameStates
                 return;
             }
             
-            var player = pm.GetNextActivePlayer();
+            var player = pm.NextPlayer();
             pm.SetActivePlayer(player);
             
             Manager.PushState(new GameStateActivePlayer(player));

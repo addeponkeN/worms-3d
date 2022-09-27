@@ -6,21 +6,19 @@ using UnityEngine;
 using Util;
 using VoxelEngine;
 
+
 public class PlayerManager : MonoBehaviour, ILoader
 {
-    public int CurrentTeamIndex => _index = (_index + 1) % Teams.Count;
-
     public List<Team> Teams;
     public Player ActivePlayer;
     public PlayerControllerManager ControllerManager;
 
-    private GameObject _playerContainer;
-
-    private int _index;
+    private GameObject _playerContainerGo;
+    private Indexer _teamIndex;
 
     private void Awake()
     {
-        _playerContainer = new GameObject("PlayerContainer");
+        _playerContainerGo = new GameObject("PlayerContainer");
         Teams = new List<Team>();
         ControllerManager = gameObject.AddComponent<PlayerControllerManager>();
     }
@@ -35,15 +33,15 @@ public class PlayerManager : MonoBehaviour, ILoader
             {
                 new TeamData()
                 {
-                    PlayerCount = 1
+                    PlayerCount = 2
                 },
                 new TeamData()
                 {
-                    PlayerCount = 1
+                    PlayerCount = 2
                 },
                 // new TeamData()
                 // {
-                    // PlayerCount = 4
+                    // PlayerCount = 2
                 // },
                 // new TeamData()
                 // {
@@ -56,20 +54,22 @@ public class PlayerManager : MonoBehaviour, ILoader
         ActivePlayer = Teams[0].Players[0];
     }
 
-    public Team GetNextActiveTeam()
+    public Team CurrentTeam() => Teams[_teamIndex];
+    public Team NextTeam()
     {
         Team team;
         do
         {
-            team = Teams[CurrentTeamIndex];
+            team = Teams[_teamIndex.Next()];
         } while(team.IsDead);
 
         return team;
     }
 
-    public Player GetNextActivePlayer()
+    public Player CurrentPlayer() => ActivePlayer;
+    public Player NextPlayer()
     {
-        var team = GetNextActiveTeam();
+        var team = NextTeam();
         return team.GetNextPlayer();
     }
 
@@ -77,12 +77,13 @@ public class PlayerManager : MonoBehaviour, ILoader
     {
         ActivePlayer = player;
         ControllerManager.SetPlayer(player);
+        Debug.Log($"Player: {player.GetPlayerId()},  team: {player.GetTeam().GetTeamName()}({player.GetTeam().GetTeamId()})");
     }
 
     private Player CreatePlayer(Vector3 position)
     {
         var player = Instantiate(PrefabManager.Get.GetPrefab("player"), position, Quaternion.identity,
-            _playerContainer.transform).GetComponent<Player>();
+            _playerContainerGo.transform).GetComponent<Player>();
         player.Life.DeathEvent += LifeOnDeathEvent;
         return player;
     }
@@ -124,6 +125,9 @@ public class PlayerManager : MonoBehaviour, ILoader
 
             Teams.Add(team);
         }
+
+        _teamIndex = Teams.Count;
+        _teamIndex.SetCurrent(Teams.Count);
     }
     
 }

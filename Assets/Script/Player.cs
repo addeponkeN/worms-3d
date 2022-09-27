@@ -67,6 +67,7 @@ public class Player : GameActor
 
     private TeamBanner _banner;
     private Team _team;
+    private int _playerId;
 
     protected override void Awake()
     {
@@ -76,10 +77,12 @@ public class Player : GameActor
     }
 
     public Team GetTeam() => _team;
+    public int GetPlayerId() => _playerId;
 
     public void AssignTeam(Team team)
     {
         _team = team;
+        _playerId = team.Players.Count;
         _banner.SetColor(team.GetColor());
     }
 

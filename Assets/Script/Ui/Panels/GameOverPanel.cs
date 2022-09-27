@@ -36,7 +36,7 @@ namespace Ui
                 tfRect.localPosition = new Vector3(0f, offset * i, 0);
                 
                 var btText = g.GetComponentInChildren<TMP_Text>();
-                btText.text = $"Team {t.GetTeamId()} Won!";
+                btText.text = $"Team {t.GetTeamName()} Won!";
             }
         }
 
