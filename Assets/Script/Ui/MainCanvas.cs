@@ -24,6 +24,7 @@ namespace Ui
         [SerializeField] private MenuPanel DefaultPanelPrefab;
 
         public bool KeepBottomPanel;
+        public bool CanExitCurrent = true;
 
         private List<IUiPanel> _registeredPanels;
         private Stack<IUiPanel> _panelStack;
@@ -58,16 +59,17 @@ namespace Ui
             }
         }
 
-        public void PushPanel<T>() where T : IUiPanel
+        public T PushPanel<T>() where T : IUiPanel
         {
             for(int i = 0; i < _registeredPanels.Count; i++)
                 if(_registeredPanels[i] is T ret)
                 {
                     PushPanel(ret);
-                    return;
+                    return ret;
                 }
 
             Debug.LogError($"Could not find panel type: {typeof(T).Name}");
+            return default;
         }
 
         public void PushPanel(Type type)
@@ -131,7 +133,7 @@ namespace Ui
                 {
                     PushPanel(DefaultPanelPrefab.GetType());
                 }
-                else if(_panelStack.Count == 1 && !KeepBottomPanel)
+                else if(CanExitCurrent && _panelStack.Count == 1 && !KeepBottomPanel)
                 {
                     ExitPanel();
                 }

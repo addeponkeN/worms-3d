@@ -65,10 +65,8 @@ public class Player : GameActor
     public Transform CameraAimPosition;
     public Transform WeaponOrigin;
 
-
     private TeamBanner _banner;
     private Team _team;
-    private int _id;
 
     protected override void Awake()
     {
@@ -83,7 +81,6 @@ public class Player : GameActor
     {
         _team = team;
         _banner.SetColor(team.GetColor());
-        _id = _team.Players.Count;
     }
 
     protected override void OnExplosionDamagedEvent(ExplodeData data)
@@ -97,8 +94,8 @@ public class Player : GameActor
 
         Debug.Log($"player took dmg from explo: {finalDamage}");
 
-        var force = data.Damage / 8f * multiplier;
-        var dir = (transform.position - data.Position + Vector3.up).normalized;
+        var force = data.Damage / 10f * multiplier;
+        var dir = ((transform.position - data.Position).normalized + Vector3.up).normalized;
         Body.Push(dir, force);
     }
 }

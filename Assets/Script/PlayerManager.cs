@@ -9,17 +9,18 @@ using VoxelEngine;
 public class PlayerManager : MonoBehaviour, ILoader
 {
     public int CurrentTeamIndex => _index = (_index + 1) % Teams.Count;
-    
+
     public List<Team> Teams;
     public Player ActivePlayer;
     public PlayerControllerManager ControllerManager;
 
+    private GameObject _playerContainer;
+
     private int _index;
-
-
 
     private void Awake()
     {
+        _playerContainer = new GameObject("PlayerContainer");
         Teams = new List<Team>();
         ControllerManager = gameObject.AddComponent<PlayerControllerManager>();
     }
@@ -34,20 +35,20 @@ public class PlayerManager : MonoBehaviour, ILoader
             {
                 new TeamData()
                 {
-                    PlayerCount = 4
+                    PlayerCount = 1
                 },
                 new TeamData()
                 {
-                    PlayerCount = 4
+                    PlayerCount = 1
                 },
-                new TeamData()
-                {
-                    PlayerCount = 4
-                },
-                new TeamData()
-                {
-                    PlayerCount = 4
-                }
+                // new TeamData()
+                // {
+                    // PlayerCount = 4
+                // },
+                // new TeamData()
+                // {
+                    // PlayerCount = 4
+                // }
             }
         };
 
@@ -57,9 +58,15 @@ public class PlayerManager : MonoBehaviour, ILoader
 
     public Team GetNextActiveTeam()
     {
-        return Teams[CurrentTeamIndex];
+        Team team;
+        do
+        {
+            team = Teams[CurrentTeamIndex];
+        } while(team.IsDead);
+
+        return team;
     }
-    
+
     public Player GetNextActivePlayer()
     {
         var team = GetNextActiveTeam();
@@ -74,8 +81,8 @@ public class PlayerManager : MonoBehaviour, ILoader
 
     private Player CreatePlayer(Vector3 position)
     {
-        var player = Instantiate(PrefabManager.Get.GetPrefab("player"), position, Quaternion.identity)
-            .GetComponent<Player>();
+        var player = Instantiate(PrefabManager.Get.GetPrefab("player"), position, Quaternion.identity,
+            _playerContainer.transform).GetComponent<Player>();
         player.Life.DeathEvent += LifeOnDeathEvent;
         return player;
     }
@@ -118,5 +125,5 @@ public class PlayerManager : MonoBehaviour, ILoader
             Teams.Add(team);
         }
     }
-
+    
 }

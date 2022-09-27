@@ -6,37 +6,37 @@ namespace GameStates
 {
     public class GameStateManager
     {
-        private Stack<GameState> States;
+        public event Action<GameState> GameStateChangedEvent;
 
         public GameState CurrentState;
-
-        public event Action<GameState> GameStateChangedEvent;
+        
+        private Stack<GameState> _states;
 
         public GameStateManager()
         {
-            States = new();
+            _states = new();
         }
 
         public void PushState(GameState state)
         {
-            if(CurrentState == null && States.Count <= 0)
+            if(CurrentState == null && _states.Count <= 0)
             {
                 SetState(state);
             }
             else
             {
-                States.Push(state);
+                _states.Push(state);
             }
 
             string val = "STATES: ";
-            foreach(var st in States)
+            foreach(var st in _states)
                 val += $"{st.GetType().Name} < ";
             Debug.Log(val);
         }
 
         public void ClearStack()
         {
-            States.Clear();
+            _states.Clear();
             SetDefaultState();
         }
 
@@ -56,7 +56,6 @@ namespace GameStates
             CurrentState = state;
             CurrentState.Init(this);
             GameStateChangedEvent?.Invoke(CurrentState);
-            // Debug.Log($"STATE: {state.GetType().Name}");
         }
 
         void SetDefaultState()
@@ -66,9 +65,9 @@ namespace GameStates
 
         public void NextState()
         {
-            if(States.Count > 0)
+            if(_states.Count > 0)
             {
-                SetState(States.Pop());
+                SetState(_states.Pop());
             }
             else
             {
@@ -78,6 +77,12 @@ namespace GameStates
 
         public void Update()
         {
+            if(Input.GetKeyDown(KeyCode.P))
+            {
+                PushState(new GameStateGameOver());
+                CurrentState.Exit();
+            }
+            
             if(CurrentState == null)
             {
                 NextState();

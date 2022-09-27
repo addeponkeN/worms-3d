@@ -2,20 +2,23 @@ using UnityEngine;
 
 namespace GameStates
 {
-    /// <summary>
-    /// default state
-    /// the brain of all states
-    /// the state decider
-    /// </summary>
     public class GameStateMain : GameState
     {
         private float _thinkTimer = 0.1f;
 
-        private void Think()
+        private void DecideState()
         {
-            var playerManager = GameManager.Get.PlayerManager;
-            var player = playerManager.GetNextActivePlayer();
-            playerManager.SetActivePlayer(player);
+            var pm = GameManager.Get.PlayerManager;
+
+            if(pm.Teams.Count <= 1)
+            {
+                Manager.PushState(new GameStateGameOver());
+                Exit();
+                return;
+            }
+            
+            var player = pm.GetNextActivePlayer();
+            pm.SetActivePlayer(player);
             
             Manager.PushState(new GameStateActivePlayer(player));
             
@@ -34,7 +37,7 @@ namespace GameStates
             _thinkTimer -= Time.deltaTime;
             if(_thinkTimer <= 0f)
             {
-                Think();
+                DecideState();
             }
         }
     }
