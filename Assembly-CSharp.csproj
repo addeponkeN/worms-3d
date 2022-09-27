@@ -138,6 +138,7 @@
      <Compile Include="Assets\Script\GameStates\GameStateAirstrike.cs" />
      <Compile Include="Assets\Script\Ui\Panels\GameOverPanel.cs" />
      <Compile Include="Assets\Script\GameStates\GameStateGameOver.cs" />
+     <Compile Include="Assets\PlayerGui.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
