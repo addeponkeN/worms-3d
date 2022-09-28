@@ -6,7 +6,7 @@ namespace AudioSystem
     {
         public static void PlaySfx(this AudioSource source, string name)
         {
-            if(AudioManager.Get.Sfx.TryGetValue(name, out var audio))
+            if(AudioManager.Sfx.TryGetValue(name, out var audio))
             {
                 if(source.isPlaying)
                     source.Stop();

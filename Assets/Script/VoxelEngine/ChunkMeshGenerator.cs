@@ -8,7 +8,6 @@ namespace VoxelEngine
         public delegate bool InBounds(int x, int y, int z);
         
         private static Dictionary<Vector3Int, FaceData> _faces;
-
         public static Dictionary<Vector3Int, FaceData> Faces
         {
             get

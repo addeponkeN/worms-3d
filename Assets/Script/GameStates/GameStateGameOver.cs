@@ -10,7 +10,7 @@ namespace GameStates
             base.Init(manager);
             Time.timeScale = 0f;
 
-            var main = GameManager.Get.Ui.MainCanvas;
+            var main = GameManager.Get.Ui.Main;
 
             main.CanExitCurrent = false;
             main.KeepBottomPanel = true;
@@ -23,7 +23,7 @@ namespace GameStates
         public override void Exit()
         {
             base.Exit();
-            var main = GameManager.Get.Ui.MainCanvas;
+            var main = GameManager.Get.Ui.Main;
             main.CanExitCurrent = true;
             main.KeepBottomPanel = false;
             main.ExitPanel();

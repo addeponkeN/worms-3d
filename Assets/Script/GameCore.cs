@@ -6,8 +6,6 @@ public class GameCore : MonoBehaviour
 {
     public static GameCore Get { get; private set; }
 
-    [NonSerialized] public AudioManager Aud;
-
     private void Awake()
     {
         Debug.Log("loading core");
@@ -22,7 +20,7 @@ public class GameCore : MonoBehaviour
             return;
         }
 
-        Aud = gameObject.AddComponent<AudioManager>();
+        AudioManager.Load();
         Debug.Log("core loaded");
     }
 }

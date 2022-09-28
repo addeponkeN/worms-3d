@@ -6,7 +6,7 @@ namespace GameSystems
     {
         //  increase water level every 4 turns
         private int _turnInterval = 4;
-        private int _counter;
+        private int _counter = -1;
 
         private float _increaseAmount = 2f;
 

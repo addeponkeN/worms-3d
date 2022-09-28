@@ -1,15 +1,15 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(ExplosionTargetObject))]
+[RequireComponent(typeof(EnvironmentInteractor))]
 public class EnvironmentObject : MonoBehaviour
 {
     private void Awake()
     {
-        GetComponent<ExplosionTargetObject>().DamagedEvent += OnDamagedEvent;
+        GetComponent<EnvironmentInteractor>().ExplosionEvent += OnExplosionEvent;
     }
 
-    private void OnDamagedEvent(ExplodeData obj)
+    private void OnExplosionEvent(ExplodeData obj)
     {
         Destroy(gameObject);
     }

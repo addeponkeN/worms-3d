@@ -10,18 +10,6 @@ namespace Ui
     {
         [SerializeField] private GameObject _placingsContainer;
 
-        void Start()
-        {
-        }
-
-        void Update()
-        {
-        }
-
-        void Clear()
-        {
-        }
-
         public void SetResults(List<Team> teams)
         {
             var offset = 150f;
@@ -42,6 +30,11 @@ namespace Ui
 
         public override void OnFocused(bool isFocused)
         {
+            if(isFocused)
+            {
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
         }
 
         public override void OnRemoved()

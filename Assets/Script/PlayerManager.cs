@@ -33,20 +33,16 @@ public class PlayerManager : MonoBehaviour, ILoader
             {
                 new TeamData()
                 {
-                    PlayerCount = 2
+                    PlayerCount = 4
                 },
                 new TeamData()
                 {
-                    PlayerCount = 2
+                    PlayerCount = 4
                 },
-                // new TeamData()
-                // {
-                    // PlayerCount = 2
-                // },
-                // new TeamData()
-                // {
-                    // PlayerCount = 4
-                // }
+                new TeamData()
+                {
+                    PlayerCount = 4
+                }
             }
         };
 

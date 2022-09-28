@@ -17,6 +17,7 @@ namespace Ui
         
         public void Button_MainMenu()
         {
+            OnRemoved();
             SceneManager.LoadScene("Scenes/MenuScene");
         }
 

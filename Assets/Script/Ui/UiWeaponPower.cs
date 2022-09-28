@@ -39,12 +39,15 @@ public class UiWeaponPower : MonoBehaviour
     {
         Progress = 0f;
         _progressBar.gameObject.SetActive(false);
+        
     }
 
     private void WepControllerOnWeaponAimingEvent(BaseWeapon weapon)
     {
         Progress = 0f;
         _progressBar.gameObject.SetActive(weapon.IsAimDown);
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     private void WepControllerOnWeaponChargingEvent(BaseWeapon weapon)

@@ -12,7 +12,7 @@ namespace EntityComponents
         private float _gravity;
         private Vector3 _pushDir;
         private float _mass = 1f;
-        private float _jumpMass = 6f;
+        private float _jumpMass = 10f;
 
         public override void Start()
         {
@@ -32,10 +32,17 @@ namespace EntityComponents
             _gravity = amount;
         }
 
-        public void Move(Vector3 amount)
+        public CollisionFlags Move(Vector3 amount)
         {
             amount.y -= 0.00001f;
-            _con.Move(amount);
+            var result = _con.Move(amount);
+            
+            if(result == CollisionFlags.Sides)
+            {
+                _pushDir = Vector3.zero;
+            }
+
+            return result;
         }
 
         public override void Update()

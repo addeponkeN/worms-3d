@@ -18,7 +18,7 @@ namespace CameraSystem
 
         public Transform DefaultPosition;
 
-        private List<ICameraState> _states;
+        private List<ICameraState> _states; //  for camera effects (shake etc..)
         private Queue<ICameraState> _queue;
 
         private void Awake()
@@ -34,16 +34,11 @@ namespace CameraSystem
         private void Start()
         {
             AddDefaultState();
-            World.Get.OnGeneratedEvent += OnWorldGeneratedEvent;
         }
 
         public void Load()
         {
             LoadingComplete = true;
-        }
-
-        private void OnWorldGeneratedEvent()
-        {
         }
 
         public void SetMainState(ICameraState state)

@@ -2,12 +2,10 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider), typeof(Rigidbody))]
-public class ExplosionTargetObject : MonoBehaviour
+public class EnvironmentInteractor : MonoBehaviour
 {
-    public event Action<ExplodeData> DamagedEvent;
+    public event Action<ExplodeData> ExplosionEvent;
 
-    public GameObject DamageableGameObject;
-    
     private void Awake()
     {
         var box = GetComponent<BoxCollider>();
@@ -19,9 +17,9 @@ public class ExplosionTargetObject : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Damageable");
     }
 
-    public void OnTriggerDamageable(ExplodeData data)
+    public void OnTriggerExplosion(ExplodeData data)
     {
-        DamagedEvent?.Invoke(data);
+        ExplosionEvent?.Invoke(data);
     }
     
 }

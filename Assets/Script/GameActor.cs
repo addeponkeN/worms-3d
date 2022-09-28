@@ -2,42 +2,40 @@ using System;
 using EntityComponents;
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController), typeof(ExplosionTargetObject))]
+[RequireComponent(typeof(CharacterController))]
 public class GameActor : MonoBehaviour
 {
     private const int DEFAULT_LIFE = 100;
 
     [NonSerialized] public CharacterController CharController;
+    [NonSerialized] public SimpleBody Body;
 
-    public GameObject Model;
     public StatContainer Stats;
     public ActorLife Life;
-    public SimpleBody Body;
-    protected ExplosionTargetObject ExploTarget;
+
+    protected EnvironmentInteractor EnvInteractor;
 
     protected virtual void Awake()
     {
         CharController = GetComponent<CharacterController>();
-        ExploTarget = GetComponent<ExplosionTargetObject>();
+        EnvInteractor = GetComponent<EnvironmentInteractor>();
         CharController.radius = 0.1f;
-        Model = transform.Find("Model").gameObject;
         Life = new ActorLife(this, DEFAULT_LIFE);
         Body = gameObject.AddComponent<SimpleBody>();
     }
 
     protected virtual void Start()
     {
-        ExploTarget.DamagedEvent += OnExplosionDamagedEvent;
+        EnvInteractor.ExplosionEvent += OnExplosionEvent;
         gameObject.AddComponent<LifeBoundsComponent>();
     }
 
-    protected virtual void OnExplosionDamagedEvent(ExplodeData data)
+    protected virtual void OnExplosionEvent(ExplodeData data)
     {
     }
 
     protected virtual void Update()
     {
-        Body.Update();
     }
 
     protected virtual void FixedUpdate()
@@ -46,7 +44,6 @@ public class GameActor : MonoBehaviour
 
     protected virtual void LateUpdate()
     {
-        Body.LateUpdate();
     }
 
     public virtual void Kill()
@@ -58,6 +55,4 @@ public class GameActor : MonoBehaviour
     {
         Destroy(gameObject);
     }
-    
 }
-

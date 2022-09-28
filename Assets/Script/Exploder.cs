@@ -61,14 +61,21 @@ public class Exploder : MonoBehaviour
 
         var hits = Physics.SphereCastNonAlloc(ray, data.Radius, _buffer, 1f, _layer);
 
+        var hash = new HashSet<EnvironmentInteractor>();
+        
         for(int i = 0; i < hits; i++)
         {
             var target = _buffer[i].transform.gameObject;
-            var exploTarget = target.GetComponent<ExplosionTargetObject>();
-            if(exploTarget == null)
+            var interactor = target.GetComponent<EnvironmentInteractor>();
+            if(interactor == null)
                 continue;
 
-            exploTarget.OnTriggerDamageable(data);
+            if(hash.Contains(interactor))
+                continue;
+            
+            hash.Add(interactor);
+            
+            interactor.OnTriggerExplosion(data);
         }
 
         AudioManager.PlaySfx($"explosion{Random.Range(1, 4)}");

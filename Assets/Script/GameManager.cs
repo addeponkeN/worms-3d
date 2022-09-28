@@ -92,5 +92,13 @@ public class GameManager : MonoBehaviour
         StateManager.FixedUpdate();
     }
 
+    private void OnMouseEnter()
+    {
+        Cursor.visible = false;
+    }
 
+    private void OnMouseExit()
+    {
+        Cursor.visible = true;
+    }
 }

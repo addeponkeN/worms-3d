@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Util;
 using Weapons;
 
 public class UiWeaponSlot : MonoBehaviour

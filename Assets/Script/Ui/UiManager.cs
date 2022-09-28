@@ -6,15 +6,19 @@ namespace Ui
     public class UiManager : MonoBehaviour, ILoader
     {
         public Canvas AimCanvas;
-        public MainCanvas MainCanvas;
         public GamePanel GamePanel;
+        public MainCanvas Main;
+        public WorldCanvas World;
 
         private void Awake()
         {
             AimCanvas = GameObject.Find("AimCanvas").GetComponent<Canvas>();
-            var mainCanvasGo = GameObject.Find("MainCanvas");
-            MainCanvas = mainCanvasGo.GetComponent<MainCanvas>();
-            GamePanel = mainCanvasGo.GetComponentInChildren<GamePanel>();
+            var mainGo = GameObject.Find("MainCanvas");
+            Main = mainGo.GetComponent<MainCanvas>();
+            GamePanel = mainGo.GetComponentInChildren<GamePanel>();
+            
+            var worldGo = GameObject.Find("WorldCanvas");
+            World = worldGo.GetComponent<WorldCanvas>();
             
             AimCanvas.gameObject.SetActive(false);
         }

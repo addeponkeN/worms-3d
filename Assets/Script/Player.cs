@@ -1,6 +1,7 @@
 using System;
 using Teams;
 using UnityEngine;
+using ProgressBar = Ui.Widgets.ProgressBar;
 
 public class ActorLife
 {
@@ -10,10 +11,12 @@ public class ActorLife
     public int Life { get; set; }
     public int MaxLife { get; set; }
 
+    public float LifePercentage => (float)Life / MaxLife;
+
     /// <summary>
     /// EntityLife(life), int(damage)
     /// </summary>
-    public event Action<ActorLife, int> LifeUpdatedEvent;
+    public event Action<ActorLife, int> LifeChangedEvent;
     public event Action<GameActor> DeathEvent;
 
     public ActorLife(GameActor actor, int life)
@@ -32,7 +35,7 @@ public class ActorLife
 
         Life -= dmg;
         Debug.Log($"took dmg: {dmg}  ({Life}hp)");
-        LifeUpdatedEvent?.Invoke(this, -dmg);
+        LifeChangedEvent?.Invoke(this, -dmg);
         if(!IsAlive)
         {
             DeathEvent?.Invoke(Parent);
@@ -48,7 +51,7 @@ public class ActorLife
 
         Life = Mathf.Clamp(Life + val, 0, MaxLife);
         Debug.Log($"heal: +{val}  ({Life}hp)");
-        LifeUpdatedEvent?.Invoke(this, val);
+        LifeChangedEvent?.Invoke(this, val);
     }
 
     public void Kill()
@@ -61,19 +64,20 @@ public class ActorLife
 
 public class Player : GameActor
 {
+    [NonSerialized] public PlayerUi Ui;
     public Transform CameraPosition;
     public Transform CameraAimPosition;
     public Transform WeaponOrigin;
 
-    private TeamBanner _banner;
     private Team _team;
     private int _playerId;
+    private ProgressBar _bar;
 
     protected override void Awake()
     {
         base.Awake();
-        _banner = GetComponentInChildren<TeamBanner>();
         CharController = GetComponent<CharacterController>();
+        Ui = gameObject.AddComponent<PlayerUi>();
     }
 
     public Team GetTeam() => _team;
@@ -83,12 +87,12 @@ public class Player : GameActor
     {
         _team = team;
         _playerId = team.Players.Count;
-        _banner.SetColor(team.GetColor());
+        Ui.Init(this);
     }
 
-    protected override void OnExplosionDamagedEvent(ExplodeData data)
+    protected override void OnExplosionEvent(ExplodeData data)
     {
-        base.OnExplosionDamagedEvent(data);
+        base.OnExplosionEvent(data);
 
         var distance = Vector3.Distance(transform.position, data.Position);
         var multiplier = Mathf.Clamp(1.15f - distance / data.Radius, 0.1f, 1f);

@@ -2,77 +2,53 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using Util;
 
 namespace AudioSystem
 {
-    public class AudioManager : MonoBehaviour
+    public static class AudioManager
     {
-        public static AudioManager Get { get; private set; }
-
         private const string MusicFolderPath = "Sound/Music/";
         private const string SfxFolderPath = "Sound/Sfx/";
+
+        public static float MasterVolume { get; set; } = 0.5f;
+        public static float SfxVolume { get; set; } = 1f;
+        public static float MusicVolume { get; set; } = 1f;
+
+        public static Dictionary<string, AudioClip> Sfx => _sfx;
+
+        private static float SfxScaledVolume => SfxVolume * MasterVolume;
+        private static float MusicScaledVolume => MusicVolume * MasterVolume;
+        
+        private static int _sourceCount;
+        private static Dictionary<string, AudioClip> _music;
+        private static Dictionary<string, AudioClip> _sfx;
+        private static AudioSource _musicSource;
+        private static GameObject _audioSourceContainer;
+        private static Stack<AudioPlayer> _sources;
 
         private static string GetFullMusicPath() => $"{Application.dataPath}/{MusicFolderPath}";
         private static string GetFullSfxPath() => $"{Application.dataPath}/{SfxFolderPath}";
 
-        private static int _sourceCount;
-        private static bool _loaded = false;
-        private static Dictionary<string, AudioClip> _music;
-        private static Dictionary<string, AudioClip> _sfx;
-
-        public Dictionary<string, AudioClip> Sfx => _sfx;
-
-        private AudioSource _musicSource;
-        private GameObject _audioSourceContainer;   //  audiosource pool
-        private Stack<AudioPlayer> _sources;
-
-        private void Awake()
+        public static void Load()
         {
-            if(Get == null)
-            {
-                Get = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-            {
-                Destroy(gameObject);
-                return;
-            }
-
             _sources = new Stack<AudioPlayer>();
-            _audioSourceContainer = new GameObject("AudioSourceContainer");
-            DontDestroyOnLoad(_audioSourceContainer);
-            _musicSource = gameObject.AddComponent<AudioSource>();
-            _musicSource.loop = true;
-        }
-
-        private void Start()
-        {
-            Load();
-        }
-
-        private static void Load()
-        {
-            if(_loaded)
-                return;
-
-            _loaded = true;
+            _audioSourceContainer = new GameObject("AudioSourcePool");
+            Object.DontDestroyOnLoad(_audioSourceContainer);
 
             _music = new Dictionary<string, AudioClip>();
             _sfx = new Dictionary<string, AudioClip>();
 
-            
+
             // ###################################################################
-            //  todo - create prettier abstract file loading system (mby later..)
+            //  todo - prettier abstract file loading system (mby later..)
             // ###################################################################
-            
             var musicFiles = Directory.GetFiles(GetFullMusicPath(), "*.wav", SearchOption.TopDirectoryOnly);
             for(int i = 0; i < musicFiles.Length; i++)
             {
                 string path = musicFiles[i];
-                var idx = path.LastIndexOf('/') + 1;
-                var filename = path.Substring(idx, path.Length - idx);
-                var name = filename.Split('_', 2)[1].Split('.', 2)[0];
+                var filename = FileHelper.GetFilenameFromPath(path);
+                var name = FileHelper.GetNameFromFilename(filename).Split('_', 2)[1];
                 string finalPath = $"Assets/{MusicFolderPath}{filename}";
                 var clip = AssetDatabase.LoadAssetAtPath<AudioClip>(finalPath);
                 _music.Add(name, clip);
@@ -82,9 +58,8 @@ namespace AudioSystem
             for(int i = 0; i < sfxFiles.Length; i++)
             {
                 string path = sfxFiles[i];
-                var idx = path.LastIndexOf('/') + 1;
-                var filename = path.Substring(idx, path.Length - idx);
-                var name = filename.Split('.', 2)[0];
+                var filename = FileHelper.GetFilenameFromPath(path);
+                var name = FileHelper.GetNameFromFilename(filename);
                 string finalPath = $"Assets/{SfxFolderPath}{filename}";
                 var clip = AssetDatabase.LoadAssetAtPath<AudioClip>(finalPath);
                 _sfx.Add(name, clip);
@@ -95,12 +70,12 @@ namespace AudioSystem
             Debug.Log("Audio loaded");
         }
 
-        public void ReturnAudioPlayer(AudioPlayer player)
+        internal static void ReturnAudioPlayer(AudioPlayer player)
         {
             _sources.Push(player);
         }
 
-        private AudioSource GetSource()
+        private static AudioSource GetSource()
         {
             if(_sources.Count <= 0)
             {
@@ -109,18 +84,21 @@ namespace AudioSystem
                 return go.GetComponent<AudioPlayer>().GetSource();
             }
 
-            return _sources.Pop().GetSource();
+            var source = _sources.Pop().GetSource();
+            source.loop = false;
+            return source;
         }
 
         public static void PlayMusic(string musicName)
         {
-            var source = Get._musicSource;
             if(_music.TryGetValue(musicName, out var clip))
             {
-                if(source.isPlaying)
-                    source.Stop();
-                source.clip = clip;
-                source.Play();
+                if(_musicSource != null && _musicSource.isPlaying)
+                    _musicSource.Stop();
+                _musicSource = GetSource();
+                _musicSource.clip = clip;
+                _musicSource.loop = true;
+                _musicSource.Play();
             }
             else
             {
@@ -130,11 +108,9 @@ namespace AudioSystem
 
         public static AudioSource PlaySfx(string sfxName)
         {
-            var source = Get.GetSource();
             if(_sfx.TryGetValue(sfxName, out var clip))
             {
-                if(source.isPlaying)
-                    source.Stop();
+                var source = GetSource();
                 source.clip = clip;
                 source.Play();
                 return source;

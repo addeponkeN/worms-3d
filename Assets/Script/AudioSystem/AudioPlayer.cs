@@ -23,7 +23,7 @@ namespace AudioSystem
         public void ReturnPlayer()
         {
             gameObject.SetActive(false);
-            AudioManager.Get.ReturnAudioPlayer(this);
+            AudioManager.ReturnAudioPlayer(this);
         }
 
         private void Update()

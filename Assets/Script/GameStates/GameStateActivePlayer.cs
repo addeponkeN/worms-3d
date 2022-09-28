@@ -23,9 +23,17 @@ namespace GameStates
         public override void Init(GameStateManager manager)
         {
             base.Init(manager);
-
+            
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Confined;
+            
+            if(!_player.Life.IsAlive)
+            {
+                Exit();
+                Debug.Log("player was dead on playstate");
+                return;
+            }
+
             
             _playTimer = 45f;
             _wepManager.WeaponDoneEvent += WepManagerOnWeaponDoneEvent;
