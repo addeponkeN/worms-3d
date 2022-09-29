@@ -4,6 +4,8 @@ namespace Util
 {
     public struct Timer
     {
+        public static implicit operator Timer(float time) => new(time);
+        
         private float _timer;
 
         public Timer(float time)
@@ -14,11 +16,10 @@ namespace Util
         /// <summary>
         /// </summary>
         /// <returns>if timer is done (equal or below 0)</returns>
-        public bool CheckUpdate()
+        public bool UpdateCheck()
         {
             return (_timer -= Time.deltaTime) <= 0;
         }
 
-        public static implicit operator Timer(float time) => new(time);
     }
 }

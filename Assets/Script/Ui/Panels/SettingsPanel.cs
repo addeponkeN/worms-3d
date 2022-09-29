@@ -9,7 +9,6 @@ namespace Ui
         [SerializeField] private Slider _slMasterVolume;
         [SerializeField] private Slider _slSfxVolume;
         [SerializeField] private Slider _slMusicVolume;
-
         [SerializeField] private Toggle _cbSmile;
 
         public void Slider_MasterVolumeChanged()

@@ -1,4 +1,5 @@
 using CameraSystem.CameraStates;
+using Components;
 using Projectiles;
 using UnityEngine;
 
@@ -8,7 +9,6 @@ namespace GameStates
     {
         private BaseProjectile _p;
         private float _timer;
-
         private bool _ended;
 
         public GameStateFollowProjectile(BaseProjectile proj, float waitTimeAfterFollowEnded = 0f)

@@ -1,20 +1,20 @@
 using System;
-using UnityEngine;
-using VoxelEngine;
+using Components;
+using Util;
 
 namespace Projectiles
 {
     public class ProjectileGrenade : BaseProjectile, IExploder
     {
-        public override ProjectileTypes Type { get; } = ProjectileTypes.Grenade;
-
         private const float FuseTime = 4f;
+        
+        public override ProjectileTypes Type { get; } = ProjectileTypes.Grenade;
         
         public event Action<ExplodeData> ExplodeEvent;
         public float ExplodeRadius = 4;
         public int Damage = 4;
         
-        private float _fuseTimer;
+        private Timer _fuseTimer;
 
         public override void Init(ProjectileData data)
         {
@@ -24,8 +24,7 @@ namespace Projectiles
 
         private void Update()
         {
-            _fuseTimer -= Time.deltaTime;
-            if(_fuseTimer <= 0)
+            if(_fuseTimer.UpdateCheck())
             {
                 Explode();
             }

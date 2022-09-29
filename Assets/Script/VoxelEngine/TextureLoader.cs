@@ -23,7 +23,6 @@ namespace VoxelEngine
     [Serializable]
     public class CubeTexture
     {
-        public string Name;
         public Sprite FaceTexture;
         public Sprite XTexture, YTexture, ZTexture;
 

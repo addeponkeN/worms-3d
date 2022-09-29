@@ -34,8 +34,6 @@ namespace Projectiles
         public Transform Transform => transform;
         //  -----------
 
-        public bool IsAlive { get; set; } = true;
-
         protected Rigidbody Body;
         protected ProjectileData Data;
 
@@ -60,12 +58,11 @@ namespace Projectiles
 
         public virtual void Kill()
         {
-            IsAlive = false;
             EndFollow = true;
             Invoke(nameof(DestroySelf), 0.05f);
         }
 
-        void DestroySelf()
+        private void DestroySelf()
         {
             Destroy(Body.gameObject);
         }

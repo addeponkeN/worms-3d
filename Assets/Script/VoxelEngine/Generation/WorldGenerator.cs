@@ -6,7 +6,6 @@ namespace VoxelEngine.Generation
     {
         public override void Init()
         {
-            
         }
 
         public override void Generate()
@@ -55,7 +54,7 @@ namespace VoxelEngine.Generation
                 chunk.Init(ob);
                 chunk.PositionIndex = new Vector2Int(wx, wz);
 
-                var position = new Vector3(wx * ChunkSize.x * FaceData.s, 0, wz * ChunkSize.z * FaceData.s);
+                var position = new Vector3(wx * ChunkSize.x * FaceData.VoxelSize, 0, wz * ChunkSize.z * FaceData.VoxelSize);
                 ob.transform.position = position;
 
                 w.AddChunk(chunk);

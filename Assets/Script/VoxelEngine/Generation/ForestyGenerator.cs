@@ -15,7 +15,7 @@ namespace VoxelEngine.Generation
             int treeCount = Random.Range(300, 500);
 
             var w = World.Get;
-            var naturePrefabs = GetPrefabs("Branch", "Bush", "Flowers", "Grass", "Mushroom", "Stump");
+            var naturePrefabs = GetPrefabs("branch", "bBush", "flowers", "grass", "mushroom", "stump");
 
             const float fullTurn = 360f;
 

@@ -29,11 +29,6 @@ namespace CameraSystem
             AimCam = GameObject.Find("CM Aiming").GetComponent<CinemachineVirtualCamera>();
         }
 
-        private void Start()
-        {
-            AddDefaultState();
-        }
-
         public void Load()
         {
         }
@@ -52,11 +47,6 @@ namespace CameraSystem
             MainState.Init();
         }
 
-        public void AddDefaultState()
-        {
-            // SetMainState(new FollowPlayerState(GameManager.Get.ControllerManager.CurrentPlayer));
-        }
-
         public void QueueMainState(ICameraState state)
         {
             _queue.Enqueue(state);
@@ -67,10 +57,6 @@ namespace CameraSystem
             if(_queue.Count > 0)
             {
                 SetMainState(_queue.Dequeue());
-            }
-            else
-            {
-                AddDefaultState();
             }
         }
 

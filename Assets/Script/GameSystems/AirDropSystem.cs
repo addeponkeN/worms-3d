@@ -1,3 +1,4 @@
+using Components;
 using GameStates;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace GameSystems
     public class AirDropSystem : GameSystem
     {
         private int _roundInterval = 3;
-        private int _counter;
+        private int _counter = -1;
 
         public override void OnGameStarted()
         {
@@ -26,7 +27,7 @@ namespace GameSystems
                 _counter = 0;
             }
         }
-        
+
         private void OmegaSpawnAirDrops()
         {
             //  spawns many airdrops near all players

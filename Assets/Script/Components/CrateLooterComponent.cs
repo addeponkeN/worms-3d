@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace EntityComponents
+namespace Components
 {
     public class CrateLooterComponent : BaseEntityComponent
     {

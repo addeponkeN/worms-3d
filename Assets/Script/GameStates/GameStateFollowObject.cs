@@ -1,4 +1,5 @@
 using CameraSystem.CameraStates;
+using Components;
 using UnityEngine;
 
 namespace GameStates
@@ -13,7 +14,6 @@ namespace GameStates
     {
         private IFollowable _followAble;
         private float _timer;
-
         private bool _ended;
 
         public GameStateFollowObject(IFollowable followAble, float waitTimeAfterFollowEnded = 0f)
@@ -43,21 +43,13 @@ namespace GameStates
             if(!_followAble.EndFollow)
                 return;
 
-            if(_timer > 0)
+            if(_timer > 0 && !_ended)
             {
-                if(!_ended)
-                {
-                    _ended = true;
-                    SpectateCorpse();
-                }
+                _ended = true;
+                SpectateCorpse();
             }
 
             Exit();
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
         }
     }
 }

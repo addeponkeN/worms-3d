@@ -13,7 +13,7 @@ namespace PlayerControllers
         public event Action<BaseWeapon> WeaponChangedEvent;
         public event Action<BaseWeapon> WeaponDoneEvent;
         public event Action<BaseWeapon> WeaponAimingEvent;
-
+        
         private bool _isWeaponActive;
 
         public override void Init()
@@ -103,11 +103,6 @@ namespace PlayerControllers
             {
                 EquipWeapon(new WeaponAirstrike());
             }
-            // else if(Input.GetKeyDown(KeyCode.Alpha4))
-            // {
-                // EquipWeapon(new WeaponPistol());
-            // }
         }
-        
     }
 }

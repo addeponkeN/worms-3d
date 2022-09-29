@@ -1,4 +1,5 @@
 using System;
+using Components;
 using UnityEngine;
 
 namespace Projectiles
@@ -35,8 +36,9 @@ namespace Projectiles
             tf.eulerAngles = new Vector3(e.x + _baseRot.x, e.y + _baseRot.y, e.z + _baseRot.z);
         }
 
-        void Explode()
+        private void Explode()
         {
+            Debug.Log("missile exploding");
             ExplodeEvent?.Invoke(new ExplodeData(transform.position, ExplodeRadius, Damage));
             Kill();
         }

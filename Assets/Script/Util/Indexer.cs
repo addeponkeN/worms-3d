@@ -27,7 +27,5 @@ namespace Util
         {
             return _current = (_current + 1) % Length;
         }
-
     }
-
 }

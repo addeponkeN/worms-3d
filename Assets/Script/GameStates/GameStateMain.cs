@@ -1,10 +1,10 @@
-using UnityEngine;
+using Util;
 
 namespace GameStates
 {
     public class GameStateMain : GameState
     {
-        private float _thinkTimer = 0.1f;
+        private Timer _thinkTimer = 0.1f;
 
         private void DecideState()
         {
@@ -16,30 +16,28 @@ namespace GameStates
                 Exit();
                 return;
             }
-            
+
             var player = pm.NextPlayer();
             pm.SetActivePlayer(player);
-            
+
             Manager.PushState(new GameStateActivePlayer(player));
-            
+
             var systems = GameManager.Get.Systems;
             for(int i = 0; i < systems.Count; i++)
             {
                 systems[i].OnNextPlayerTurn();
             }
-            
+
             Exit();
         }
-        
+
         public override void Update()
         {
             base.Update();
-            _thinkTimer -= Time.deltaTime;
-            if(_thinkTimer <= 0f)
+            if(_thinkTimer.UpdateCheck())
             {
                 DecideState();
             }
         }
-        
     }
 }

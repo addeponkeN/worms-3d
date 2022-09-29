@@ -5,8 +5,6 @@ namespace PlayerControllers
 {
     public class PlayerLookController : BasePlayerController
     {
-        private const float PlayerRotationSpeed = 6f;
-        
         private InputAction _aimAction;
 
         public override void Init()
@@ -24,7 +22,7 @@ namespace PlayerControllers
                 var cam = GameManager.Get.CamManager.Cam.transform;
                 var rotation = Quaternion.Euler(0, cam.eulerAngles.y, 0);
                 Transform.rotation =
-                    Quaternion.Lerp(Transform.rotation, rotation, PlayerRotationSpeed * Time.deltaTime);
+                    Quaternion.Lerp(Transform.rotation, rotation, Player.Stats.RotationSpeed * Time.deltaTime);
             }
         }
     }

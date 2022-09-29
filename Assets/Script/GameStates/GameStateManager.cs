@@ -9,7 +9,7 @@ namespace GameStates
         public event Action<GameState> GameStateChangedEvent;
 
         public GameState CurrentState;
-        
+
         private Stack<GameState> _states;
 
         public GameStateManager()
@@ -28,10 +28,12 @@ namespace GameStates
                 _states.Push(state);
             }
 
+            //  debugging
             string val = "STATES: ";
             foreach(var st in _states)
                 val += $"{st.GetType().Name} < ";
             Debug.Log(val);
+            //  ------------------------------
         }
 
         public void ClearStack()
@@ -82,33 +84,27 @@ namespace GameStates
                 PushState(new GameStateGameOver());
                 CurrentState.Exit();
             }
-            
+
             if(CurrentState == null)
             {
                 NextState();
             }
 
-            if(CurrentState != null)
+            if(!CurrentState.IsAlive)
             {
+                NextState();
+            }
+            else
+            {
+                CurrentState.Update();
                 if(!CurrentState.IsAlive)
-                {
                     NextState();
-                }
-                else
-                {
-                    CurrentState.Update();
-                    if(!CurrentState.IsAlive)
-                        NextState();
-                }
             }
         }
 
         public void FixedUpdate()
         {
-            if(CurrentState != null)
-            {
-                CurrentState.FixedUpdate();
-            }
+            CurrentState?.FixedUpdate();
         }
     }
 }

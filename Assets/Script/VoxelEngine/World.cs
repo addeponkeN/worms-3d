@@ -41,7 +41,8 @@ namespace VoxelEngine
             }
             else
             {
-                Destroy(this);
+                Destroy(gameObject);
+                return;
             }
 
             _generators = new List<MapGeneratorComponent>();
@@ -93,18 +94,6 @@ namespace VoxelEngine
             for(int i = 0; i < _generators.Count; i++)
                 _generators[i].Generate();
             OnGeneratedEvent?.Invoke();
-        }
-
-        public GameObject InstantiateEnvironment(GameObject prefab, Vector3 position, Quaternion rotation)
-        {
-            var go = Instantiate(prefab, position, rotation, Environment.transform);
-            go.AddComponent<EnvironmentObject>();
-            return go;
-        }
-        
-        public GameObject InstantiateEnvironment(GameObject prefab, Vector3 position, Vector3 rotationEuler)
-        {
-            return InstantiateEnvironment(prefab, position, Quaternion.Euler(rotationEuler));
         }
 
         public void AddChunk(Chunk chunk)
@@ -168,42 +157,5 @@ namespace VoxelEngine
             _chunksToUpdate.Add(ch);
         }
 
-        public void SetVoxelsCube(Vector3 worldPosition, int radius, int voxelType)
-        {
-            var sx = (int)(worldPosition.x - radius);
-            var ex = (int)(worldPosition.x + radius);
-            var sy = (int)(worldPosition.y - radius);
-            var ey = (int)(worldPosition.y + radius);
-            var sz = (int)(worldPosition.z - radius);
-            var ez = (int)(worldPosition.z + radius);
-
-            for(int x = sx; x <= ex; x++)
-            for(int y = sy; y <= ey; y++)
-            for(int z = sz; z <= ez; z++)
-            {
-                SetVoxel(x, y, z, voxelType);
-            }
-        }
-
-        public void SetVoxelsSphere(Vector3 worldPosition, int radius, int voxelType)
-        {
-            var sx = (int)(worldPosition.x - radius);
-            var ex = (int)(worldPosition.x + radius);
-            var sy = (int)(worldPosition.y - radius);
-            var ey = (int)(worldPosition.y + radius);
-            var sz = (int)(worldPosition.z - radius);
-            var ez = (int)(worldPosition.z + radius);
-
-            for(int x = sx; x <= ex; x++)
-            for(int y = sy; y <= ey; y++)
-            for(int z = sz; z <= ez; z++)
-            {
-                var dis = Vector3.Distance(new Vector3(x, y, z), worldPosition);
-                if(dis < radius)
-                {
-                    SetVoxel(x, y, z, voxelType);
-                }
-            }
-        }
     }
 }

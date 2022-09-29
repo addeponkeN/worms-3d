@@ -64,15 +64,15 @@ namespace VoxelEngine
                             var voxel = data[x, y, z].Type;
                             var texture = textureLoader.Textures[voxel];
 
-                            for(var j = 0; j < face.Verts.Length; j++)
+                            for(var j = 0; j < face.Vertices.Length; j++)
                             {
-                                var v = face.Verts[j];
-                                vertices.Add(new Vector3(x, y, z) * FaceData.s + v);
+                                var v = face.Vertices[j];
+                                vertices.Add(new Vector3(x, y, z) * FaceData.VoxelSize + v);
                             }
 
-                            for(var j = 0; j < face.Ind.Length; j++)
+                            for(var j = 0; j < face.Indices.Length; j++)
                             {
-                                var t = face.Ind[j];
+                                var t = face.Indices[j];
                                 indices.Add(vertices.Count - 4 + t);
                             }
 
@@ -91,15 +91,15 @@ namespace VoxelEngine
                             var voxel = data[x, y, z];
                             var texture = textureLoader.Textures[voxel.Type];
 
-                            for(var j = 0; j < newFace.Verts.Length; j++)
+                            for(var j = 0; j < newFace.Vertices.Length; j++)
                             {
-                                var v = newFace.Verts[j];
-                                vertices.Add(new Vector3(x, y, z) * FaceData.s + v);
+                                var v = newFace.Vertices[j];
+                                vertices.Add(new Vector3(x, y, z) * FaceData.VoxelSize + v);
                             }
 
-                            for(var j = 0; j < newFace.Ind.Length; j++)
+                            for(var j = 0; j < newFace.Indices.Length; j++)
                             {
-                                var t = newFace.Ind[j];
+                                var t = newFace.Indices[j];
                                 indices.Add(vertices.Count - 4 + t);
                             }
 

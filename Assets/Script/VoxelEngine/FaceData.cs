@@ -4,10 +4,10 @@ namespace VoxelEngine
 {
     public class FaceData
     {
-        //  size of voxel
-        public static float s = 1f;
-        
-        public static readonly Vector3Int[] Directions = new Vector3Int[]
+        //  size of voxels
+        public const float VoxelSize = 1f;
+
+        public static readonly Vector3Int[] Directions =
         {
             Vector3Int.right,
             Vector3Int.left,
@@ -17,102 +17,79 @@ namespace VoxelEngine
             Vector3Int.back
         };
         
-        private static int[] XUVOrder = new int[]
-        {
-            2, 3, 1, 0
-        };
+        private static readonly int[] XUVOrder = {2, 3, 1, 0};
+        private static readonly int[] YUVOrder = {0, 1, 3, 2};
+        private static readonly int[] ZUVOrder = {3, 1, 0, 2};
 
-        private static int[] YUVOrder = new int[]
-        {
-            0, 1, 3, 2
-        };
-
-        private static int[] ZUVOrder = new int[]
-        {
-            3, 1, 0, 2
-        };
-
-        public static FaceData Right = new FaceData(new Vector3[]
+        public static readonly FaceData Right = new(new[]
             {
-                new Vector3(1f, 0f, 0f) * s,
-                new Vector3(1f, 0f, 1f) * s,
-                new Vector3(1f, 1f, 1f) * s,
-                new Vector3(1f, 1f, 0f) * s
+                new Vector3(1f, 0f, 0f) * VoxelSize,
+                new Vector3(1f, 0f, 1f) * VoxelSize,
+                new Vector3(1f, 1f, 1f) * VoxelSize,
+                new Vector3(1f, 1f, 0f) * VoxelSize
             },
-            new int[]
-            {
-                0, 2, 1, 0, 3, 2
-            }, YUVOrder);
+            new[] {0, 2, 1, 0, 3, 2},
+            YUVOrder);
 
-        public static FaceData Left = new FaceData(new Vector3[]
+        public static readonly FaceData Left = new(new[]
             {
-                new Vector3(0f, 0f, 0f) * s,
-                new Vector3(0f, 0f, 1f) * s,
-                new Vector3(0f, 1f, 1f) * s,
-                new Vector3(0f, 1f, 0f) * s
+                new Vector3(0f, 0f, 0f) * VoxelSize,
+                new Vector3(0f, 0f, 1f) * VoxelSize,
+                new Vector3(0f, 1f, 1f) * VoxelSize,
+                new Vector3(0f, 1f, 0f) * VoxelSize
             },
-            new int[]
-            {
-                0, 1, 2, 0, 2, 3
-            }, YUVOrder);
+            new[] {0, 1, 2, 0, 2, 3},
+            YUVOrder);
 
-        public static FaceData Up = new FaceData(new Vector3[]
+        public static readonly FaceData Up = new(new[]
             {
-                new Vector3(0f, 1f, 0f) * s,
-                new Vector3(0f, 1f, 1f) * s,
-                new Vector3(1f, 1f, 1f) * s,
-                new Vector3(1f, 1f, 0f) * s
+                new Vector3(0f, 1f, 0f) * VoxelSize,
+                new Vector3(0f, 1f, 1f) * VoxelSize,
+                new Vector3(1f, 1f, 1f) * VoxelSize,
+                new Vector3(1f, 1f, 0f) * VoxelSize
             },
-            new int[]
-            {
-                0, 1, 2, 0, 2, 3
-            }, ZUVOrder);
+            new[] {0, 1, 2, 0, 2, 3},
+            ZUVOrder);
 
-        public static FaceData Down = new FaceData(new Vector3[]
+        public static readonly FaceData Down = new(new[]
             {
-                new Vector3(0f, 0f, 0f) * s,
-                new Vector3(0f, 0f, 1f) * s,
-                new Vector3(1f, 0f, 1f) * s,
-                new Vector3(1f, 0f, 0f) * s
+                new Vector3(0f, 0f, 0f) * VoxelSize,
+                new Vector3(0f, 0f, 1f) * VoxelSize,
+                new Vector3(1f, 0f, 1f) * VoxelSize,
+                new Vector3(1f, 0f, 0f) * VoxelSize
             },
-            new int[]
-            {
-                0, 2, 1, 0, 3, 2
-            }, ZUVOrder);
+            new[] {0, 2, 1, 0, 3, 2},
+            ZUVOrder);
 
-        public static FaceData Forward = new FaceData(new Vector3[]
+        public static readonly FaceData Forward = new(new[]
             {
-                new Vector3(0f, 0f, 1f) * s,
-                new Vector3(0f, 1f, 1f) * s,
-                new Vector3(1f, 1f, 1f) * s,
-                new Vector3(1f, 0f, 1f) * s
+                new Vector3(0f, 0f, 1f) * VoxelSize,
+                new Vector3(0f, 1f, 1f) * VoxelSize,
+                new Vector3(1f, 1f, 1f) * VoxelSize,
+                new Vector3(1f, 0f, 1f) * VoxelSize
             },
-            new int[]
-            {
-                0, 2, 1, 0, 3, 2
-            }, XUVOrder);
+            new[] {0, 2, 1, 0, 3, 2},
+            XUVOrder);
 
-        public static FaceData Back = new FaceData(new Vector3[]
+        public static readonly FaceData Back = new(new[]
             {
-                new Vector3(0f, 0f, 0f) * s,
-                new Vector3(0f, 1f, 0f) * s,
-                new Vector3(1f, 1f, 0f) * s,
-                new Vector3(1f, 0f, 0f) * s
+                new Vector3(0f, 0f, 0f) * VoxelSize,
+                new Vector3(0f, 1f, 0f) * VoxelSize,
+                new Vector3(1f, 1f, 0f) * VoxelSize,
+                new Vector3(1f, 0f, 0f) * VoxelSize
             },
-            new int[]
-            {
-                0, 1, 2, 0, 2, 3
-            }, XUVOrder);
+            new[] {0, 1, 2, 0, 2, 3},
+            XUVOrder);
 
-        public Vector3[] Verts;
-        public int[] Ind;
+        public Vector3[] Vertices;
+        public int[] Indices;
         public int[] Uvs;
 
-        public FaceData(Vector3[] verts, int[] ind, int[] uvs)
+        public FaceData(Vector3[] vertices, int[] indices, int[] uvs)
         {
-            Verts = verts;
-            Ind = ind;
+            Vertices = vertices;
+            Indices = indices;
             Uvs = uvs;
         }
     }
- }
+}

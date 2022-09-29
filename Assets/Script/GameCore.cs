@@ -1,4 +1,3 @@
-using System;
 using AudioSystem;
 using UnityEngine;
 
@@ -8,7 +7,6 @@ public class GameCore : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("loading core");
         if(Get == null)
         {
             Get = this;
@@ -21,6 +19,5 @@ public class GameCore : MonoBehaviour
         }
 
         AudioManager.Load();
-        Debug.Log("core loaded");
     }
 }

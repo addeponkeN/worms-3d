@@ -16,11 +16,10 @@ namespace Ui
 
         private void Start()
         {
-            var weaponTypes = Enum.GetValues(typeof(WeaponTypes));
-            _weaponCount = weaponTypes.Length;
+            var allWeaponTypes = Enum.GetValues(typeof(WeaponTypes));
+            _weaponCount = allWeaponTypes.Length;
 
             var prefItem = PrefabManager.Get.GetPrefab("weapon_slot");
-
             var prefImage = prefItem.GetComponentInChildren<Image>();
             _slotWidth = prefImage.sprite.bounds.extents.x;
 
@@ -28,7 +27,7 @@ namespace Ui
 
             _slots = new UiWeaponSlot[_weaponCount];
 
-            foreach(WeaponTypes wepType in weaponTypes)
+            foreach(WeaponTypes wepType in allWeaponTypes)
             {
                 int i = (int)wepType;
                 var weaponGo = Instantiate(prefItem, transform);
@@ -39,13 +38,13 @@ namespace Ui
                 _slots[i] = weaponGo.GetComponent<UiWeaponSlot>().SetSlot(wepType, i);
             }
 
-            SetBarInCenter();
+            SetWeaponBarInCenter();
 
             var controllerManager = GameManager.Get.PlayerManager.ControllerManager;
             var wepController = controllerManager.GetController<PlayerWeaponController>();
             wepController.WeaponChangedEvent += WeaponControllerOnWeaponChangedEvent;
         }
-
+        
         private void WeaponControllerOnWeaponChangedEvent(BaseWeapon wep)
         {
             for(int i = 0; i < _slots.Length; i++)
@@ -54,7 +53,7 @@ namespace Ui
             _slots[selectedIndex].SetSelected(true);
         }
 
-        private void SetBarInCenter()
+        private void SetWeaponBarInCenter()
         {
             var rect = GetComponent<RectTransform>();
             float x = -(_slotWidth * _weaponCount + Spacing * _weaponCount) * .5f;

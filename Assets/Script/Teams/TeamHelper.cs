@@ -4,12 +4,12 @@ namespace Teams
 {
     public static class TeamHelper
     {
-        public static readonly Color[] TeamColors = new[]
+        public static readonly Color[] TeamColors =
         {
             Color.green, Color.blue, Color.red, Color.yellow, Color.cyan, Color.magenta
         };
 
-        public static readonly string[] TeamNames = new[]
+        public static readonly string[] TeamNames =
         {
             "Green", "Blue", "Red", "Yellow", "Cyan", "Pink"
         };
@@ -20,7 +20,7 @@ namespace Teams
                 return "Unknown";
             return TeamNames[i];
         }
-        
+
         public static Color GetTeamColor(int i)
         {
             if(i >= TeamColors.Length)

@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Get { get; private set; }
 
     private bool _isGamePaused;
+
     public bool IsGamePaused
     {
         get => _isGamePaused;
@@ -30,7 +31,7 @@ public class GameManager : MonoBehaviour
     [NonSerialized] public PlayerManager PlayerManager;
     [NonSerialized] public UiManager Ui;
     [NonSerialized] public PlayerInput PlayerInput;
-    
+
     public GameStateManager StateManager;
     public List<GameSystem> Systems;
 
@@ -43,11 +44,15 @@ public class GameManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
-            return;
         }
-        
+
+        SetupGame();
+    }
+
+    private void SetupGame()
+    {
         PlayerInput = GetComponent<PlayerInput>();
-        
+
         StateManager = new GameStateManager();
         StateManager.PushState(new GameStateLoading());
 
@@ -65,10 +70,10 @@ public class GameManager : MonoBehaviour
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
-        
+
         AudioManager.PlayMusic("gameplay1");
     }
-    
+
     void AddGameSystem(GameSystem system)
     {
         system.GameStateManager = StateManager;

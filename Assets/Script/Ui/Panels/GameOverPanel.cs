@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teams;
 using TMPro;
 using UnityEngine;
@@ -12,20 +13,22 @@ namespace Ui
 
         public void SetResults(List<Team> teams)
         {
-            var offset = 150f;
-            for(int i = 0; i < teams.Count; i++)
-            {
-                var t = teams[i];
-                var pos = new Vector2(0f, offset * i);
-                var g = Instantiate(PrefabManager.Get.GetPrefab("button"), Vector3.zero, Quaternion.identity,
-                    _placingsContainer.transform);
+            string textWinner;
 
-                var tfRect = g.GetComponent<RectTransform>();
-                tfRect.localPosition = new Vector3(0f, offset * i, 0);
-                
-                var btText = g.GetComponentInChildren<TMP_Text>();
-                btText.text = $"Team {t.GetTeamName()} Won!";
+            if(teams.Count <= 0)
+            {
+                textWinner = "Draw!";
             }
+            else
+            {
+                var winningTeam = teams.First();
+                textWinner = $"Team {winningTeam.GetTeamName()} Won!";
+            }
+
+            var g = Instantiate(PrefabManager.Get.GetPrefab("button"), Vector3.zero, Quaternion.identity,
+                _placingsContainer.transform);
+            var btText = g.GetComponentInChildren<TMP_Text>();
+            btText.text = textWinner;
         }
 
         public override void OnFocused(bool isFocused)
@@ -46,6 +49,5 @@ namespace Ui
             Time.timeScale = 1f;
             SceneManager.LoadScene("Scenes/MenuScene");
         }
-        
     }
 }

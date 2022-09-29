@@ -1,55 +1,37 @@
 using CameraSystem.CameraStates;
+using Components;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using Util;
 
 namespace GameStates
 {
     public class GameStateAirDrop : GameState
     {
-        private float _timer;
+        private Timer _lifeTimer;
         private AirDrop _drop;
-
-        private InputAction skipAction;
 
         public override void Init(GameStateManager manager)
         {
             base.Init(manager);
-            // Debug.Log("!! AIR DROP IS HAPPENING !!");
-            _timer = 2f;
-
+            _lifeTimer = 2f;
             var prefab = PrefabManager.Get.GetPrefab("airdrop");
             _drop = Object.Instantiate(prefab).GetComponent<AirDrop>();
-
             GameManager.Get.CamManager.SetMainState(new FollowFollowable(_drop));
-
-            skipAction = GameManager.Get.PlayerInput.actions["Jump"];
         }
 
         public override void Update()
         {
             base.Update();
 
-            //                              this new input system rarely works
-            // if(!_drop.ReleasedParachute && skipAction.triggered)
             if(!_drop.ReleasedParachute && Input.GetKeyDown(KeyCode.Space))
             {
                 _drop.ReleaseParachute();
             }
 
-            if(_drop.EndFollow)
+            if(_drop.EndFollow && _lifeTimer.UpdateCheck())
             {
-                _timer -= Time.deltaTime;
-                if(_timer <= 0)
-                {
-                    Exit();
-                }
+                Exit();
             }
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
-            // Debug.Log("!! AIR DROP ENDED !!");
         }
     }
 }

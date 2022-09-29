@@ -18,7 +18,7 @@ namespace PlayerControllers
             _moveAction = Manager.Input.actions["Move"];
         }
 
-        private Vector3 CalculateMoveDirection(Vector2 input)
+        private Vector3 CalculateMoveDirection()
         {
             var cam = GameManager.Get.CamManager.Cam.transform;
             var inputDirection = new Vector3(_latestInput.x, 0, _latestInput.y).normalized;
@@ -57,7 +57,7 @@ namespace PlayerControllers
                 _moveDir = Vector3.zero;
                 if(IsMoving)
                 {
-                    _moveDir = CalculateMoveDirection(input);
+                    _moveDir = CalculateMoveDirection();
                 }
             }
 
@@ -65,10 +65,6 @@ namespace PlayerControllers
                 RotateToDirection();
 
             Player.Body.Move(_moveDir.normalized * (Player.Stats.MoveSpeed * Time.deltaTime));
-        }
-
-        public override void FixedUpdate()
-        {
         }
     }
 }

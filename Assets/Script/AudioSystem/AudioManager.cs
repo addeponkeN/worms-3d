@@ -11,16 +11,12 @@ namespace AudioSystem
         private const string MusicFolderPath = "Sound/Music/";
         private const string SfxFolderPath = "Sound/Sfx/";
 
-        // public static float MasterVolume { get; set; } = 0.5f;
-        // public static float SfxVolume { get; set; } = 1f;
-        // public static float MusicVolume { get; set; } = 1f;
-
         public static Dictionary<string, AudioClip> Sfx => _sfx;
+        public static Dictionary<string, AudioClip> Music => _music;
 
         public static float SfxScaledVolume => GameSettings.SfxVolume.Value * GameSettings.MasterVolume.Value;
         public static float MusicScaledVolume => GameSettings.MusicVolume.Value * GameSettings.MasterVolume.Value;
 
-        private static int _sourceCount;
         private static Dictionary<string, AudioClip> _music;
         private static Dictionary<string, AudioClip> _sfx;
         private static AudioSource _musicSource;
@@ -93,7 +89,7 @@ namespace AudioSystem
             AudioPlayer retSource;
             if(_sources.Count <= 0)
             {
-                var go = new GameObject($"player{_sourceCount++}", typeof(AudioPlayer));
+                var go = new GameObject($"AudioPlayer{_allPlayers.Count}", typeof(AudioPlayer));
                 go.transform.parent = _audioSourceContainer.transform;
                 retSource = go.GetComponent<AudioPlayer>();
                 _allPlayers.Add(retSource);
@@ -103,6 +99,7 @@ namespace AudioSystem
                 retSource = _sources.Pop();
             }
 
+            retSource.GetSource().loop = false;
             return retSource;
         }
 

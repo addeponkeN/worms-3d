@@ -5,55 +5,55 @@ using UnityEngine.UI;
 using Util;
 using Weapons;
 
-public class UiWeaponSlot : MonoBehaviour
+namespace Ui
 {
-    private const string UiWeaponPath = "Assets/Textures/Ui/Weapons/";
-
-    public Image ImgWeapon;
-    public Image ImgSelected;
-    [NonSerialized] public WeaponTypes WeaponType;
-    [NonSerialized] public TextMeshProUGUI LbSlotNumber;
-
-    private RectTransform _tfRect;
-
-    private void Awake()
+    public class UiWeaponSlot : MonoBehaviour
     {
-        _tfRect = GetComponent<RectTransform>();
-        LbSlotNumber = GetComponentInChildren<TextMeshProUGUI>();
-    }
+        private const string UiWeaponPath = "Assets/Textures/Ui/Weapons/";
 
-    public void SetSelected(bool selected)
-    {
-        ImgSelected.gameObject.SetActive(selected);
-        LbSlotNumber.color = selected ? Color.cyan : Color.white;
-    }
+        public Image ImgWeapon;
+        public Image ImgSelected;
+        [NonSerialized] public WeaponTypes WeaponType;
+        [NonSerialized] public TextMeshProUGUI LbSlotNumber;
 
-    public void SetSprite(Sprite sprite)
-    {
-        if(sprite == null)
+        private void Awake()
         {
-            Debug.Log("NULL sprite on set");
-            return;
+            LbSlotNumber = GetComponentInChildren<TextMeshProUGUI>();
         }
 
-        ImgWeapon.sprite = sprite;
-    }
+        public void SetSelected(bool selected)
+        {
+            ImgSelected.gameObject.SetActive(selected);
+            LbSlotNumber.color = selected ? Color.cyan : Color.white;
+        }
 
-    public UiWeaponSlot SetSlot(WeaponTypes wepType, int slotNumber)
-    {
-        WeaponType = wepType;
-        SetSprite(AssetHelper.LoadSprite(GetWeaponSpritePath(wepType)));
-        LbSlotNumber.text = $"{slotNumber + 1}";
-        return this;
-    }
+        public void SetSprite(Sprite sprite)
+        {
+            if(sprite == null)
+            {
+                Debug.Log("NULL sprite on set");
+                return;
+            }
 
-    private string GetSpriteName(WeaponTypes type)
-    {
-        return $"{type}".ToLowerInvariant();
-    }
+            ImgWeapon.sprite = sprite;
+        }
 
-    private string GetWeaponSpritePath(WeaponTypes type)
-    {
-        return $"{UiWeaponPath}{GetSpriteName(type)}.png";
+        public UiWeaponSlot SetSlot(WeaponTypes wepType, int slotNumber)
+        {
+            WeaponType = wepType;
+            SetSprite(AssetHelper.LoadSprite(GetWeaponSpritePath(wepType)));
+            LbSlotNumber.text = $"{slotNumber + 1}";
+            return this;
+        }
+
+        private string GetSpriteName(WeaponTypes type)
+        {
+            return $"{type}".ToLowerInvariant();
+        }
+
+        private string GetWeaponSpritePath(WeaponTypes type)
+        {
+            return $"{UiWeaponPath}{GetSpriteName(type)}.png";
+        }
     }
 }

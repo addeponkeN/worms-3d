@@ -1,4 +1,5 @@
 using CameraSystem.CameraStates;
+using Components;
 using PlayerControllers;
 using UnityEngine;
 using Weapons;
@@ -30,10 +31,8 @@ namespace GameStates
             if(!_player.Life.IsAlive)
             {
                 Exit();
-                Debug.Log("player was dead on playstate");
                 return;
             }
-
             
             _playTimer = 45f;
             _wepManager.WeaponDoneEvent += WepManagerOnWeaponDoneEvent;
@@ -84,8 +83,6 @@ namespace GameStates
             corpseGo.transform.position = _player.transform.position;
             Manager.PushState(new GameStateFollowObject(corpse));
             Exit();
-
-            Debug.Log("player died - active");
         }
 
         public override void Update()

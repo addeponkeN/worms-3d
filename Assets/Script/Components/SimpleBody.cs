@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace EntityComponents
+namespace Components
 {
     [RequireComponent(typeof(CharacterController))]
     public class SimpleBody : BaseEntityComponent
@@ -14,7 +14,7 @@ namespace EntityComponents
         private float _mass = 1f;
         private float _jumpMass = 10f;
 
-        public override void Start()
+        protected override void Start()
         {
             base.Start();
             _con = gameObject.GetComponent<CharacterController>();
@@ -45,7 +45,7 @@ namespace EntityComponents
             return result;
         }
 
-        public override void Update()
+        protected override void Update()
         {
             var dt = Time.deltaTime;
 
@@ -82,10 +82,6 @@ namespace EntityComponents
 
             if(_con.isGrounded)
                 _gravity = 0f;
-        }
-
-        public void LateUpdate()
-        {
         }
     }
 }

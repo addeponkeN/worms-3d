@@ -1,12 +1,14 @@
 using CameraSystem.CameraStates;
+using Components;
 using UnityEngine;
+using Util;
 using Weapons;
 
 namespace GameStates
 {
     public class GameStateAirstrike : GameState
     {
-        private float _timer;
+        private Timer _timer;
         private bool _bombsDropped;
         private Airplane _plane;
         private WeaponAirstrike _wep;
@@ -21,8 +23,6 @@ namespace GameStates
             base.Init(manager);
             _timer = 6f;
 
-            Debug.Log("airstrike");
-
             _plane = Object.Instantiate(PrefabManager.Get.GetPrefab("airplane")).GetComponent<Airplane>();
             _plane.SetStrikePosition(_wep.TargetPosition);
             _plane.BombsDroppedEvent += PlaneOnBombsDroppedEvent;
@@ -34,14 +34,14 @@ namespace GameStates
         {
             var corpse = new GameObject("corpse").AddComponent<Corpse>();
             corpse.transform.position = _plane.Transform.position;
-            GameManager.Get.CamManager.SetMainState(new FollowFollowable(corpse, 2f));
+            GameManager.Get.CamManager.SetMainState(new FollowFollowable(corpse, 2.5f));
             _bombsDropped = true;
         }
         
         public override void Update()
         {
             base.Update();
-            if(_bombsDropped && (_timer -= Time.deltaTime) <= 0f)
+            if(_bombsDropped && _timer.UpdateCheck())
             {
                 Exit();
             }
