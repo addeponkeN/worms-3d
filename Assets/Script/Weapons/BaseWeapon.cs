@@ -21,11 +21,6 @@ namespace Weapons
     {
         public abstract WeaponTypes WeaponType { get; }
 
-        protected string GetWeaponName()
-        {
-            return WeaponType.ToString().ToLower();
-        }
-
         public float GetWeaponChargeValue => _chargeTimer / ChargeTime;
         public float GetFinalPower => Power * GetWeaponChargeValue;
 
@@ -47,11 +42,15 @@ namespace Weapons
         private Transform _weaponOrigin;
         private bool _prevAimDown;
         private float _chargeTimer;
+        
+        public string GetWeaponName()
+        {
+            return WeaponType.ToString().ToLower();
+        }
 
         public virtual void Init()
         {
             WeaponGo = Object.Instantiate(PrefabManager.Get.GetPrefab(WeaponType));
-            // _audio = WeaponGo.AddComponent<AudioSource>();
 
             _weaponOrigin = Manager.Player.WeaponOrigin.transform;
             _rotationOffset = WeaponGo.transform.eulerAngles;

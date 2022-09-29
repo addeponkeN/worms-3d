@@ -48,9 +48,12 @@
      <Compile Include="Assets\Script\Ui\WorldCanvas.cs" />
      <Compile Include="Assets\Script\Weapons\WeaponGrenade.cs" />
      <Compile Include="Assets\Script\Util\BoundsChecker.cs" />
+     <Compile Include="Assets\Script\PlayerUi.cs" />
      <Compile Include="Assets\Script\VoxelEngine\Generation\ForestyGenerator.cs" />
      <Compile Include="Assets\Script\GameStates\GameStateManager.cs" />
+     <Compile Include="Assets\Script\Ui\Widgets\ProgressBarWorld.cs" />
      <Compile Include="Assets\Script\VoxelEngine\Generation\MapGeneratorComponent.cs" />
+     <Compile Include="Assets\Script\Ui\Widgets\ProgressBar.cs" />
      <Compile Include="Assets\Script\Ui\Panels\SettingsPanel.cs" />
      <Compile Include="Assets\Script\VoxelEngine\Chunk.cs" />
      <Compile Include="Assets\Script\VoxelEngine\Generation\RockGenerator.cs" />
@@ -121,12 +124,14 @@
      <Compile Include="Assets\Script\EntityComponents\SimpleBody.cs" />
      <Compile Include="Assets\Script\Projectiles\ProjectileGrenade.cs" />
      <Compile Include="Assets\Script\Util\Timer.cs" />
+     <Compile Include="Assets\Script\Ui\Panels\GameRulesPanel.cs" />
      <Compile Include="Assets\Script\Airplane.cs" />
      <Compile Include="Assets\Script\GameStates\GameStateIncreaseWaterLevel.cs" />
      <Compile Include="Assets\Script\Weapons\WeaponBazooka.cs" />
      <Compile Include="Assets\Script\GameSystems\WaterLevelSystem.cs" />
      <Compile Include="Assets\Script\AudioSystem\AudioManager.cs" />
      <Compile Include="Assets\Script\GameStates\GameStateSpectatePlayer.cs" />
+     <Compile Include="Assets\Script\Ui\Panels\MenuPanel.cs" />
      <Compile Include="Assets\Script\StatContainer.cs" />
      <Compile Include="Assets\Script\PlayerManager.cs" />
      <Compile Include="Assets\Script\GameStates\GameStateAirstrike.cs" />
@@ -144,9 +149,6 @@
      <Compile Include="Assets\Script\Teams\GameData.cs" />
      <Compile Include="Assets\Script\Weapons\BaseWeapon.cs" />
      <Compile Include="Assets\Script\EntityComponents\DeadComponent.cs" />
-     <Compile Include="Assets\Script\Ui\Widgets\ProgressBar.cs" />
-     <Compile Include="Assets\Script\PlayerUi.cs" />
-     <Compile Include="Assets\Script\Ui\Widgets\ProgressBarWorld.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

@@ -14,7 +14,7 @@ namespace Weapons
             IsProjectile = true;
             Power = 5000f;
         }
-        
+
         public override BaseProjectile GetProjectile()
         {
             return _projectile;
@@ -26,6 +26,5 @@ namespace Weapons
             _projectile = FireProjectile(ProjectileTypes.Grenade);
             Kill();
         }
-
     }
 }

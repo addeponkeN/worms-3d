@@ -1,22 +1,20 @@
+using System;
 using System.Collections.Generic;
 using CameraSystem.CameraStates;
 using Cinemachine;
 using GameStates;
 using UnityEngine;
-using VoxelEngine;
 
 namespace CameraSystem
 {
     public class CameraManager : MonoBehaviour, ILoader
     {
-        public bool LoadingComplete { get; set; }
-
-        public Camera Cam;
-        public CinemachineVirtualCamera MoveCam;
-        public CinemachineVirtualCamera AimCam;
-        public ICameraState MainState;
-
+        [NonSerialized] public Camera Cam;
+        [NonSerialized] public CinemachineVirtualCamera MoveCam;
+        [NonSerialized] public CinemachineVirtualCamera AimCam;
+        
         public Transform DefaultPosition;
+        public ICameraState MainState;
 
         private List<ICameraState> _states; //  for camera effects (shake etc..)
         private Queue<ICameraState> _queue;
@@ -38,7 +36,6 @@ namespace CameraSystem
 
         public void Load()
         {
-            LoadingComplete = true;
         }
 
         public void SetMainState(ICameraState state)

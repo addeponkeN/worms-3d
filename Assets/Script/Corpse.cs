@@ -7,7 +7,7 @@ public class Corpse : MonoBehaviour, IFollowable
     public bool EndFollow { get; set; } = true;
     public Transform Transform => transform;
 
-    private Timer _life = 3f;
+    private Timer _life = 4f;
     
     private void Update()
     {

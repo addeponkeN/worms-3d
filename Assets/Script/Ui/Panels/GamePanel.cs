@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Ui
 {
-    public class GamePanel : MonoBehaviour
+    public class GamePanel : MenuPanel
     {
         [SerializeField] private TextMeshProUGUI lbPlayTimer;
 
@@ -18,6 +18,14 @@ namespace Ui
             {
                 lbPlayTimer.text = $"{(int)player.PlayTimer}";
             }
+        }
+
+        public override void OnFocused(bool isFocused)
+        {
+        }
+
+        public override void OnRemoved()
+        {
         }
     }
 }

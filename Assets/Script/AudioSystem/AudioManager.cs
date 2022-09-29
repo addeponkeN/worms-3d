@@ -11,21 +11,22 @@ namespace AudioSystem
         private const string MusicFolderPath = "Sound/Music/";
         private const string SfxFolderPath = "Sound/Sfx/";
 
-        public static float MasterVolume { get; set; } = 0.5f;
-        public static float SfxVolume { get; set; } = 1f;
-        public static float MusicVolume { get; set; } = 1f;
+        // public static float MasterVolume { get; set; } = 0.5f;
+        // public static float SfxVolume { get; set; } = 1f;
+        // public static float MusicVolume { get; set; } = 1f;
 
         public static Dictionary<string, AudioClip> Sfx => _sfx;
 
-        private static float SfxScaledVolume => SfxVolume * MasterVolume;
-        private static float MusicScaledVolume => MusicVolume * MasterVolume;
-        
+        public static float SfxScaledVolume => GameSettings.SfxVolume.Value * GameSettings.MasterVolume.Value;
+        public static float MusicScaledVolume => GameSettings.MusicVolume.Value * GameSettings.MasterVolume.Value;
+
         private static int _sourceCount;
         private static Dictionary<string, AudioClip> _music;
         private static Dictionary<string, AudioClip> _sfx;
         private static AudioSource _musicSource;
         private static GameObject _audioSourceContainer;
         private static Stack<AudioPlayer> _sources;
+        private static List<AudioPlayer> _allPlayers;
 
         private static string GetFullMusicPath() => $"{Application.dataPath}/{MusicFolderPath}";
         private static string GetFullSfxPath() => $"{Application.dataPath}/{SfxFolderPath}";
@@ -33,12 +34,12 @@ namespace AudioSystem
         public static void Load()
         {
             _sources = new Stack<AudioPlayer>();
+            _allPlayers = new List<AudioPlayer>();
             _audioSourceContainer = new GameObject("AudioSourcePool");
             Object.DontDestroyOnLoad(_audioSourceContainer);
 
             _music = new Dictionary<string, AudioClip>();
             _sfx = new Dictionary<string, AudioClip>();
-
 
             // ###################################################################
             //  todo - prettier abstract file loading system (mby later..)
@@ -68,6 +69,18 @@ namespace AudioSystem
             Debug.Log($"Loaded {_music.Count} songs");
             Debug.Log($"Loaded {_sfx.Count} sfx");
             Debug.Log("Audio loaded");
+
+            GameSettings.MasterVolume.OnChangedEvent += OnAnyVolumeChangedEvent;
+            GameSettings.SfxVolume.OnChangedEvent += OnAnyVolumeChangedEvent;
+            GameSettings.MusicVolume.OnChangedEvent += OnAnyVolumeChangedEvent;
+        }
+
+        private static void OnAnyVolumeChangedEvent()
+        {
+            for(int i = 0; i < _allPlayers.Count; i++)
+            {
+                _allPlayers[i].UpdateVolume();
+            }
         }
 
         internal static void ReturnAudioPlayer(AudioPlayer player)
@@ -75,18 +88,22 @@ namespace AudioSystem
             _sources.Push(player);
         }
 
-        private static AudioSource GetSource()
+        private static AudioPlayer GetAudioPlayer()
         {
+            AudioPlayer retSource;
             if(_sources.Count <= 0)
             {
                 var go = new GameObject($"player{_sourceCount++}", typeof(AudioPlayer));
                 go.transform.parent = _audioSourceContainer.transform;
-                return go.GetComponent<AudioPlayer>().GetSource();
+                retSource = go.GetComponent<AudioPlayer>();
+                _allPlayers.Add(retSource);
+            }
+            else
+            {
+                retSource = _sources.Pop();
             }
 
-            var source = _sources.Pop().GetSource();
-            source.loop = false;
-            return source;
+            return retSource;
         }
 
         public static void PlayMusic(string musicName)
@@ -95,7 +112,10 @@ namespace AudioSystem
             {
                 if(_musicSource != null && _musicSource.isPlaying)
                     _musicSource.Stop();
-                _musicSource = GetSource();
+                var player = GetAudioPlayer();
+                player.IsMusic = true;
+                _musicSource = player.GetSource();
+                _musicSource.volume = MusicScaledVolume;
                 _musicSource.clip = clip;
                 _musicSource.loop = true;
                 _musicSource.Play();
@@ -110,8 +130,11 @@ namespace AudioSystem
         {
             if(_sfx.TryGetValue(sfxName, out var clip))
             {
-                var source = GetSource();
+                var player = GetAudioPlayer();
+                player.IsMusic = false;
+                var source = player.GetSource();
                 source.clip = clip;
+                source.volume = SfxScaledVolume;
                 source.Play();
                 return source;
             }

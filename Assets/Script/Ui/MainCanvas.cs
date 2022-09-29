@@ -12,13 +12,6 @@ namespace Ui
         void OnRemoved();
     }
 
-    public abstract class MenuPanel : MonoBehaviour, IUiPanel
-    {
-        public MainCanvas Main { get; set; }
-        public abstract void OnFocused(bool isFocused);
-        public abstract void OnRemoved();
-    }
-
     public class MainCanvas : MonoBehaviour
     {
         [SerializeField] private MenuPanel DefaultPanelPrefab;

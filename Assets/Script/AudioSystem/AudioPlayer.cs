@@ -7,8 +7,9 @@ namespace AudioSystem
     [RequireComponent(typeof(AudioSource))]
     public class AudioPlayer : MonoBehaviour
     {
+        [NonSerialized] public bool IsMusic;
         private AudioSource _source;
-        
+
         private void Awake()
         {
             _source = GetComponent<AudioSource>();
@@ -33,5 +34,11 @@ namespace AudioSystem
                 ReturnPlayer();
             }
         }
+
+        public void UpdateVolume()
+        {
+            _source.volume = IsMusic ? AudioManager.MusicScaledVolume : AudioManager.SfxScaledVolume;
+        }
+
     }
 }

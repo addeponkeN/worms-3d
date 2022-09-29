@@ -60,7 +60,7 @@ namespace GameStates
                 if(wep.IsFired)
                 {
                     var projectile = wep.GetProjectile();
-                    Manager.PushState(new GameStateFollowProjectile(projectile, 2f));
+                    Manager.PushState(new GameStateFollowProjectile(projectile, 3.5f));
                 }
                 Exit();
             }
