@@ -1,3 +1,6 @@
+using System;
+using AudioSystem;
+using Components;
 using GameStates;
 using UnityEngine;
 using VoxelEngine;
@@ -42,12 +45,17 @@ namespace Projectiles
             Body = GetComponent<Rigidbody>();
         }
 
-        protected virtual void FixedUpdate()
+        protected virtual void Update()
         {
-            if(transform.position.y < World.Get.Water.WaterLevel)
+            if(!EndFollow && transform.position.y < World.Get.Water.WaterLevel)
             {
                 Kill();
+                AudioManager.PlaySfx("watersplash");
             }
+        }
+
+        protected virtual void FixedUpdate()
+        {
         }
 
         public virtual void Init(ProjectileData data)

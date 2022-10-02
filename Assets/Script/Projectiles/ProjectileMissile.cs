@@ -28,8 +28,9 @@ namespace Projectiles
                 Explode();
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             var tf = transform;
             tf.LookAt(tf.position + Body.velocity);
             var e = tf.eulerAngles;

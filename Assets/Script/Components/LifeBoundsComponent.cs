@@ -1,3 +1,4 @@
+using AudioSystem;
 using VoxelEngine;
 
 namespace Components
@@ -11,7 +12,9 @@ namespace Components
             float waterLevel = World.Get.Water.WaterLevel;
             if(Actor.transform.position.y < waterLevel)
             {
+                //  killed by water level
                 Actor.Life.Kill();
+                AudioManager.PlaySfx("watersplash");
             }
         }
     }

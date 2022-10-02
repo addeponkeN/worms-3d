@@ -22,8 +22,9 @@ namespace Projectiles
             _fuseTimer = FuseTime;
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             if(_fuseTimer.UpdateCheck())
             {
                 Explode();

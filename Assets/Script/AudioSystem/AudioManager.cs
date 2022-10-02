@@ -111,6 +111,7 @@ namespace AudioSystem
                     _musicSource.Stop();
                 var player = GetAudioPlayer();
                 player.IsMusic = true;
+                player.gameObject.name = musicName;
                 _musicSource = player.GetSource();
                 _musicSource.volume = MusicScaledVolume;
                 _musicSource.clip = clip;
@@ -128,6 +129,7 @@ namespace AudioSystem
             if(_sfx.TryGetValue(sfxName, out var clip))
             {
                 var player = GetAudioPlayer();
+                player.gameObject.name = sfxName;
                 player.IsMusic = false;
                 var source = player.GetSource();
                 source.clip = clip;

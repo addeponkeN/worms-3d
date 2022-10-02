@@ -47,9 +47,11 @@
      <Compile Include="Assets\Script\Util\AssetHelper.cs" />
      <Compile Include="Assets\Script\Ui\WorldCanvas.cs" />
      <Compile Include="Assets\Script\Weapons\WeaponGrenade.cs" />
+     <Compile Include="Assets\Script\Components\Exploder\ExplodeData.cs" />
      <Compile Include="Assets\Script\Ui\PlayerUi.cs" />
      <Compile Include="Assets\Script\VoxelEngine\Generation\ForestyGenerator.cs" />
      <Compile Include="Assets\Script\GameStates\GameStateManager.cs" />
+     <Compile Include="Assets\Script\Components\Exploder\IExploder.cs" />
      <Compile Include="Assets\Script\Ui\Widgets\ProgressBarWorld.cs" />
      <Compile Include="Assets\Script\VoxelEngine\Generation\MapGeneratorComponent.cs" />
      <Compile Include="Assets\Script\Ui\Widgets\ProgressBar.cs" />
@@ -68,6 +70,7 @@
      <Compile Include="Assets\Script\Components\Player.cs" />
      <Compile Include="Assets\Script\PlayerControllers\PlayerLookController.cs" />
      <Compile Include="Assets\Script\GameStates\GameStateLoading.cs" />
+     <Compile Include="Assets\Script\Components\ActorLife.cs" />
      <Compile Include="Assets\Script\Components\GameActor.cs" />
      <Compile Include="Assets\Script\Weapons\WeaponHand.cs" />
      <Compile Include="Assets\Script\CameraSystem\CameraStates\ICameraState.cs" />
@@ -95,6 +98,7 @@
      <Compile Include="Assets\Script\PlayerControllers\PlayerJumpController.cs" />
      <Compile Include="Assets\Script\Teams\TeamHelper.cs" />
      <Compile Include="Assets\Script\VoxelEngine\Voxel.cs" />
+     <Compile Include="Assets\Script\Components\Airplane\Airplane.cs" />
      <Compile Include="Assets\Script\VoxelEngine\ChunkMeshGenerator.cs" />
      <Compile Include="Assets\Script\GameStates\GameStateFollowObject.cs" />
      <Compile Include="Assets\Script\Components\LifeBoundsComponent.cs" />
@@ -124,6 +128,8 @@
      <Compile Include="Assets\Script\Weapons\WeaponBazooka.cs" />
      <Compile Include="Assets\Script\GameSystems\WaterLevelSystem.cs" />
      <Compile Include="Assets\Script\AudioSystem\AudioManager.cs" />
+     <Compile Include="Assets\Script\Components\Airplane\PlanePathInfo.cs" />
+     <Compile Include="Assets\Script\Components\Exploder\Exploder.cs" />
      <Compile Include="Assets\Script\GameStates\GameStateSpectatePlayer.cs" />
      <Compile Include="Assets\Script\Ui\Panels\BaseMenuPanel.cs" />
      <Compile Include="Assets\Script\StatContainer.cs" />
@@ -142,12 +148,6 @@
      <Compile Include="Assets\Script\GameStates\GameStateFollowProjectile.cs" />
      <Compile Include="Assets\Script\Teams\GameData.cs" />
      <Compile Include="Assets\Script\Weapons\BaseWeapon.cs" />
-     <Compile Include="Assets\Script\Components\Exploder\Exploder.cs" />
-     <Compile Include="Assets\Script\Components\Exploder\IExploder.cs" />
-     <Compile Include="Assets\Script\Components\Exploder\ExplodeData.cs" />
-     <Compile Include="Assets\Script\Components\Airplane\Airplane.cs" />
-     <Compile Include="Assets\Script\Components\Airplane\PlanePathInfo.cs" />
-     <Compile Include="Assets\Script\Components\ActorLife.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
