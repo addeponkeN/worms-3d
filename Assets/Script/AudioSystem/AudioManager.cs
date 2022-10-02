@@ -11,14 +11,14 @@ namespace AudioSystem
         private const string MusicFolderPath = "Sound/Music/";
         private const string SfxFolderPath = "Sound/Sfx/";
 
-        public static Dictionary<string, AudioClip> Sfx => _sfx;
-        public static Dictionary<string, AudioClip> Music => _music;
+        public static Dictionary<string, AudioClip> AudioClips => _audioClips;
+        // public static Dictionary<string, AudioClip> Music => _music;
 
         public static float SfxScaledVolume => GameSettings.SfxVolume.Value * GameSettings.MasterVolume.Value;
         public static float MusicScaledVolume => GameSettings.MusicVolume.Value * GameSettings.MasterVolume.Value;
 
-        private static Dictionary<string, AudioClip> _music;
-        private static Dictionary<string, AudioClip> _sfx;
+        // private static Dictionary<string, AudioClip> _music;
+        private static Dictionary<string, AudioClip> _audioClips;
         private static AudioSource _musicSource;
         private static GameObject _audioSourceContainer;
         private static Stack<AudioPlayer> _sources;
@@ -34,8 +34,8 @@ namespace AudioSystem
             _audioSourceContainer = new GameObject("AudioSourcePool");
             Object.DontDestroyOnLoad(_audioSourceContainer);
 
-            _music = new Dictionary<string, AudioClip>();
-            _sfx = new Dictionary<string, AudioClip>();
+            // _music = new Dictionary<string, AudioClip>();
+            _audioClips = new Dictionary<string, AudioClip>();
 
             // ###################################################################
             //  todo - prettier abstract file loading system (mby later..)
@@ -48,7 +48,7 @@ namespace AudioSystem
                 var name = FileHelper.GetNameFromFilename(filename).Split('_', 2)[1];
                 string finalPath = $"Assets/{MusicFolderPath}{filename}";
                 var clip = AssetDatabase.LoadAssetAtPath<AudioClip>(finalPath);
-                _music.Add(name, clip);
+                _audioClips.Add(name, clip);
             }
 
             var sfxFiles = Directory.GetFiles(GetFullSfxPath(), "*.wav", SearchOption.TopDirectoryOnly);
@@ -59,11 +59,11 @@ namespace AudioSystem
                 var name = FileHelper.GetNameFromFilename(filename);
                 string finalPath = $"Assets/{SfxFolderPath}{filename}";
                 var clip = AssetDatabase.LoadAssetAtPath<AudioClip>(finalPath);
-                _sfx.Add(name, clip);
+                _audioClips.Add(name, clip);
             }
 
-            Debug.Log($"Loaded {_music.Count} songs");
-            Debug.Log($"Loaded {_sfx.Count} sfx");
+            // Debug.Log($"Loaded {_music.Count} songs");
+            Debug.Log($"Loaded {_audioClips.Count} audio clips");
             Debug.Log("Audio loaded");
 
             GameSettings.MasterVolume.OnChangedEvent += OnAnyVolumeChangedEvent;
@@ -103,43 +103,52 @@ namespace AudioSystem
             return retSource;
         }
 
+        private static AudioPlayer GetAudio(string name)
+        {
+            if(_audioClips.TryGetValue(name, out var clip))
+            {
+                var player = GetAudioPlayer();
+                player.gameObject.name = name;
+                player.IsMusic = false;
+                var source = player.GetSource();
+                source.clip = clip;
+                source.loop = false;
+                return player;
+            }
+            return null;
+        }
+
         public static void PlayMusic(string musicName)
         {
-            if(_music.TryGetValue(musicName, out var clip))
-            {
-                if(_musicSource != null && _musicSource.isPlaying)
-                    _musicSource.Stop();
-                var player = GetAudioPlayer();
-                player.IsMusic = true;
-                player.gameObject.name = musicName;
-                _musicSource = player.GetSource();
-                _musicSource.volume = MusicScaledVolume;
-                _musicSource.clip = clip;
-                _musicSource.loop = true;
-                _musicSource.Play();
-            }
-            else
+            var player = GetAudio(musicName);
+
+            if(player == null)
             {
                 Debug.LogWarning($"music '{musicName}' does not exit");
+                return;
             }
+
+            player.IsMusic = true;
+            _musicSource = player.GetSource();
+            _musicSource.volume = MusicScaledVolume;
+            _musicSource.loop = true;
+            _musicSource.Play();
         }
 
         public static AudioSource PlaySfx(string sfxName)
         {
-            if(_sfx.TryGetValue(sfxName, out var clip))
+            var player = GetAudio(sfxName);
+            
+            if(player == null)
             {
-                var player = GetAudioPlayer();
-                player.gameObject.name = sfxName;
-                player.IsMusic = false;
-                var source = player.GetSource();
-                source.clip = clip;
-                source.volume = SfxScaledVolume;
-                source.Play();
-                return source;
+                Debug.LogWarning($"sfx '{sfxName}' does not exit");
+                return null;
             }
 
-            Debug.LogWarning($"sfx '{sfxName}' does not exit");
-            return null;
+            var source = player.GetSource();
+            source.volume = SfxScaledVolume;
+            source.Play();
+            return source;
         }
     }
 }
