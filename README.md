@@ -14,7 +14,7 @@
 
 ✅ (VG, large) Support up to 4 players (using the same input device taking turns)
 
-(VG, large) Implement a simple AI opponent.
+⛔(VG, large) Implement a simple AI opponent.
 
 ### Terrain
 
@@ -30,7 +30,7 @@
 
 ✅ (G) Has hit points
 
-(VG, small) Implement a custom character controller to control the movement of the worm.
+✅ (VG, small) Implement a custom character controller to control the movement of the worm.
 
 ✅ (VG, small) A worm can only move a certain range
 
@@ -65,4 +65,4 @@
 
 ✅ (VG, medium) Battle royal, danger zones that move around on the map after a set amount of time
 
-(VG, medium) High score that is persistent across game sessions
+⛔ (VG, medium) High score that is persistent across game sessions
