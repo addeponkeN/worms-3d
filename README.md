@@ -1,8 +1,10 @@
 ## worms-3d
 
-General
+#General
 ✅ (G) Only play scene is required
+
 ✅ (VG, small) Add main menu (start) scene and game over scene
+
 ✅ (VG, medium) Implement Pause menu and settings menu
 
 # Turn based game
