@@ -22,7 +22,7 @@
 
 ✅ (VG, large) Destructible terrain (You can use Unity's built in terrain or your own custom solution)
 
-# Player
+### Player
 
 ✅ (G) A player only controls one worm
 
@@ -36,21 +36,33 @@
 
 ✅ (VG, medium) A player controls a team of (multiple worms)
 
-# Camera
+### Camera
+
 ✅ (G) Focus camera on active player
+
 ✅ (VG, small) Camera movement
 
-# Weapon system
+### Weapon system
+
 ✅ (G) Minimum of two different weapons/attacks, can be of similar functionality, can be bound to an individual button, like weapon 1 is left mouse button and weapon 2 is right mouse button
+
 ✅ (VG, small) a weapon can have ammo and needs to reload
+
 ✅ (VG, medium) The two types of weapons/attacks must function differently, I.E a pistol and a hand grenade. The player can switch between the different weapons and using the active weapon on for example left mouse button
 
-# (VG, medium) Pickups
+
+### (VG, medium) Pickups
+
 ✅ Spawning randomly on the map during the play session
+
 ✅ Gives something to the player picking it up, I.E health, extra ammo, new weapon, armour etc
 
-# (VG, medium) Cheat functionalities
+### (VG, medium) Cheat functionalities
+
 ✅ Two different cheats, I.E Invincible, all weapons on start etc
-Miscellaneous
+
+### Miscellaneous
+
 ✅ (VG, medium) Battle royal, danger zones that move around on the map after a set amount of time
+
 (VG, medium) High score that is persistent across game sessions
