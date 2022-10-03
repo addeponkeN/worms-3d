@@ -17,7 +17,8 @@ namespace Ui
 
         public void Button_Start()
         {
-            SceneManager.LoadScene("GameScene");
+            Main.PushPanel<GameRulesPanel>();
+            // SceneManager.LoadScene("GameScene");
         }
 
         public void Button_Settings()

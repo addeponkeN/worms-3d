@@ -36,12 +36,12 @@ namespace Ui
         private void RegisterAllPrefabPanels()
         {
             var uiPanels = PrefabManager.GetPrefabs("Ui/Panels/");
-            for(int i = 0; i < uiPanels.Length; i++)
+            for (int i = 0; i < uiPanels.Length; i++)
             {
                 var panelGo = uiPanels[i];
                 var go = Instantiate(panelGo, transform);
                 var uiPanel = go.GetComponent<IUiPanel>();
-                if(uiPanel == null)
+                if (uiPanel == null)
                 {
                     Debug.LogWarning($"UiPanel does not inherit IUiPanel: {panelGo.name}");
                     continue;
@@ -54,8 +54,8 @@ namespace Ui
 
         public T PushPanel<T>() where T : IUiPanel
         {
-            for(int i = 0; i < _registeredPanels.Count; i++)
-                if(_registeredPanels[i] is T ret)
+            for (int i = 0; i < _registeredPanels.Count; i++)
+                if (_registeredPanels[i] is T ret)
                 {
                     PushPanel(ret);
                     return ret;
@@ -67,16 +67,16 @@ namespace Ui
 
         public void PushPanel(Type type)
         {
-            if(type == null)
+            if (type == null)
             {
                 Debug.LogError("Panel type was null");
                 return;
             }
 
-            for(int i = 0; i < _registeredPanels.Count; i++)
+            for (int i = 0; i < _registeredPanels.Count; i++)
             {
                 var regType = _registeredPanels[i].GetType();
-                if(regType == type)
+                if (regType == type)
                 {
                     PushPanel(_registeredPanels[i]);
                     return;
@@ -88,7 +88,7 @@ namespace Ui
 
         public void PushPanel(IUiPanel panel)
         {
-            if(_panelStack.Count > 0)
+            if (_panelStack.Count > 0)
             {
                 SetCurrentIsEnabled(false);
             }
@@ -101,7 +101,7 @@ namespace Ui
 
         private void SetCurrentIsEnabled(bool isEnabled)
         {
-            if(_panelStack.Count <= 0)
+            if (_panelStack.Count <= 0)
                 return;
 
             var currentPanel = _panelStack.Peek();
@@ -120,15 +120,23 @@ namespace Ui
 
         private void Update()
         {
-            if(Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if(_panelStack.Count <= 0)
+                if (_panelStack.Count <= 0)
                 {
                     PushPanel(DefaultPanelPrefab.GetType());
                 }
-                else if(CanExitCurrent && _panelStack.Count == 1 && !KeepBottomPanel)
+                else if (CanExitCurrent)
                 {
-                    ExitPanel();
+                    if (_panelStack.Count == 1)
+                    {
+                        if (!KeepBottomPanel)
+                            ExitPanel();
+                    }
+                    else
+                    {
+                        ExitPanel();
+                    }
                 }
             }
         }

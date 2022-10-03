@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
         set
         {
             _isGamePaused = value;
-            if(_isGamePaused)
+            if (_isGamePaused)
                 Time.timeScale = 0f;
             else
                 Time.timeScale = 1f;
@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if(Get == null)
+        if (Get == null)
         {
             Get = this;
         }
@@ -57,8 +57,13 @@ public class GameManager : MonoBehaviour
         StateManager.PushState(new GameStateLoading());
 
         Systems = new();
-        // AddGameSystem(new AirDropSystem());
-        AddGameSystem(new WaterLevelSystem());
+
+        var rules = GameCore.Get.GameRules;
+
+        if (rules.EnableAirdrops)
+            AddGameSystem(new AirDropSystem());
+        if (rules.EnableDangerZone)
+            AddGameSystem(new WaterLevelSystem());
     }
 
     public GameState GetGameState()
@@ -74,7 +79,7 @@ public class GameManager : MonoBehaviour
         AudioManager.PlayMusic("gameplay1");
     }
 
-    void AddGameSystem(GameSystem system)
+    private void AddGameSystem(GameSystem system)
     {
         system.GameStateManager = StateManager;
         Systems.Add(system);

@@ -14,6 +14,11 @@ namespace AudioSystem
             _source = GetComponent<AudioSource>();
         }
 
+        public void SetAudioClip(string name)
+        {
+            _source.clip = AudioManager.GetSoundClip(name);
+        }
+        
         public AudioSource GetSource()
         {
             gameObject.SetActive(true);

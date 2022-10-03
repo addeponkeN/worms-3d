@@ -3,6 +3,7 @@ using Components;
 using GameStates;
 using PlayerControllers;
 using Teams;
+using Ui;
 using UnityEngine;
 using Util;
 using VoxelEngine;
@@ -26,44 +27,25 @@ public class PlayerManager : MonoBehaviour, ILoader
 
     public void Load()
     {
-        //  4 teams
-        //  4 players per team
-        var testData = new GameData()
-        {
-            Teams = new TeamData[]
-            {
-                new TeamData()
-                {
-                    PlayerCount = 4
-                },
-                new TeamData()
-                {
-                    PlayerCount = 4
-                },
-                new TeamData()
-                {
-                    PlayerCount = 4
-                }
-            }
-        };
-
-        CreateTeams(testData);
+        CreateTeams(GameCore.Get.GameRules);
         ActivePlayer = Teams[0].Players[0];
     }
 
     public Team CurrentTeam() => Teams[_teamIndex];
+
     public Team NextTeam()
     {
         Team team;
         do
         {
             team = Teams[_teamIndex.Next()];
-        } while(team.IsDead);
+        } while (team.IsDead);
 
         return team;
     }
 
     public Player CurrentPlayer() => ActivePlayer;
+
     public Player NextPlayer()
     {
         var team = NextTeam();
@@ -74,7 +56,8 @@ public class PlayerManager : MonoBehaviour, ILoader
     {
         ActivePlayer = player;
         ControllerManager.SetPlayer(player);
-        Debug.Log($"Player: {player.GetPlayerId()},  team: {player.GetTeam().GetTeamName()}({player.GetTeam().GetTeamId()})");
+        Debug.Log(
+            $"Player: {player.GetPlayerId()},  team: {player.GetTeam().GetTeamName()}({player.GetTeam().GetTeamId()})");
     }
 
     private Player CreatePlayer(Vector3 position)
@@ -96,24 +79,25 @@ public class PlayerManager : MonoBehaviour, ILoader
     {
         var team = player.GetTeam();
         team.RemovePlayer(player);
-        if(team.Players.Count <= 0)
+        if (team.Players.Count <= 0)
         {
             Teams.Remove(team);
         }
     }
 
-    private void CreateTeams(GameData gameData)
+    private void CreateTeams(GameRulesInfo gameRules)
     {
         Teams.Clear();
 
         int teamId = 0;
 
-        for(int i = 0; i < gameData.Teams.Length; i++)
+        int teamsCount = gameRules.TeamsCount;
+        var teamSize = gameRules.TeamSize;
+        for (int i = 0; i <teamsCount; i++)
         {
-            var teamData = gameData.Teams[i];
-            var team = new Team(teamId++, teamData.PlayerCount);
+            var team = new Team(teamId++, teamSize);
 
-            for(int j = 0; j < teamData.PlayerCount; j++)
+            for (int j = 0; j < teamSize; j++)
             {
                 var position = World.Get.GetRandomSafePosition();
                 var player = CreatePlayer(position);
@@ -126,5 +110,4 @@ public class PlayerManager : MonoBehaviour, ILoader
         _teamIndex = Teams.Count;
         _teamIndex.SetCurrent(Teams.Count);
     }
-    
 }

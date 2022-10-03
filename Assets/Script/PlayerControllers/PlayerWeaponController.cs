@@ -13,7 +13,8 @@ namespace PlayerControllers
         public event Action<BaseWeapon> WeaponChangedEvent;
         public event Action<BaseWeapon> WeaponDoneEvent;
         public event Action<BaseWeapon> WeaponAimingEvent;
-        
+        public event Action<BaseWeapon> WeaponReloadedEvent;
+
         private bool _isWeaponActive;
 
         public override void Init()
@@ -29,7 +30,7 @@ namespace PlayerControllers
 
         public void EquipWeapon(BaseWeapon wep)
         {
-            if(CurrentWeapon != null)
+            if (CurrentWeapon != null)
             {
                 CurrentWeapon.Kill();
             }
@@ -50,27 +51,39 @@ namespace PlayerControllers
         {
             base.Update();
 
-            if(CurrentWeapon != null)
+            if (CurrentWeapon != null)
             {
                 CurrentWeapon.Update();
-                if(CurrentWeapon.AimeStanceChangedThisFrame)
+
+                #region DONT LOOK
+
+                //  #############################################
+                if (CurrentWeapon.AimeStanceChangedThisFrame)
                 {
                     WeaponAimingEvent?.Invoke(CurrentWeapon);
                 }
-                if(CurrentWeapon.IsFireDown)
+                if (CurrentWeapon.IsFireDown)
                 {
                     WeaponChargingEvent?.Invoke(CurrentWeapon);
                 }
-                if(CurrentWeapon.IsFired)
+                if (CurrentWeapon.IsReloaded)
+                {
+                    WeaponReloadedEvent?.Invoke(CurrentWeapon);
+                }
+                if (CurrentWeapon.IsFired)
                 {
                     WeaponFiredEvent?.Invoke(CurrentWeapon);
                 }
-                if(!CurrentWeapon.IsAlive)
+                if (!CurrentWeapon.IsAlive)
                 {
                     WeaponDoneEvent?.Invoke(CurrentWeapon);
                     UnequipWeapon();
                 }
-                if(CurrentWeapon.CanBeSwapped)
+                //  #############################################
+
+                #endregion
+
+                if (CurrentWeapon.CanBeSwapped)
                 {
                     SelectWeaponInput();
                 }
@@ -83,23 +96,23 @@ namespace PlayerControllers
 
         private void SelectWeaponInput()
         {
-            if(Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Alpha0))
+            if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Alpha0))
             {
                 UnequipWeapon();
             }
-            else if(Input.GetKeyDown(KeyCode.Alpha2))
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
                 EquipWeapon(new WeaponGrenade());
             }
-            else if(Input.GetKeyDown(KeyCode.Alpha3))
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
                 EquipWeapon(new WeaponBazooka());
             }
-            else if(Input.GetKeyDown(KeyCode.Alpha4))
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
             {
                 EquipWeapon(new WeaponPistol());
             }
-            else if(Input.GetKeyDown(KeyCode.Alpha5))
+            else if (Input.GetKeyDown(KeyCode.Alpha5))
             {
                 EquipWeapon(new WeaponAirstrike());
             }

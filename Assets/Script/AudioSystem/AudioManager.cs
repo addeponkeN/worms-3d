@@ -19,7 +19,7 @@ namespace AudioSystem
 
         // private static Dictionary<string, AudioClip> _music;
         private static Dictionary<string, AudioClip> _audioClips;
-        private static AudioSource _musicSource;
+        private static AudioPlayer _musicPlayer;
         private static GameObject _audioSourceContainer;
         private static Stack<AudioPlayer> _sources;
         private static List<AudioPlayer> _allPlayers;
@@ -41,7 +41,7 @@ namespace AudioSystem
             //  todo - prettier abstract file loading system (mby later..)
             // ###################################################################
             var musicFiles = Directory.GetFiles(GetFullMusicPath(), "*.wav", SearchOption.TopDirectoryOnly);
-            for(int i = 0; i < musicFiles.Length; i++)
+            for (int i = 0; i < musicFiles.Length; i++)
             {
                 string path = musicFiles[i];
                 var filename = FileHelper.GetFilenameFromPath(path);
@@ -52,7 +52,7 @@ namespace AudioSystem
             }
 
             var sfxFiles = Directory.GetFiles(GetFullSfxPath(), "*.wav", SearchOption.TopDirectoryOnly);
-            for(int i = 0; i < sfxFiles.Length; i++)
+            for (int i = 0; i < sfxFiles.Length; i++)
             {
                 string path = sfxFiles[i];
                 var filename = FileHelper.GetFilenameFromPath(path);
@@ -73,7 +73,7 @@ namespace AudioSystem
 
         private static void OnAnyVolumeChangedEvent()
         {
-            for(int i = 0; i < _allPlayers.Count; i++)
+            for (int i = 0; i < _allPlayers.Count; i++)
             {
                 _allPlayers[i].UpdateVolume();
             }
@@ -81,13 +81,24 @@ namespace AudioSystem
 
         internal static void ReturnAudioPlayer(AudioPlayer player)
         {
+            player.GetSource().Stop();
             _sources.Push(player);
+        }
+
+        public static AudioClip GetSoundClip(string name)
+        {
+            if (_audioClips.TryGetValue(name, out var clip))
+            {
+                return clip;
+            }
+
+            return null;
         }
 
         private static AudioPlayer GetAudioPlayer()
         {
             AudioPlayer retSource;
-            if(_sources.Count <= 0)
+            if (_sources.Count <= 0)
             {
                 var go = new GameObject($"AudioPlayer{_allPlayers.Count}", typeof(AudioPlayer));
                 go.transform.parent = _audioSourceContainer.transform;
@@ -103,9 +114,9 @@ namespace AudioSystem
             return retSource;
         }
 
-        private static AudioPlayer GetAudio(string name)
+        private static AudioPlayer GetAudioPlayerSource(string name)
         {
-            if(_audioClips.TryGetValue(name, out var clip))
+            if (_audioClips.TryGetValue(name, out var clip))
             {
                 var player = GetAudioPlayer();
                 player.gameObject.name = name;
@@ -115,31 +126,33 @@ namespace AudioSystem
                 source.loop = false;
                 return player;
             }
+
             return null;
         }
 
         public static void PlayMusic(string musicName)
         {
-            var player = GetAudio(musicName);
-
-            if(player == null)
+            if (_musicPlayer == null)
             {
-                Debug.LogWarning($"music '{musicName}' does not exit");
-                return;
+                _musicPlayer = GetAudioPlayerSource(musicName);
+                _musicPlayer.IsMusic = true;
+            }
+            else
+            {
+                _musicPlayer.SetAudioClip(musicName);
             }
 
-            player.IsMusic = true;
-            _musicSource = player.GetSource();
-            _musicSource.volume = MusicScaledVolume;
-            _musicSource.loop = true;
-            _musicSource.Play();
+            var source = _musicPlayer.GetSource();
+            source.volume = MusicScaledVolume;
+            source.loop = true;
+            source.Play();
         }
 
         public static AudioSource PlaySfx(string sfxName)
         {
-            var player = GetAudio(sfxName);
-            
-            if(player == null)
+            var player = GetAudioPlayerSource(sfxName);
+
+            if (player == null)
             {
                 Debug.LogWarning($"sfx '{sfxName}' does not exit");
                 return null;

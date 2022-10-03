@@ -7,7 +7,7 @@ namespace Weapons
     {
         public override WeaponTypes WeaponType { get; } = WeaponTypes.Pistol;
 
-        public int Damage = 12;
+        public int Damage = 7;
         
         private int _maxBulletCount = 3;
         private int _bullets;
@@ -23,12 +23,19 @@ namespace Weapons
             _magazineCount = 1;
         }
 
+        public override bool NeedsReloading()
+        {
+            return _bullets > 0 && _magazineCount <= 0;
+        }
+
         public override void Update()
         {
             base.Update();
+            IsReloaded = false;
 
             if(Input.GetKeyDown(KeyCode.R))
             {
+                IsReloaded = true;
                 Reload();
             }
         }
@@ -54,10 +61,8 @@ namespace Weapons
                 if(_bullets <= 0)
                 {
                     Kill();
-                    Debug.Log("no more bullets - time to die");
                 }
 
-                Debug.Log("no bullets in mag - reload (R)");
                 return;
             }
 
@@ -74,24 +79,14 @@ namespace Weapons
                 var player = info.transform.GetComponentInParent<Player>();
                 if(player != null)
                 {
-                    Debug.Log("hit player");
-                    player.Life.TakeDamage((int)Damage);
+                    player.Life.TakeDamage(Damage);
                     player.Body.Push(ray.direction + Vector3.up * .4f, 1.5f);
                 }
-                else
-                {
-                    Debug.Log($"hit: {info.transform.gameObject.name}");
-                }
-            }
-            else
-            {
-                Debug.Log($"no hit");
             }
 
             if(_bullets <= 0)
             {
                 Kill();
-                Debug.Log("no more bullets - time to die");
             }
         }
     }

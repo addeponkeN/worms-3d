@@ -26,12 +26,18 @@ namespace Weapons
         public GameObject WeaponGo;
         public bool IsFired;
         public bool IsFireDown;
+        public bool IsReloaded;
         public bool IsAimDown;
         public bool IsProjectile;
         public bool IsAlive = true;
         public bool CanBeSwapped = true;
         public bool AimeStanceChangedThisFrame;
         public float ChargeTime = 1.5f;
+
+        public virtual bool NeedsReloading()
+        {
+            return false;
+        }
 
         protected float Power = 5000f;
 
