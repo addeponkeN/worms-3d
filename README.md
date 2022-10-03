@@ -1,8 +1,8 @@
 # Chickens 3D (worms-3d)
 
-![Unity_XwIAILhXCE](https://user-images.githubusercontent.com/17746816/193549523-71ba0ac4-1b27-4e5f-93ad-81f45fb0e70f.png)
-
 #### Futuregames Assignment - 3D Turn-based local multiplayer (based on Worms)
+
+![Unity_XwIAILhXCE](https://user-images.githubusercontent.com/17746816/193549523-71ba0ac4-1b27-4e5f-93ad-81f45fb0e70f.png)
 
 ### General
 
