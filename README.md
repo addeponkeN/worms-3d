@@ -1,4 +1,4 @@
-# worms-3d
+# Chickens 3D (worms-3d)
 
 ### General
 
