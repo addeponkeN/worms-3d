@@ -62,7 +62,7 @@ namespace Components
         {
             while(BombCount-- > 0)
             {
-                Instantiate(PrefabManager.Get.GetPrefab(ProjectileTypes.Bomb),
+                Instantiate(PrefabManager.GetPrefab(ProjectileTypes.Bomb),
                     _bombSpawnTf.position,
                     Quaternion.identity);
                 yield return new WaitForSeconds(0.1f);

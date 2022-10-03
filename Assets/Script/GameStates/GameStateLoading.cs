@@ -25,7 +25,7 @@ namespace GameStates
             var game = GameManager.Get;
 
             //  setup world
-            var prefWorld = PrefabManager.Get.GetPrefab("voxelworld");
+            var prefWorld = PrefabManager.GetPrefab("voxelworld");
             var worldGo = Object.Instantiate(prefWorld);
             var world = worldGo.GetComponent<World>();
 

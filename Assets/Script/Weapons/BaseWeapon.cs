@@ -54,7 +54,7 @@ namespace Weapons
 
         public virtual void Init()
         {
-            WeaponGo = Object.Instantiate(PrefabManager.Get.GetPrefab(WeaponType));
+            WeaponGo = Object.Instantiate(PrefabManager.GetPrefab(WeaponType));
 
             _weaponOrigin = Manager.Player.WeaponOrigin.transform;
             _rotationOffset = WeaponGo.transform.eulerAngles;
@@ -111,7 +111,7 @@ namespace Weapons
             var projDirection = aimer.transform.forward + Vector3.up * 0.01f;
             projDirection.Normalize();
 
-            var projectileGo = Object.Instantiate(PrefabManager.Get.GetPrefab(type));
+            var projectileGo = Object.Instantiate(PrefabManager.GetPrefab(type));
             projectileGo.transform.position = WeaponGo.transform.position + projDirection * 2f;
             var projectile = projectileGo.GetComponent<BaseProjectile>();
             projectile.Init(new ProjectileData(GetFinalPower, projDirection));

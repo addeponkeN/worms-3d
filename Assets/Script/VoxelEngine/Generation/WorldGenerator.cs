@@ -26,8 +26,8 @@ namespace VoxelEngine.Generation
                 {
                     const float scale = 0.2f;
 
-                    float perX = (offX + x) / (float)150f;
-                    float perZ = (offZ + z) / (float)150f;
+                    float perX = (offX + x) / 150f;
+                    float perZ = (offZ + z) / 150f;
 
                     var noise = Mathf.PerlinNoise(perX / scale, perZ / scale);
                     int height = Mathf.RoundToInt(noise * ChunkSize.y - 10);

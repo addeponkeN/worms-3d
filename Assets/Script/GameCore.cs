@@ -22,6 +22,7 @@ public class GameCore : MonoBehaviour
         }
 
         GameRules = new GameRulesInfo();
+        PrefabManager.Load();
         AudioManager.Load();
     }
 }

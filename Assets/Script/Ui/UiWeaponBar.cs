@@ -19,7 +19,7 @@ namespace Ui
             var allWeaponTypes = Enum.GetValues(typeof(WeaponTypes));
             _weaponCount = allWeaponTypes.Length;
 
-            var prefItem = PrefabManager.Get.GetPrefab("weapon_slot");
+            var prefItem = PrefabManager.GetPrefab("weapon_slot");
             var prefImage = prefItem.GetComponentInChildren<Image>();
             _slotWidth = prefImage.sprite.bounds.extents.x;
 

@@ -16,7 +16,7 @@ namespace Weapons
             base.Init();
             ChargeTime = 1f;
 
-            _laser = Object.Instantiate(PrefabManager.Get.GetPrefab("laser")).GetComponent<Laser>();
+            _laser = Object.Instantiate(PrefabManager.GetPrefab("laser")).GetComponent<Laser>();
             _laser.SetActivated(false);
         }
 

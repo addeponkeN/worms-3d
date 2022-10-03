@@ -12,7 +12,7 @@ namespace Ui
         private void Awake()
         {
             var ui = GameManager.Get.Ui.World;
-            var prefBar = PrefabManager.Get.GetPrefab("progressbar_player");
+            var prefBar = PrefabManager.GetPrefab("progressbar_player");
             HealthBar = Instantiate(prefBar, ui.transform)
                 .GetComponent<ProgressBarWorld>();
         }

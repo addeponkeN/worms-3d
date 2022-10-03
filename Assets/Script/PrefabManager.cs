@@ -1,64 +1,46 @@
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
-public class PrefabManager : MonoBehaviour
+public static partial class PrefabManager
 {
-    public static PrefabManager Get { get; private set; }
+    private static Dictionary<string, GameObject> _prefabs;
+    private static List<GameObject> _prefabList;
 
-    private Dictionary<string, GameObject> _prefabs;
-
-    public GameObject GetPrefab(string name)
+    public static GameObject GetPrefab(string name)
     {
         return _prefabs[name];
     }
 
-    private void Awake()
+    public static void Load()
     {
-        if(Get == null)
-            Get = this;
-
         _prefabs = new Dictionary<string, GameObject>();
-
-        var prefabGuids = AssetDatabase.FindAssets("t:prefab", new string[] {"Assets/Prefabs/"});
-
-        for(int i = 0; i < prefabGuids.Length; i++)
-        {
-            var path = AssetDatabase.GUIDToAssetPath(prefabGuids[i]);
-            var go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-            _prefabs.Add(go.name, go);
-        }
+        _prefabList = new List<GameObject>();
         
+        var prefabs = Resources.LoadAll<GameObject>("Prefabs/");
+        for (int i = 0; i < prefabs.Length; i++)
+        {
+            var pf = prefabs[i];
+            _prefabs.Add(pf.name, pf);
+            _prefabList.Add(pf);
+        }
     }
 
     public static GameObject[] GetPrefabs(string prefabFolder)
     {
-        var prefabGuids = AssetDatabase.FindAssets("t:prefab", new[] {$"Assets/Prefabs/{prefabFolder}"});
-
-        var prefabs = new GameObject[prefabGuids.Length];
-        
-        for(int i = 0; i < prefabGuids.Length; i++)
-        {
-            var path = AssetDatabase.GUIDToAssetPath(prefabGuids[i]);
-            prefabs[i] = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-        }
-
-        return prefabs;
+        return Resources.LoadAll<GameObject>($"Prefabs/{prefabFolder}");
     }
     
     public static GameObject[] GetPrefabs(string prefabFolder, string containsName)
     {
-        var prefabGuids = AssetDatabase.FindAssets($"{containsName} t:prefab", new[] {$"Assets/Prefabs/{prefabFolder}"});
-
-        var prefabs = new GameObject[prefabGuids.Length];
+        List<GameObject> retList = new List<GameObject>();
         
-        for(int i = 0; i < prefabGuids.Length; i++)
+        for (int i = 0; i < _prefabList.Count; i++)
         {
-            var path = AssetDatabase.GUIDToAssetPath(prefabGuids[i]);
-            prefabs[i] = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            if (_prefabList[i].name.Contains(containsName))
+                retList.Add(_prefabList[i]);
         }
 
-        return prefabs;
+        return retList.ToArray();
     }
     
 }

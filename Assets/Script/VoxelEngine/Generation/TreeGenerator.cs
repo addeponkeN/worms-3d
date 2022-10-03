@@ -14,7 +14,7 @@ namespace VoxelEngine.Generation
             int treeCount = Random.Range(10, 20);
 
             var w = World.Get;
-            var treePrefabs = PrefabManager.GetPrefabs("Environment/", "Tree");
+            var treePrefabs = PrefabManager.GetPrefabs("Environment/", "tree");
             
             for(int i = 0; i < treeCount; i++)
             {

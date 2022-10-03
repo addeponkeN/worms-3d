@@ -12,12 +12,10 @@ namespace AudioSystem
         private const string SfxFolderPath = "Sound/Sfx/";
 
         public static Dictionary<string, AudioClip> AudioClips => _audioClips;
-        // public static Dictionary<string, AudioClip> Music => _music;
 
         public static float SfxScaledVolume => GameSettings.SfxVolume.Value * GameSettings.MasterVolume.Value;
         public static float MusicScaledVolume => GameSettings.MusicVolume.Value * GameSettings.MasterVolume.Value;
 
-        // private static Dictionary<string, AudioClip> _music;
         private static Dictionary<string, AudioClip> _audioClips;
         private static AudioPlayer _musicPlayer;
         private static GameObject _audioSourceContainer;
@@ -34,7 +32,6 @@ namespace AudioSystem
             _audioSourceContainer = new GameObject("AudioSourcePool");
             Object.DontDestroyOnLoad(_audioSourceContainer);
 
-            // _music = new Dictionary<string, AudioClip>();
             _audioClips = new Dictionary<string, AudioClip>();
 
             // ###################################################################
@@ -47,7 +44,8 @@ namespace AudioSystem
                 var filename = FileHelper.GetFilenameFromPath(path);
                 var name = FileHelper.GetNameFromFilename(filename).Split('_', 2)[1];
                 string finalPath = $"Assets/{MusicFolderPath}{filename}";
-                var clip = AssetDatabase.LoadAssetAtPath<AudioClip>(finalPath);
+                var clip = Resources.Load<AudioClip>(finalPath);
+                // var clip = AssetDatabase.LoadAssetAtPath<AudioClip>(finalPath);
                 _audioClips.Add(name, clip);
             }
 
@@ -58,7 +56,8 @@ namespace AudioSystem
                 var filename = FileHelper.GetFilenameFromPath(path);
                 var name = FileHelper.GetNameFromFilename(filename);
                 string finalPath = $"Assets/{SfxFolderPath}{filename}";
-                var clip = AssetDatabase.LoadAssetAtPath<AudioClip>(finalPath);
+                var clip = Resources.Load<AudioClip>(finalPath);
+                // var clip = AssetDatabase.LoadAssetAtPath<AudioClip>(finalPath);
                 _audioClips.Add(name, clip);
             }
 

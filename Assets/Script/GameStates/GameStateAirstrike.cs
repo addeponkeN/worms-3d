@@ -23,7 +23,7 @@ namespace GameStates
             base.Init(manager);
             _timer = 6f;
 
-            _plane = Object.Instantiate(PrefabManager.Get.GetPrefab("airplane")).GetComponent<Airplane>();
+            _plane = Object.Instantiate(PrefabManager.GetPrefab("airplane")).GetComponent<Airplane>();
             _plane.SetStrikePosition(_wep.TargetPosition);
             _plane.BombsDroppedEvent += PlaneOnBombsDroppedEvent;
 

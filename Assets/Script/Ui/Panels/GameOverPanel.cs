@@ -25,7 +25,7 @@ namespace Ui
                 textWinner = $"Team {winningTeam.GetTeamName()} Won!";
             }
 
-            var g = Instantiate(PrefabManager.Get.GetPrefab("button"), Vector3.zero, Quaternion.identity,
+            var g = Instantiate(PrefabManager.GetPrefab("button"), Vector3.zero, Quaternion.identity,
                 _placingsContainer.transform);
             var btText = g.GetComponentInChildren<TMP_Text>();
             btText.text = textWinner;

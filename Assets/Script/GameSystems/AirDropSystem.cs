@@ -38,7 +38,7 @@ namespace GameSystems
                 {
                     var p = teams[i].Players[j];
 
-                    var prefab = PrefabManager.Get.GetPrefab("airdrop");
+                    var prefab = PrefabManager.GetPrefab("airdrop");
                     var drop = Object.Instantiate(prefab).GetComponent<AirDrop>();
                     drop.transform.position = p.transform.position + new Vector3(2, 5, 2);
                     drop.ReleaseParachute();

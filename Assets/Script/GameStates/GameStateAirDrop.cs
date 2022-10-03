@@ -14,7 +14,7 @@ namespace GameStates
         {
             base.Init(manager);
             _lifeTimer = 2f;
-            var prefab = PrefabManager.Get.GetPrefab("airdrop");
+            var prefab = PrefabManager.GetPrefab("airdrop");
             _drop = Object.Instantiate(prefab).GetComponent<AirDrop>();
             GameManager.Get.CamManager.SetMainState(new FollowFollowable(_drop));
         }

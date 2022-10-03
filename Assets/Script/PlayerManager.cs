@@ -62,7 +62,7 @@ public class PlayerManager : MonoBehaviour, ILoader
 
     private Player CreatePlayer(Vector3 position)
     {
-        var player = Instantiate(PrefabManager.Get.GetPrefab("player"), position, Quaternion.identity,
+        var player = Instantiate(PrefabManager.GetPrefab("player"), position, Quaternion.identity,
             _playerContainerGo.transform).GetComponent<Player>();
         player.Life.DeathEvent += LifeOnDeathEvent;
         return player;
