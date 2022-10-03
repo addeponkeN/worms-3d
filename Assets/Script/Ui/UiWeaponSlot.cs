@@ -9,7 +9,7 @@ namespace Ui
 {
     public class UiWeaponSlot : MonoBehaviour
     {
-        private const string UiWeaponPath = "Assets/Textures/Ui/Weapons/";
+        private const string UiWeaponPath = "Textures/Ui/Weapons/";
 
         public Image ImgWeapon;
         public Image ImgSelected;
@@ -53,7 +53,7 @@ namespace Ui
 
         private string GetWeaponSpritePath(WeaponTypes type)
         {
-            return $"{UiWeaponPath}{GetSpriteName(type)}.png";
+            return $"{UiWeaponPath}{GetSpriteName(type)}";
         }
     }
 }

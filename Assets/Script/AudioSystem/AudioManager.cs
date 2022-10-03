@@ -34,36 +34,27 @@ namespace AudioSystem
 
             _audioClips = new Dictionary<string, AudioClip>();
 
-            // ###################################################################
-            //  todo - prettier abstract file loading system (mby later..)
-            // ###################################################################
-            var musicFiles = Directory.GetFiles(GetFullMusicPath(), "*.wav", SearchOption.TopDirectoryOnly);
-            for (int i = 0; i < musicFiles.Length; i++)
+
+            var loadedAudioClips = Resources.LoadAll<AudioClip>("Sound/");
+
+            for (int i = 0; i < loadedAudioClips.Length; i++)
             {
-                string path = musicFiles[i];
-                var filename = FileHelper.GetFilenameFromPath(path);
-                var name = FileHelper.GetNameFromFilename(filename).Split('_', 2)[1];
-                string finalPath = $"Assets/{MusicFolderPath}{filename}";
-                var clip = Resources.Load<AudioClip>(finalPath);
-                // var clip = AssetDatabase.LoadAssetAtPath<AudioClip>(finalPath);
-                _audioClips.Add(name, clip);
+                var clip = loadedAudioClips[i];
+
+                string finalName;
+                if (clip.name.StartsWith("music_"))
+                {
+                    finalName = clip.name.Remove(0, 6);
+                }
+                else
+                {
+                    finalName = clip.name;
+                }
+
+                _audioClips.Add(finalName, clip);
             }
 
-            var sfxFiles = Directory.GetFiles(GetFullSfxPath(), "*.wav", SearchOption.TopDirectoryOnly);
-            for (int i = 0; i < sfxFiles.Length; i++)
-            {
-                string path = sfxFiles[i];
-                var filename = FileHelper.GetFilenameFromPath(path);
-                var name = FileHelper.GetNameFromFilename(filename);
-                string finalPath = $"Assets/{SfxFolderPath}{filename}";
-                var clip = Resources.Load<AudioClip>(finalPath);
-                // var clip = AssetDatabase.LoadAssetAtPath<AudioClip>(finalPath);
-                _audioClips.Add(name, clip);
-            }
-
-            // Debug.Log($"Loaded {_music.Count} songs");
             Debug.Log($"Loaded {_audioClips.Count} audio clips");
-            Debug.Log("Audio loaded");
 
             GameSettings.MasterVolume.OnChangedEvent += OnAnyVolumeChangedEvent;
             GameSettings.SfxVolume.OnChangedEvent += OnAnyVolumeChangedEvent;

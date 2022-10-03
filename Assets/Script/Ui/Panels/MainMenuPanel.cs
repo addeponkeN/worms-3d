@@ -12,13 +12,11 @@ namespace Ui
             Main.KeepBottomPanel = true;
             World.Get.Load();
             AudioManager.PlayMusic("menu");
-            Debug.Log("playing menu song");
         }
 
         public void Button_Start()
         {
             Main.PushPanel<GameRulesPanel>();
-            // SceneManager.LoadScene("GameScene");
         }
 
         public void Button_Settings()

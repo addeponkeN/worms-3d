@@ -23,10 +23,15 @@ namespace Weapons
         public override void Fired()
         {
             base.Fired();
-            Object.Destroy(_laser.gameObject);
             Kill();
         }
-        
+
+        public override void Kill()
+        {
+            base.Kill();
+            Object.Destroy(_laser.gameObject);
+        }
+
         public override void Update()
         {
             base.Update();

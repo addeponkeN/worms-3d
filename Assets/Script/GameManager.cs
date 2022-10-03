@@ -7,6 +7,7 @@ using GameSystems;
 using Ui;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -37,6 +38,12 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        if (!GameCore.IsInited)
+        {
+            SceneManager.LoadScene("Scenes/MenuScene");
+            return;
+        }
+        
         if (Get == null)
         {
             Get = this;

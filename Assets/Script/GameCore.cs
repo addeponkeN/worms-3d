@@ -6,6 +6,8 @@ public class GameCore : MonoBehaviour
 {
     public static GameCore Get { get; private set; }
 
+    public static bool IsInited => Get != null;
+    
     public GameRulesInfo GameRules;
 
     private void Awake()
@@ -21,8 +23,10 @@ public class GameCore : MonoBehaviour
             return;
         }
 
+
         GameRules = new GameRulesInfo();
         PrefabManager.Load();
         AudioManager.Load();
+        
     }
 }
