@@ -137,7 +137,6 @@
      <Compile Include="Assets\Script\Ui\Panels\GamePanel.cs" />
      <Compile Include="Assets\Script\Util\Indexer.cs" />
      <Compile Include="Assets\Script\GameStates\GameStateActivePlayer.cs" />
-     <Compile Include="Assets\PlayerGui.cs" />
      <Compile Include="Assets\Script\Components\EnvironmentObject.cs" />
      <Compile Include="Assets\Script\Weapons\WeaponAirstrike.cs" />
      <Compile Include="Assets\Script\Util\FileHelper.cs" />

@@ -62,6 +62,7 @@ namespace Components
                 interactor.OnTriggerExplosion(data);
             }
 
+            //  temp random explosion sfx
             AudioManager.PlaySfx($"explosion{Random.Range(1, 4)}");
         
             World.Get.SetVoxelsSphere(transform.position, (int)data.Radius, 0);

@@ -32,6 +32,8 @@ public static partial class PrefabManager
     
     public static GameObject[] GetPrefabs(string prefabFolder, string containsName)
     {
+        //  todo - use prefabFolder param
+        
         List<GameObject> retList = new List<GameObject>();
         
         for (int i = 0; i < _prefabList.Count; i++)

@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 namespace Ui
 {
-
     public class GameRulesInfo
     {
         public int TeamsCount;
