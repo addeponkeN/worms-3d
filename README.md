@@ -1,6 +1,6 @@
-## worms-3d
+# worms-3d
 
-#General
+### General
 
 ✅ (G) Only play scene is required
 
@@ -8,7 +8,7 @@
 
 ✅ (VG, medium) Implement Pause menu and settings menu
 
-# Turn based game
+### Turn based game
 
 ✅ (G) You can have two players using the same input device taking turns.
 
@@ -16,7 +16,7 @@
 
 (VG, large) Implement a simple AI opponent.
 
-# Terrain
+### Terrain
 
 ✅ (G) Basic Unity terrain or primitives will suffice for a level
 
