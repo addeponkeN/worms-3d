@@ -80,7 +80,6 @@ namespace Ui
         {
             GameRules.EnableDangerZone = _cbDangerZones.isOn;
         }
-
-
+        
     }
 }
