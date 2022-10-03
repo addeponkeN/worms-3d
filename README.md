@@ -1,6 +1,7 @@
 ## worms-3d
 
 #General
+
 ✅ (G) Only play scene is required
 
 ✅ (VG, small) Add main menu (start) scene and game over scene
@@ -8,20 +9,31 @@
 ✅ (VG, medium) Implement Pause menu and settings menu
 
 # Turn based game
+
 ✅ (G) You can have two players using the same input device taking turns.
+
 ✅ (VG, large) Support up to 4 players (using the same input device taking turns)
+
 (VG, large) Implement a simple AI opponent.
 
 # Terrain
+
 ✅ (G) Basic Unity terrain or primitives will suffice for a level
+
 ✅ (VG, large) Destructible terrain (You can use Unity's built in terrain or your own custom solution)
 
 # Player
+
 ✅ (G) A player only controls one worm
+
 ✅ (G) Use the built in Character Controller. Add jumping.
+
 ✅ (G) Has hit points
+
 (VG, small) Implement a custom character controller to control the movement of the worm.
+
 ✅ (VG, small) A worm can only move a certain range
+
 ✅ (VG, medium) A player controls a team of (multiple worms)
 
 # Camera
