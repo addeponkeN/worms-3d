@@ -1,5 +1,7 @@
 # Chickens 3D (worms-3d)
 
+#### Futuregames Assignment - 3D Turn-based local multiplayer (based on Worms)
+
 ### General
 
 ✅ (G) Only play scene is required
