@@ -69,4 +69,4 @@
 
 ✅ (VG, medium) Battle royal, danger zones that move around on the map after a set amount of time
 
-⛔ (VG, medium) High score that is persistent across game sessions
+✅ (VG, medium) ~~High score that is persistent across game sessions~~ Save & Load GameSettings with JSON
