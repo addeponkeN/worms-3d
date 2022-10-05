@@ -6,12 +6,6 @@
 
 
 
-## ✅ = Feature implemented
-
-
-
-
-
 ## - Assignement feature list -
 
 #### ✅ = Feature implemented
