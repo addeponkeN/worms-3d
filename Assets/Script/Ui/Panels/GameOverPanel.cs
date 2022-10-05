@@ -27,6 +27,7 @@ namespace Ui
 
             var g = Instantiate(PrefabManager.GetPrefab("button"), Vector3.zero, Quaternion.identity,
                 _placingsContainer.transform);
+            g.transform.position = _placingsContainer.transform.position;
             var btText = g.GetComponentInChildren<TMP_Text>();
             btText.text = textWinner;
         }
