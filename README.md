@@ -4,6 +4,14 @@
 
 ![Unity_XwIAILhXCE](https://user-images.githubusercontent.com/17746816/193549523-71ba0ac4-1b27-4e5f-93ad-81f45fb0e70f.png)
 
+
+
+✅ = Feature implemented
+⛔ = Feature not implemented
+
+
+
+
 ### General
 
 ✅ (G) Only play scene is required
@@ -18,7 +26,7 @@
 
 ✅ (VG, large) Support up to 4 players (using the same input device taking turns)
 
-⛔(VG, large) Implement a simple AI opponent.
+⛔ (VG, large) Implement a simple AI opponent.
 
 ### Terrain
 
