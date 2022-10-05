@@ -6,8 +6,9 @@
 
 
 
-✅ = Feature implemented
-⛔ = Feature not implemented
+## ✅ = Feature implemented
+
+## ⛔ = Feature not implemented
 
 
 
