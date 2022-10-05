@@ -77,6 +77,7 @@
      <Compile Include="Assets\Script\Util\GridHelper.cs" />
      <Compile Include="Assets\Script\Util\PrefabManagerExtensions.cs" />
      <Compile Include="Assets\Script\Ui\MenuManager.cs" />
+     <Compile Include="Assets\Script\Settings\GameSettings.cs" />
      <Compile Include="Assets\Script\VoxelEngine\TextureLoader.cs" />
      <Compile Include="Assets\Script\GameSystems\AirDropSystem.cs" />
      <Compile Include="Assets\Script\GameManager.cs" />
@@ -103,11 +104,11 @@
      <Compile Include="Assets\Script\GameStates\GameStateFollowObject.cs" />
      <Compile Include="Assets\Script\Components\LifeBoundsComponent.cs" />
      <Compile Include="Assets\Script\WaterMesh.cs" />
-     <Compile Include="Assets\Script\GameSettings.cs" />
      <Compile Include="Assets\Script\Ui\UiWeaponBar.cs" />
      <Compile Include="Assets\Script\Util\DistinctList.cs" />
      <Compile Include="Assets\Script\Components\EnvironmentInteractor.cs" />
      <Compile Include="Assets\Script\Weapons\WeaponPistol.cs" />
+     <Compile Include="Assets\Script\Settings\GameSetting.cs" />
      <Compile Include="Assets\Script\PrefabManager.cs" />
      <Compile Include="Assets\Script\Ui\Panels\PausePanel.cs" />
      <Compile Include="Assets\Script\Components\AirDrop.cs" />
@@ -123,6 +124,7 @@
      <Compile Include="Assets\Script\Projectiles\ProjectileGrenade.cs" />
      <Compile Include="Assets\Script\Util\Timer.cs" />
      <Compile Include="Assets\Script\Ui\Panels\GameRulesPanel.cs" />
+     <Compile Include="Assets\Script\Util\JsonHelper.cs" />
      <Compile Include="Assets\Script\GameStates\GameStateIncreaseWaterLevel.cs" />
      <Compile Include="Assets\Script\Weapons\WeaponBazooka.cs" />
      <Compile Include="Assets\Script\GameSystems\WaterLevelSystem.cs" />
@@ -145,6 +147,7 @@
      <Compile Include="Assets\Script\Ui\MainCanvas.cs" />
      <Compile Include="Assets\Script\GameStates\GameStateFollowProjectile.cs" />
      <Compile Include="Assets\Script\Weapons\BaseWeapon.cs" />
+     <Compile Include="Assets\Script\Settings\GameSettingsFile.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

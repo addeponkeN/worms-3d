@@ -41,7 +41,7 @@ namespace AudioSystem
 
         public void UpdateVolume()
         {
-            _source.volume = IsMusic ? AudioManager.MusicScaledVolume : AudioManager.SfxScaledVolume;
+            _source.volume = IsMusic ? AudioManager.ScaledMusicVolume : AudioManager.ScaledSfxVolume;
         }
 
     }

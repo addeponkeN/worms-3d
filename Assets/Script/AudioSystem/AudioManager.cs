@@ -1,20 +1,13 @@
 using System.Collections.Generic;
-using System.IO;
-using UnityEditor;
+using Settings;
 using UnityEngine;
-using Util;
 
 namespace AudioSystem
 {
     public static class AudioManager
     {
-        private const string MusicFolderPath = "Sound/Music/";
-        private const string SfxFolderPath = "Sound/Sfx/";
-
-        public static Dictionary<string, AudioClip> AudioClips => _audioClips;
-
-        public static float SfxScaledVolume => GameSettings.SfxVolume.Value * GameSettings.MasterVolume.Value;
-        public static float MusicScaledVolume => GameSettings.MusicVolume.Value * GameSettings.MasterVolume.Value;
+        public static float ScaledSfxVolume => GameSettings.Get.SfxVolume.Value * GameSettings.Get.MasterVolume.Value;
+        public static float ScaledMusicVolume => GameSettings.Get.MusicVolume.Value * GameSettings.Get.MasterVolume.Value;
 
         private static Dictionary<string, AudioClip> _audioClips;
         private static AudioPlayer _musicPlayer;
@@ -22,43 +15,35 @@ namespace AudioSystem
         private static Stack<AudioPlayer> _sources;
         private static List<AudioPlayer> _allPlayers;
 
-        private static string GetFullMusicPath() => $"{Application.dataPath}/{MusicFolderPath}";
-        private static string GetFullSfxPath() => $"{Application.dataPath}/{SfxFolderPath}";
-
         public static void Load()
         {
             _sources = new Stack<AudioPlayer>();
             _allPlayers = new List<AudioPlayer>();
+            _audioClips = new Dictionary<string, AudioClip>();
+            
+            //  audio pool object
             _audioSourceContainer = new GameObject("AudioSourcePool");
             Object.DontDestroyOnLoad(_audioSourceContainer);
 
-            _audioClips = new Dictionary<string, AudioClip>();
-
-
             var loadedAudioClips = Resources.LoadAll<AudioClip>("Sound/");
 
+            const string musicPrefix = "music_";
+            
             for (int i = 0; i < loadedAudioClips.Length; i++)
             {
                 var clip = loadedAudioClips[i];
-
-                string finalName;
-                if (clip.name.StartsWith("music_"))
-                {
-                    finalName = clip.name.Remove(0, 6);
-                }
-                else
-                {
-                    finalName = clip.name;
-                }
+                var finalName = clip.name.StartsWith(musicPrefix) 
+                    ? clip.name.Remove(0, musicPrefix.Length) 
+                    : clip.name;
 
                 _audioClips.Add(finalName, clip);
             }
 
             Debug.Log($"Loaded {_audioClips.Count} audio clips");
 
-            GameSettings.MasterVolume.OnChangedEvent += OnAnyVolumeChangedEvent;
-            GameSettings.SfxVolume.OnChangedEvent += OnAnyVolumeChangedEvent;
-            GameSettings.MusicVolume.OnChangedEvent += OnAnyVolumeChangedEvent;
+            GameSettings.Get.MasterVolume.OnChangedEvent += OnAnyVolumeChangedEvent;
+            GameSettings.Get.SfxVolume.OnChangedEvent += OnAnyVolumeChangedEvent;
+            GameSettings.Get.MusicVolume.OnChangedEvent += OnAnyVolumeChangedEvent;
         }
 
         private static void OnAnyVolumeChangedEvent()
@@ -133,7 +118,7 @@ namespace AudioSystem
             }
 
             var source = _musicPlayer.GetSource();
-            source.volume = MusicScaledVolume;
+            source.volume = ScaledMusicVolume;
             source.loop = true;
             source.Play();
         }
@@ -149,7 +134,7 @@ namespace AudioSystem
             }
 
             var source = player.GetSource();
-            source.volume = SfxScaledVolume;
+            source.volume = ScaledSfxVolume;
             source.Play();
             return source;
         }
