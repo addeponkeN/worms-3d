@@ -8,11 +8,16 @@
 
 ## ✅ = Feature implemented
 
-## ⛔ = Feature not implemented
+
 
 
 
 ## - Assignement feature list -
+
+#### ✅ = Feature implemented
+
+#### ⛔ = Feature not implemented
+
 
 ### General
 
