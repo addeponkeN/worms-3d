@@ -63,8 +63,10 @@ namespace Components
             }
 
             //  temp random explosion sfx
-            AudioManager.PlaySfx($"explosion{Random.Range(1, 4)}");
-        
+
+            var prefab = PrefabManager.GetPrefab("explosion");
+            Instantiate(prefab, data.Position, Quaternion.identity);
+            
             World.Get.SetVoxelsSphere(transform.position, (int)data.Radius, 0);
         }
     }
